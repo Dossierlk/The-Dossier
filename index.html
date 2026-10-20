@@ -505,10 +505,16 @@
       const description = document.createElement("p");
       description.textContent = (post.content || "").slice(0, 180);
 
+      
       const link = document.createElement("a");
       link.className = "read";
-      link.href = post.slug ? `#${encodeURIComponent(post.slug)}` : "#about";
+      link.href = `#${encodeURIComponent(post.slug || post.id)}`;
       link.textContent = "Explore story ↗";
+
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        openArticle(post);
+      });
 
       body.append(category, title, description, link);
       article.append(coverWrap, body);
@@ -516,6 +522,68 @@
     });
 
     filterArticles();
+  }
+
+  function openArticle(post) {
+    let reader = document.getElementById("article-reader");
+
+    if (!reader) {
+      reader = document.createElement("section");
+      reader.id = "article-reader";
+      reader.style.cssText =
+        "max-width:900px;margin:40px auto;padding:24px;color:#f5f5f5;";
+
+      document.querySelector("main")?.appendChild(reader);
+
+      if (!reader.isConnected) {
+        document.body.appendChild(reader);
+      }
+    }
+
+    reader.replaceChildren();
+    reader.style.display = "block";
+
+    const back = document.createElement("button");
+    back.textContent = "← Back to stories";
+    back.style.cssText =
+      "padding:10px 16px;margin-bottom:24px;cursor:pointer;";
+    back.addEventListener("click", () => {
+      reader.style.display = "none";
+      articlesGrid.parentElement?.scrollIntoView({ behavior: "smooth" });
+      history.replaceState(null, "", location.pathname + location.search);
+    });
+
+    const category = document.createElement("p");
+    category.textContent = post.category || "Mystery";
+
+    const title = document.createElement("h1");
+    title.textContent = post.title || "Untitled story";
+
+    const date = document.createElement("p");
+    date.textContent = post.created_at
+      ? new Date(post.created_at).toLocaleDateString()
+      : "";
+
+    const content = document.createElement("div");
+    content.style.cssText =
+      "white-space:pre-wrap;line-height:1.9;font-size:17px;";
+    content.textContent = post.content || "No article content available.";
+
+    reader.append(back, category, title, date);
+
+    if (post.image_url) {
+      const image = document.createElement("img");
+      image.src = post.image_url;
+      image.alt = post.title || "Article image";
+      image.style.cssText =
+        "display:block;width:100%;max-height:480px;object-fit:cover;border-radius:12px;margin:24px 0;";
+      reader.appendChild(image);
+    }
+
+    reader.appendChild(content);
+    reader.scrollIntoView({ behavior: "smooth", block: "start" });
+    history.replaceState(null, "", `#${encodeURIComponent(post.slug || post.id)}`);
+  }
   }
 
   function filterArticles() {
