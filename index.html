@@ -619,15 +619,13 @@
       description.textContent = (post.content || "").slice(0, 180);
 
       
+    
       const link = document.createElement("a");
       link.className = "read";
-      link.href = `#${encodeURIComponent(post.slug || post.id)}`;
+      link.href = `article.html?${post.slug
+        ? `slug=${encodeURIComponent(post.slug)}`
+        : `id=${encodeURIComponent(post.id)}`}`;
       link.textContent = "Explore story ↗";
-
-      link.addEventListener("click", (event) => {
-        event.preventDefault();
-        openArticle(post);
-      });
 
       body.append(category, title, description, link);
       article.append(coverWrap, body);
