@@ -1024,13 +1024,15 @@ document.getElementById("reaction-row").addEventListener("click", event => {
   }
 });
 
+
 function playReactionAnimation(reaction) {
   const button = document.querySelector(
-    .reaction-btn[data-reaction="${reaction}"]
+    `.reaction-btn[data-reaction="${reaction}"]`
   );
+
   if (!button) return;
 
-  const animationClass = play-${reaction};
+  const animationClass = `play-${reaction}`;
 
   button.classList.remove(animationClass);
   void button.offsetWidth;
@@ -1040,6 +1042,7 @@ function playReactionAnimation(reaction) {
     button.classList.remove(animationClass);
   }, { once: true });
 }
+
 
 function updateSelectedReaction(reaction) {
   document.querySelectorAll(".reaction-btn").forEach(button => {
