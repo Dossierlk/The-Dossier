@@ -677,16 +677,19 @@
       .logo { width: 28px; height: 28px; }
     }
     
-.article h3 a {
+  .article h3 a {
   color: inherit;
-  text-decoration: none;
+  text-decoration: none !important;
+  display: inline;
   transition: color 0.2s ease;
 }
 
 .article h3 a:hover {
-  text-decoration: underline;
+  text-decoration: underline !important;
   text-underline-offset: 4px;
+  cursor: pointer;
 }
+
   </style>
   
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
