@@ -497,54 +497,54 @@
       loadRelated(post.id);
 
     }
-
-    async function loadRelated(currentId) {
       
-    let currentPostId = null;
-    let visitorId = localStorage.getItem("dossier-visitor-id");
+let currentPostId = null;
 
-    if (!visitorId) {
-      visitorId = crypto.randomUUID();
-      localStorage.setItem("dossier-visitor-id", visitorId);
-    }
+let visitorId = localStorage.getItem("dossier-visitor-id");
 
-    async function loadCommunity() {
-      if (!currentPostId) return;
+if (!visitorId) {
+  visitorId = crypto.randomUUID();
+  localStorage.setItem("dossier-visitor-id", visitorId);
+}
 
-      const [commentsResult, reactionsResult] = await Promise.all([
-        db
-          .from("comments")
-          .select("id, post_id, content, display_name, created_at")
-          .eq("post_id", currentPostId)
-          .order("created_at", { ascending: false }),
-        db
-          .from("reactions")
-          .select("reaction")
-          .eq("post_id", currentPostId)
-      ]);
+async function loadRelated(currentId) {
+  const { data, error } = await db
+    .from("posts")
+    .select("id, title, slug, category")
+    .eq("published", true)
+    .neq("id", currentId)
+    .order("created_at", { ascending: false })
+    .limit(4);
 
-      const commentStatus = document.getElementById("comment-status");
+  if (error) {
+    console.error("Related stories error:", error);
+    return;
+  }
 
-      if (commentsResult.error) {
-        console.error("Comments loading error:", commentsResult.error);
-        commentStatus.textContent = "Comments could not be loaded.";
-      } else {
-        renderComments(commentsResult.data || []);
-      }
+  if (!data || data.length === 0) return;
 
-      if (reactionsResult.error) {
-        console.error("Reactions loading error:", reactionsResult.error);
-        return;
-      }
+  const grid = document.getElementById("related-grid");
+  grid.replaceChildren();
 
-      const reactions = reactionsResult.data || [];
+  data.forEach(post => {
+    const link = document.createElement("a");
+    link.className = "related-card";
+    link.href = `article.html?${post.slug
+      ? `slug=${encodeURIComponent(post.slug)}`
+      : `id=${encodeURIComponent(post.id)}`}`;
 
-      document.getElementById("like-count").textContent =
-        reactions.filter(item => item.reaction === "interesting").length;
+    const category = document.createElement("span");
+    category.textContent = post.category || "Mystery";
 
-      document.getElementById("mind-count").textContent =
-        reactions.filter(item => item.reaction === "mindblowing").length;
-    }
+    const title = document.createElement("h3");
+    title.textContent = post.title || "Untitled story";
+
+    link.append(category, title);
+    grid.appendChild(link);
+  });
+
+  document.getElementById("related-section").hidden = false;
+}
 
     function renderComments(comments) {
       const list = document.getElementById("comments-list");
