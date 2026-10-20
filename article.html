@@ -1030,7 +1030,7 @@ function playReactionAnimation(reaction) {
     `.reaction-btn[data-reaction="${reaction}"]`
   );
 
-  if (!button) return;
+    if (!button) return;
 
   const animationClass = `play-${reaction}`;
 
@@ -1042,7 +1042,6 @@ function playReactionAnimation(reaction) {
     button.classList.remove(animationClass);
   }, { once: true });
 }
-
 
 function updateSelectedReaction(reaction) {
   document.querySelectorAll(".reaction-btn").forEach(button => {
