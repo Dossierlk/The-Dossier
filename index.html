@@ -464,5 +464,15 @@
 
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
+  
+<script>
+  const SUPABASE_URL = "https://bvafftvtucyjixadhzeu.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_QEBgCvFEuT1io7gyyr_AZA_8R4V5W1k";
+
+  const dossierSupabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+</script>
 </body>
 </html>
