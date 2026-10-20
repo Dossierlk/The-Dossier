@@ -846,8 +846,21 @@
       category.className = "category";
       category.textContent = post.category || "Mystery";
 
-      const title = document.createElement("h3");
-      title.textContent = post.title || "Untitled story";
+      
+const title = document.createElement("h3");
+
+const titleLink = document.createElement("a");
+titleLink.href = `article.html?${
+  post.slug
+    ? `slug=${encodeURIComponent(post.slug)}`
+    : `id=${encodeURIComponent(post.id)}`
+}`;
+titleLink.textContent = post.title || "Untitled story";
+titleLink.style.color = "inherit";
+titleLink.style.textDecoration = "none";
+
+title.appendChild(titleLink);
+
 
       const description = document.createElement("p");
       description.textContent = (post.content || "").slice(0, 180);
