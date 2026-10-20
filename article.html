@@ -1012,6 +1012,7 @@ async function loadRelated(currentId) {
       });
     }
 
+
 const reactionTypes = ["like", "love", "wow", "sad", "angry"];
 
 const reactionRow = document.getElementById("reaction-row");
@@ -1019,6 +1020,7 @@ const reactionRow = document.getElementById("reaction-row");
 if (reactionRow) {
   reactionRow.addEventListener("click", event => {
     const button = event.target.closest(".reaction-btn");
+
     if (!button || button.disabled) return;
 
     const reaction = button.dataset.reaction;
@@ -1029,11 +1031,12 @@ if (reactionRow) {
   });
 }
 
+function playReactionAnimation(reaction) {
   const button = document.querySelector(
     `.reaction-btn[data-reaction="${reaction}"]`
   );
 
-    if (!button) return;
+  if (!button) return;
 
   const animationClass = `play-${reaction}`;
 
@@ -1049,6 +1052,7 @@ if (reactionRow) {
 function updateSelectedReaction(reaction) {
   document.querySelectorAll(".reaction-btn").forEach(button => {
     const selected = button.dataset.reaction === reaction;
+
     button.classList.toggle("active", selected);
     button.setAttribute("aria-pressed", String(selected));
   });
