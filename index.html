@@ -644,6 +644,27 @@
       }
       .article:hover::after { opacity: 0; }
     }
+        /* ===== Round logo ===== */
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, .25);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .3),
+        0 0 16px rgba(80, 160, 255, .35);
+    }
+
+    @media (max-width: 480px) {
+      .logo { width: 28px; height: 28px; }
+    }
   </style>
   
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -651,7 +672,7 @@
 <body>
   <header class="nav">
     <a class="brand" href="#"><span>THE</span> DOSSIER</a>
-    <nav class="nav-links" aria-label="Main navigation">
+    <a class="brand" href="#"><img class="logo" src="logo.png" alt="The Dossier logo"><span>THE</span> DOSSIER</a>
       <a href="#">Home</a>
       <a href="#latest">Discover</a>
       <a href="#categories">Categories</a>
