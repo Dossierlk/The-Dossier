@@ -1012,8 +1012,7 @@ async function loadRelated(currentId) {
       });
     }
 
-        const reactionTypes = ["like", "love", "wow", "sad", "angry"];
-
+const reactionTypes = ["like", "love", "wow", "sad", "angry"];
 
 const reactionRow = document.getElementById("reaction-row");
 
@@ -1029,17 +1028,7 @@ if (reactionRow) {
     }
   });
 }
-  const button = event.target.closest(".reaction-btn");
-  if (!button || button.disabled) return;
 
-  const reaction = button.dataset.reaction;
-  if (reactionTypes.includes(reaction)) {
-    addReaction(reaction);
-  }
-});
-
-
-function playReactionAnimation(reaction) {
   const button = document.querySelector(
     `.reaction-btn[data-reaction="${reaction}"]`
   );
@@ -1142,15 +1131,6 @@ async function addReaction(reaction) {
       status.textContent = "Comment posted!";
       await loadCommunity();
     }
-
-    document.getElementById("like-btn").addEventListener("click", () => {
-      addReaction("interesting");
-    });
-
-    document.getElementById("mind-btn").addEventListener("click", () => {
-      addReaction("mindblowing");
-    });
-
     document.getElementById("comment-submit").addEventListener("click", submitComment);
 
     async function loadCommunity() {
