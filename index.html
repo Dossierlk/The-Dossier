@@ -327,6 +327,120 @@
         transition-duration: .01ms !important;
       }
     }
+    
+    /* THE DOSSIER — Electric Blue Glass Theme */
+    :root {
+      color-scheme: dark;
+      --bg: #050b18;
+      --panel: rgba(16, 31, 59, .72);
+      --text: #f2f7ff;
+      --muted: #9eafd0;
+      --gold: #48a5ff;
+      --line: rgba(120, 180, 255, .18);
+    }
+
+    body {
+      background:
+        radial-gradient(ellipse at 50% -15%, #123f83 0%, transparent 48%),
+        var(--bg);
+      background-attachment: fixed;
+    }
+
+    .nav {
+      background: rgba(5, 13, 31, .72);
+      border-bottom-color: rgba(90, 166, 255, .2);
+    }
+
+    .brand span,
+    .nav-links a:hover,
+    .eyebrow,
+    .category,
+    .read {
+      color: #65b5ff;
+    }
+
+    .dot {
+      background: #58adff;
+      box-shadow: 0 0 16px #168bff;
+    }
+
+    .search {
+      background: rgba(20, 43, 78, .6);
+      border-color: rgba(100, 170, 255, .22);
+      backdrop-filter: blur(16px);
+    }
+
+    .search:focus {
+      border-color: #4aa5ff;
+      box-shadow: 0 0 0 3px rgba(55, 145, 255, .15);
+    }
+
+    .hero {
+      border-color: rgba(90, 166, 255, .28);
+      box-shadow: 0 20px 70px rgba(0, 70, 180, .12);
+    }
+
+    .primary {
+      color: #031126;
+      background: linear-gradient(135deg, #8bd0ff, #398bff);
+      box-shadow: 0 8px 28px rgba(45, 137, 255, .22);
+    }
+
+    .primary:hover {
+      background: linear-gradient(135deg, #b1e1ff, #65aaff);
+    }
+
+    .article {
+      background: rgba(12, 27, 52, .68);
+      border-color: rgba(105, 169, 255, .17);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, .12);
+    }
+
+    .article:hover {
+      border-color: rgba(83, 168, 255, .65);
+      box-shadow: 0 18px 42px rgba(0, 100, 255, .13);
+    }
+
+    .newsletter {
+      background: linear-gradient(
+        135deg,
+        rgba(19, 59, 113, .65),
+        rgba(10, 22, 43, .8)
+      );
+      border-color: rgba(86, 166, 255, .25);
+      backdrop-filter: blur(20px);
+    }
+
+    .empty {
+      background: rgba(15, 30, 56, .6);
+    }
+
+    /* Show the entire cover image without cropping */
+    .cover {
+      height: auto;
+      aspect-ratio: 16 / 9;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-color: #08152b;
+    }
+
+    .article:hover .cover {
+      transform: none;
+    }
+
+    .section-head h2,
+    .article h3,
+    .newsletter h2 {
+      text-shadow: 0 0 24px rgba(54, 139, 255, .08);
+    }
+
+    ::selection {
+      color: white;
+      background: #176ee8;
+    }
+
   </style>
   
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -442,7 +556,6 @@
       <span>© <span id="year"></span> The Dossier</span>
     </footer>
   </main>
-</script>
   
 <script>
   const SUPABASE_URL = "https://bvafftvtucyjixadhzeu.supabase.co";
