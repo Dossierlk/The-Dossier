@@ -699,6 +699,41 @@
       document.getElementById("related-section").hidden = false;
     }
 
+    async function loadCommunity() {
+      if (!currentPostId) return;
+
+      const [commentsResult, reactionsResult] = await Promise.all([
+        db
+          .from("comments")
+          .select("id, post_id, content, display_name, created_at")
+          .eq("post_id", currentPostId)
+          .order("created_at", { ascending: false }),
+        db
+          .from("reactions")
+          .select("reaction")
+          .eq("post_id", currentPostId)
+      ]);
+
+      if (commentsResult.error) {
+        console.error("Comments loading error:", commentsResult.error);
+      } else {
+        renderComments(commentsResult.data || []);
+      }
+
+      if (reactionsResult.error) {
+        console.error("Reactions loading error:", reactionsResult.error);
+        return;
+      }
+
+      const reactions = reactionsResult.data || [];
+
+      document.getElementById("like-count").textContent =
+        reactions.filter(item => item.reaction === "interesting").length;
+
+      document.getElementById("mind-count").textContent =
+        reactions.filter(item => item.reaction === "mindblowing").length;
+    }
+
     loadArticle();
   </script>
 </body>
