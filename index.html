@@ -584,7 +584,6 @@
     reader.scrollIntoView({ behavior: "smooth", block: "start" });
     history.replaceState(null, "", `#${encodeURIComponent(post.slug || post.id)}`);
   }
-  }
 
   function filterArticles() {
     const query = (search?.value || "").trim().toLowerCase();
