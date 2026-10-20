@@ -914,20 +914,136 @@
     border-radius: 19px;
   }
 }
+    
+/* Mobile navigation — desktop remains unchanged */
+.menu-toggle {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  header.nav {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 14px;
+  }
+
+  header.nav .brand {
+    min-width: 0;
+    margin-right: auto;
+    font-size: 17px;
+    white-space: nowrap;
+  }
+
+  header.nav .logo {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+  }
+
+  header.nav .menu-toggle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 42px;
+    height: 42px;
+    padding: 10px;
+    border: 1px solid rgba(120, 170, 255, 0.25);
+    border-radius: 13px;
+    background: rgba(70, 120, 210, 0.12);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .menu-toggle span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: 10px;
+    background: #a9cfff;
+  }
+
+  header.nav .nav-links {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    order: 3;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid rgba(120, 170, 255, 0.18);
+    border-radius: 16px;
+    background: rgba(9, 18, 36, 0.97);
+    box-sizing: border-box;
+  }
+
+  header.nav .nav-links.open {
+    display: flex;
+  }
+
+  header.nav .nav-links a {
+    display: block;
+    padding: 12px;
+    border-radius: 10px;
+    text-decoration: none;
+  }
+
+  header.nav .nav-links a:active {
+    background: rgba(80, 140, 255, 0.15);
+  }
+
+  header.nav .search {
+    order: 4;
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+  }
+}
   </style>
   
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <header class="nav">
-    <a class="brand" href="#"><img class="logo" src="logo.png" alt="The Dossier logo"><span>THE</span> DOSSIER</a>
-      <a href="#">Home</a>
-      <a href="#latest">Discover</a>
-      <a href="#categories">Categories</a>
-     <a href="/about.html">About</a>
-    </nav>
-    <input id="search" class="search" type="search" placeholder="Search stories..." aria-label="Search stories">
-  </header>
+ 
+<header class="nav">
+  <a class="brand" href="#">
+    <img class="logo" src="logo.png" alt="The Dossier logo">
+    <span>THE</span> DOSSIER
+  </a>
+
+  <nav class="nav-links" id="nav-links">
+    <a href="#">Home</a>
+    <a href="#latest">Discover</a>
+    <a href="#categories">Categories</a>
+    <a href="/about.html">About</a>
+  </nav>
+
+  <input
+    id="search"
+    class="search"
+    type="search"
+    placeholder="Search stories..."
+    aria-label="Search stories"
+  >
+
+  <button
+    class="menu-toggle"
+    id="menu-toggle"
+    type="button"
+    aria-label="Open navigation menu"
+    aria-expanded="false"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</header>
+
 
   <main class="wrap">
     <section class="hero">
@@ -1302,6 +1418,29 @@ title.appendChild(titleLink);
     card.style.setProperty("--mx", `${e.clientX - rect.left}px`);
     card.style.setProperty("--my", `${e.clientY - rect.top}px`);
   });
+  
+const menuToggle = document.getElementById("menu-toggle");
+const navLinks = document.getElementById("nav-links");
+
+if (menuToggle && navLinks) {
+  menuToggle.addEventListener("click", () => {
+    const isOpen = navLinks.classList.toggle("open");
+
+    menuToggle.setAttribute("aria-expanded", String(isOpen));
+    menuToggle.setAttribute(
+      "aria-label",
+      isOpen ? "Close navigation menu" : "Open navigation menu"
+    );
+  });
+
+  navLinks.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("open");
+      menuToggle.setAttribute("aria-expanded", "false");
+      menuToggle.setAttribute("aria-label", "Open navigation menu");
+    });
+  });
+}
 </script>
   
 </body>
