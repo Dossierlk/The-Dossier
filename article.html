@@ -793,6 +793,7 @@
       <span id="category" class="category"></span>
       <h1 id="title"></h1>
       <p id="date" class="date"></p>
+      <p id="view-count" class="date">👁 Loading views...</p>
       <img id="cover" class="cover" alt="" hidden>
       <div id="content" class="content"></div>
       
@@ -924,9 +925,10 @@
       articleBox.hidden = false;
 
       currentPostId = post.id;
-      loadCommunity();
-      loadRelated(post.id);
 
+loadCommunity();
+loadRelated(post.id);
+loadPostViews(post.id);
     }
       
 let currentPostId = null;
@@ -936,6 +938,24 @@ let visitorId = localStorage.getItem("dossier-visitor-id");
 if (!visitorId) {
   visitorId = crypto.randomUUID();
   localStorage.setItem("dossier-visitor-id", visitorId);
+}
+    
+async function loadPostViews(postId) {
+  const viewElement = document.getElementById("view-count");
+
+  try {
+    const { data, error } = await db.rpc("increment_post_views", {
+      p_post_id: postId
+    });
+
+    if (error) throw error;
+
+    viewElement.textContent =
+      `👁 ${(data ?? 0).toLocaleString()} views`;
+  } catch (error) {
+    console.error("View counter error:", error);
+    viewElement.hidden = true;
+  }
 }
 
 async function loadRelated(currentId) {
