@@ -989,6 +989,22 @@
       <div id="empty" class="empty">No stories found. Try another search.</div>
     </section>
 
+    <section id="trending">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Most watched</span>
+          <h2>🔥 Trending Stories</h2>
+        </div>
+        <p>The mysteries everyone's exploring.</p>
+      </div>
+
+      <div class="grid" id="trending-articles">
+        <p class="empty" id="trending-loading" style="display:block">
+          Discovering trending stories...
+        </p>
+      </div>
+    </section>
+
     <section id="categories">
       <div class="section-head">
         <div>
@@ -1196,11 +1212,88 @@ title.appendChild(titleLink);
     }
   }
 
+  async function loadTrendingStories() {
+    const trendingGrid = document.getElementById("trending-articles");
+
+    const { data, error } = await dossierSupabase
+      .from("posts")
+      .select("id, title, slug, image_url, category, views")
+      .eq("published", true)
+      .order("views", { ascending: false })
+      .order("created_at", { ascending: false })
+      .limit(4);
+
+    if (error) {
+      console.error("Trending stories error:", error);
+      trendingGrid.innerHTML =
+        '<p class="empty" style="display:block">Trending stories are temporarily unavailable.</p>';
+      return;
+    }
+
+    trendingGrid.replaceChildren();
+
+    if (!data || data.length === 0) {
+      trendingGrid.innerHTML =
+        '<p class="empty" style="display:block">No trending stories yet.</p>';
+      return;
+    }
+
+    data.forEach((post, index) => {
+      const article = document.createElement("article");
+      article.className = "article";
+
+      const coverWrap = document.createElement("div");
+      coverWrap.className = "cover-wrap";
+
+      const cover = document.createElement("div");
+      cover.className = "cover";
+
+      if (post.image_url) {
+        cover.style.backgroundImage =
+          `url("${post.image_url.replace(/["\\]/g, "")}")`;
+      }
+
+      coverWrap.appendChild(cover);
+
+      const body = document.createElement("div");
+      body.className = "article-body";
+
+      const category = document.createElement("span");
+      category.className = "category";
+      category.textContent = `🔥 TRENDING #${index + 1}`;
+
+      const title = document.createElement("h3");
+      const titleLink = document.createElement("a");
+
+      titleLink.href = `article.html?${
+        post.slug
+          ? `slug=${encodeURIComponent(post.slug)}`
+          : `id=${encodeURIComponent(post.id)}`
+      }`;
+
+      titleLink.textContent = post.title || "Untitled story";
+      title.appendChild(titleLink);
+
+      const details = document.createElement("p");
+      details.textContent =
+        `${post.category || "Mystery"} · 👁 ${(post.views || 0).toLocaleString()} views`;
+
+      const link = document.createElement("a");
+      link.className = "read";
+      link.href = titleLink.href;
+      link.textContent = "Explore story ↗";
+
+      body.append(category, title, details, link);
+      article.append(coverWrap, body);
+      trendingGrid.appendChild(article);
+    });
+  }
   search?.addEventListener("input", filterArticles);
   document.getElementById("year").textContent =
     new Date().getFullYear();
 
   loadArticles();
+    loadTrendingStories();
     // Cursor spotlight on cards
   document.addEventListener("pointermove", (e) => {
     const card = e.target.closest?.(".article");
