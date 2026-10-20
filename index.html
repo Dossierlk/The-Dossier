@@ -926,6 +926,14 @@
     new Date().getFullYear();
 
   loadArticles();
+    // Cursor spotlight on cards
+  document.addEventListener("pointermove", (e) => {
+    const card = e.target.closest?.(".article");
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+    card.style.setProperty("--my", `${e.clientY - rect.top}px`);
+  });
 </script>
 </body>
 </html>
