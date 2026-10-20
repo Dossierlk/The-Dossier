@@ -237,6 +237,34 @@
       <p id="date" class="date"></p>
       <img id="cover" class="cover" alt="" hidden>
       <div id="content" class="content"></div>
+      
+    <section class="community glass" id="community">
+      <h2>Join the conversation</h2>
+      <p class="community-intro">Share your thoughts about this mystery.</p>
+
+      <div class="reaction-row">
+        <button type="button" class="reaction-btn" id="like-btn">
+          💙 <span>Interesting</span> <strong id="like-count">0</strong>
+        </button>
+        <button type="button" class="reaction-btn" id="mind-btn">
+          🤯 <span>Mind-blowing</span> <strong id="mind-count">0</strong>
+        </button>
+      </div>
+
+      <div class="comment-form">
+        <input id="comment-name" type="text" maxlength="40"
+          placeholder="Your name (optional)">
+        <textarea id="comment-input" maxlength="2000"
+          placeholder="Write your comment..." rows="4"></textarea>
+        <button type="button" class="submit-btn" id="comment-submit">
+          Post comment ↗
+        </button>
+        <p id="comment-status" role="status"></p>
+      </div>
+
+      <div id="comments-list" class="comments-list"></div>
+    </section>
+      
     </article>
 
     <section class="related" id="related-section" hidden>
