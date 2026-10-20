@@ -501,6 +501,46 @@
       .nav { padding: 11px 14px; border-radius: 20px; }
       .glass { border-radius: 24px; }
     }
+    
+/* iOS-style loading spinner */
+.ios-loader {
+  width: 38px;
+  height: 38px;
+  position: relative;
+  margin: 30px auto;
+  color: #9fdcff;
+  animation: ios-spin 1s steps(8) infinite;
+}
+
+.ios-loader::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-conic-gradient(
+    from 0deg,
+    currentColor 0deg 18deg,
+    transparent 18deg 45deg
+  );
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 6px),
+    #000 calc(100% - 5px)
+  );
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 6px),
+    #000 calc(100% - 5px)
+  );
+  border-radius: 50%;
+}
+
+@keyframes ios-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ios-loader { animation-duration: 2s; }
+}
   </style>
 </head>
 
@@ -511,7 +551,9 @@
   </header>
 
   <main class="wrap">
-    <div id="article-status" class="status">Loading story...</div>
+    <div id="article-status" class="status">
+  <div class="ios-loader" role="status" aria-label="Loading"></div>
+</div>
 
     <article id="article" class="glass" hidden>
       <span id="category" class="category"></span>
