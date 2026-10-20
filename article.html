@@ -662,44 +662,6 @@ async function loadRelated(currentId) {
 
     document.getElementById("comment-submit").addEventListener("click", submitComment);
 
-      const { data, error } = await db
-        .from("posts")
-        .select("id, title, slug, category")
-        .eq("published", true)
-        .neq("id", currentId)
-        .order("created_at", { ascending: false })
-        .limit(4);
-
-      if (error) {
-        console.error("Related stories error:", error);
-        return;
-      }
-
-      if (!data || data.length === 0) return;
-
-      const grid = document.getElementById("related-grid");
-      grid.replaceChildren();
-
-      data.forEach(post => {
-        const link = document.createElement("a");
-        link.className = "related-card";
-        link.href = `article.html?${post.slug
-          ? `slug=${encodeURIComponent(post.slug)}`
-          : `id=${encodeURIComponent(post.id)}`}`;
-
-        const category = document.createElement("span");
-        category.textContent = post.category || "Mystery";
-
-        const title = document.createElement("h3");
-        title.textContent = post.title || "Untitled story";
-
-        link.append(category, title);
-        grid.appendChild(link);
-      });
-
-      document.getElementById("related-section").hidden = false;
-    }
-
     async function loadCommunity() {
       if (!currentPostId) return;
 
