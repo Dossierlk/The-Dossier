@@ -598,6 +598,7 @@
 
       if (error) {
         console.error("Reaction insert error:", error);
+        alert("Reaction error: " + JSON.stringify(error));
         document.getElementById("comment-status").textContent =
           "Reaction failed. Please try again.";
         return;
