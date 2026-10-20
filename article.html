@@ -581,31 +581,31 @@ async function loadRelated(currentId) {
       });
     }
 
-    async function addReaction(reaction) {
+        async function addReaction(reaction) {
       if (!currentPostId) return;
 
       const buttons = document.querySelectorAll(".reaction-btn");
       buttons.forEach(button => button.disabled = true);
 
-      const { error } = await db.from("reactions").insert({
-        post_id: currentPostId,
-        reaction,
-        visitor_id: visitorId,
-        user_id: null
+      const { data, error } = await db.rpc("toggle_reaction", {
+        p_post_id: currentPostId,
+        p_reaction: reaction,
+        p_visitor_id: visitorId
       });
 
       buttons.forEach(button => button.disabled = false);
 
+      const status = document.getElementById("comment-status");
+
       if (error) {
-        console.error("Reaction insert error:", error);
-        alert("Reaction error: " + JSON.stringify(error));
-        document.getElementById("comment-status").textContent =
-          "Reaction failed. Please try again.";
+        console.error("Reaction error:", error);
+        status.textContent = "Reaction failed. Please try again.";
         return;
       }
 
-      document.getElementById("comment-status").textContent =
-        "Thanks for your reaction!";
+      status.textContent = data === "removed"
+        ? "Reaction removed."
+        : "Thanks for your reaction!";
       await loadCommunity();
     }
 
