@@ -541,6 +541,240 @@
 @media (prefers-reduced-motion: reduce) {
   .ios-loader { animation-duration: 2s; }
 }
+    
+/* ===== THE DOSSIER: Animated iOS Reactions ===== */
+.reaction-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 22px 0 28px;
+}
+
+.reaction-btn {
+  --reaction-color: #8ac7ff;
+  position: relative;
+  isolation: isolate;
+  flex: 1 1 105px;
+  min-width: 0;
+  min-height: 86px;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  overflow: hidden;
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 21px;
+  background: linear-gradient(
+    155deg,
+    rgba(255,255,255,.12),
+    rgba(255,255,255,.025)
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 7px 20px rgba(0,0,0,.16);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  transition:
+    transform .28s var(--spring),
+    border-color .25s,
+    background .25s,
+    box-shadow .25s;
+}
+
+.reaction-btn[data-reaction="like"] { --reaction-color:#70b7ff; }
+.reaction-btn[data-reaction="love"] { --reaction-color:#ff668b; }
+.reaction-btn[data-reaction="wow"] { --reaction-color:#ffc76b; }
+.reaction-btn[data-reaction="sad"] { --reaction-color:#75c6ff; }
+.reaction-btn[data-reaction="angry"] { --reaction-color:#ff655f; }
+
+.reaction-btn:hover {
+  transform: translateY(-3px);
+  border-color: var(--reaction-color);
+  box-shadow: 0 8px 25px color-mix(in srgb, var(--reaction-color) 18%, transparent);
+}
+
+.reaction-btn:active {
+  transform: scale(.94);
+}
+
+.reaction-btn:disabled {
+  cursor: wait;
+  opacity: .75;
+}
+
+.reaction-emoji {
+  display: inline-block;
+  position: relative;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  font-size: 29px;
+  line-height: 1.2;
+  transform-origin: 50% 80%;
+  filter: drop-shadow(0 3px 5px rgba(0,0,0,.18));
+}
+
+.reaction-label {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.reaction-btn strong {
+  color: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.reaction-btn.active {
+  border-color: var(--reaction-color);
+  background: linear-gradient(
+    155deg,
+    color-mix(in srgb, var(--reaction-color) 24%, transparent),
+    rgba(255,255,255,.045)
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.25),
+    0 0 22px color-mix(in srgb, var(--reaction-color) 19%, transparent);
+}
+
+.reaction-btn.active strong,
+.reaction-btn.active .reaction-label {
+  color: var(--reaction-color);
+}
+
+/* Like: thumbs-up spring bounce */
+.reaction-btn.play-like .reaction-emoji {
+  animation: reaction-like .7s var(--spring);
+}
+
+@keyframes reaction-like {
+  0% { transform: translateY(9px) rotate(-22deg) scale(.55); }
+  45% { transform: translateY(-8px) rotate(12deg) scale(1.3); }
+  70% { transform: translateY(2px) rotate(-5deg) scale(.94); }
+  100% { transform: translateY(0) rotate(0) scale(1); }
+}
+
+/* Love: double heartbeat */
+.reaction-btn.play-love .reaction-emoji {
+  animation: reaction-love .85s ease-in-out;
+}
+
+@keyframes reaction-love {
+  0%, 100% { transform: scale(1); }
+  18% { transform: scale(1.38); }
+  32% { transform: scale(.94); }
+  48% { transform: scale(1.28); }
+  65% { transform: scale(1); }
+}
+
+/* Wow: pop + shockwave */
+.reaction-btn.play-wow::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--reaction-color);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  animation: reaction-wave .65s ease-out;
+}
+
+.reaction-btn.play-wow .reaction-emoji {
+  animation: reaction-wow .6s var(--spring);
+}
+
+@keyframes reaction-wow {
+  0% { transform: scale(.45); }
+  50% { transform: scale(1.48) rotate(-8deg); }
+  75% { transform: scale(.9) rotate(5deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+@keyframes reaction-wave {
+  0% { transform: scale(.3); opacity: .8; }
+  100% { transform: scale(5); opacity: 0; }
+}
+
+/* Sad: gentle drop + tear */
+.reaction-btn.play-sad .reaction-emoji {
+  animation: reaction-sad .7s ease-in-out;
+}
+
+.reaction-btn.play-sad .reaction-emoji::after {
+  content: "💧";
+  position: absolute;
+  font-size: 12px;
+  left: 55%;
+  top: 38%;
+  opacity: 0;
+  animation: reaction-tear .75s .12s ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes reaction-sad {
+  0% { transform: translateY(-5px) rotate(0); }
+  35% { transform: translateY(4px) rotate(-9deg); }
+  60% { transform: translateY(1px) rotate(5deg); }
+  100% { transform: translateY(0) rotate(0); }
+}
+
+@keyframes reaction-tear {
+  0% { transform: translateY(-2px); opacity: 0; }
+  25% { opacity: 1; }
+  100% { transform: translate(4px, 23px) scale(.75); opacity: 0; }
+}
+
+/* Angry: shake + red flash */
+.reaction-btn.play-angry {
+  animation: reaction-angry-glow .65s ease-out;
+}
+
+.reaction-btn.play-angry .reaction-emoji {
+  animation: reaction-angry .55s ease-in-out;
+}
+
+@keyframes reaction-angry {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  15%, 45%, 75% { transform: translateX(-4px) rotate(-8deg); }
+  30%, 60%, 90% { transform: translateX(4px) rotate(8deg); }
+}
+
+@keyframes reaction-angry-glow {
+  0%, 100% { box-shadow: 0 0 0 transparent; }
+  35% { box-shadow: 0 0 28px rgba(255,65,65,.5); }
+}
+
+@media (max-width: 560px) {
+  .reaction-row {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .reaction-btn {
+    min-width: 0;
+    min-height: 77px;
+    padding: 9px 2px;
+    gap: 4px;
+    border-radius: 16px;
+  }
+
+  .reaction-emoji { font-size: 25px; }
+  .reaction-label { font-size: 10px; }
+  .reaction-btn strong { font-size: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reaction-btn,
+  .reaction-emoji,
+  .reaction-btn::before {
+    animation: none !important;
+    transition: none !important;
+  }
+}
   </style>
 </head>
 
@@ -566,14 +800,39 @@
       <h2>Join the conversation</h2>
       <p class="community-intro">Share your thoughts about this mystery.</p>
 
-      <div class="reaction-row">
-        <button type="button" class="reaction-btn" id="like-btn">
-          💙 <span>Interesting</span> <strong id="like-count">0</strong>
-        </button>
-        <button type="button" class="reaction-btn" id="mind-btn">
-          🤯 <span>Mind-blowing</span> <strong id="mind-count">0</strong>
-        </button>
-      </div>
+     
+<div class="reaction-row" id="reaction-row">
+  <button type="button" class="reaction-btn" data-reaction="like" aria-pressed="false">
+    <span class="reaction-emoji">👍</span>
+    <span class="reaction-label">Like</span>
+    <strong id="like-count">0</strong>
+  </button>
+
+  <button type="button" class="reaction-btn" data-reaction="love" aria-pressed="false">
+    <span class="reaction-emoji">❤️</span>
+    <span class="reaction-label">Love</span>
+    <strong id="love-count">0</strong>
+  </button>
+
+  <button type="button" class="reaction-btn" data-reaction="wow" aria-pressed="false">
+    <span class="reaction-emoji">😮</span>
+    <span class="reaction-label">Wow</span>
+    <strong id="wow-count">0</strong>
+  </button>
+
+  <button type="button" class="reaction-btn" data-reaction="sad" aria-pressed="false">
+    <span class="reaction-emoji">😢</span>
+    <span class="reaction-label">Sad</span>
+    <strong id="sad-count">0</strong>
+  </button>
+
+  <button type="button" class="reaction-btn" data-reaction="angry" aria-pressed="false">
+    <span class="reaction-emoji">😡</span>
+    <span class="reaction-label">Angry</span>
+    <strong id="angry-count">0</strong>
+  </button>
+</div>
+
 
       <div class="comment-form">
         <input id="comment-name" type="text" maxlength="40"
@@ -753,33 +1012,77 @@ async function loadRelated(currentId) {
       });
     }
 
-        async function addReaction(reaction) {
-      if (!currentPostId) return;
+        const reactionTypes = ["like", "love", "wow", "sad", "angry"];
 
-      const buttons = document.querySelectorAll(".reaction-btn");
-      buttons.forEach(button => button.disabled = true);
+document.getElementById("reaction-row").addEventListener("click", event => {
+  const button = event.target.closest(".reaction-btn");
+  if (!button || button.disabled) return;
 
-      const { data, error } = await db.rpc("toggle_reaction", {
-        p_post_id: currentPostId,
-        p_reaction: reaction,
-        p_visitor_id: visitorId
-      });
+  const reaction = button.dataset.reaction;
+  if (reactionTypes.includes(reaction)) {
+    addReaction(reaction);
+  }
+});
 
-      buttons.forEach(button => button.disabled = false);
+function playReactionAnimation(reaction) {
+  const button = document.querySelector(
+    .reaction-btn[data-reaction="${reaction}"]
+  );
+  if (!button) return;
 
-      const status = document.getElementById("comment-status");
+  const animationClass = play-${reaction};
 
-      if (error) {
-        console.error("Reaction error:", error);
-        status.textContent = "Reaction failed. Please try again.";
-        return;
-      }
+  button.classList.remove(animationClass);
+  void button.offsetWidth;
+  button.classList.add(animationClass);
 
-      status.textContent = data === "removed"
-        ? "Reaction removed."
-        : "Thanks for your reaction!";
-      await loadCommunity();
+  button.addEventListener("animationend", () => {
+    button.classList.remove(animationClass);
+  }, { once: true });
+}
+
+function updateSelectedReaction(reaction) {
+  document.querySelectorAll(".reaction-btn").forEach(button => {
+    const selected = button.dataset.reaction === reaction;
+    button.classList.toggle("active", selected);
+    button.setAttribute("aria-pressed", String(selected));
+  });
+}
+
+async function addReaction(reaction) {
+  if (!currentPostId) return;
+
+  const buttons = document.querySelectorAll(".reaction-btn");
+  buttons.forEach(button => button.disabled = true);
+
+  const status = document.getElementById("comment-status");
+
+  try {
+    const { data, error } = await db.rpc("toggle_reaction", {
+      p_post_id: currentPostId,
+      p_reaction: reaction,
+      p_visitor_id: visitorId
+    });
+
+    if (error) throw error;
+
+    if (data === "removed") {
+      updateSelectedReaction(null);
+      status.textContent = "Reaction removed.";
+    } else {
+      updateSelectedReaction(reaction);
+      playReactionAnimation(reaction);
+      status.textContent = "Thanks for your reaction!";
     }
+
+    await loadCommunity();
+  } catch (error) {
+    console.error("Reaction error:", error);
+    status.textContent = "Reaction failed. Please try again.";
+  } finally {
+    buttons.forEach(button => button.disabled = false);
+  }
+}
 
     async function submitComment() {
       const nameInput = document.getElementById("comment-name");
@@ -862,11 +1165,14 @@ async function loadRelated(currentId) {
 
       const reactions = reactionsResult.data || [];
 
-      document.getElementById("like-count").textContent =
-        reactions.filter(item => item.reaction === "interesting").length;
+reactionTypes.forEach(reaction => {
+  const count = reactions.filter(
+    item => item.reaction === reaction
+  ).length;
 
-      document.getElementById("mind-count").textContent =
-        reactions.filter(item => item.reaction === "mindblowing").length;
+  document.getElementById(`${reaction}-count`).textContent = count;
+});
+
     }
 
     loadArticle();
