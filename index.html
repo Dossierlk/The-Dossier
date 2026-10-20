@@ -1,1 +1,466 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090909">
+  <title>The Dossier — Uncover the Unknown</title>
+  <meta name="description" content="Explore the mysteries, strange events and unexplained stories hidden within our world and beyond.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090909;
+      --panel: #111111;
+      --text: #f4f1eb;
+      --muted: #96938d;
+      --gold: #c9ad79;
+      --line: rgba(255,255,255,.09);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    button, input { font: inherit; }
+
+    button { cursor: pointer; }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 18px max(6%, calc((100% - 1240px)/2));
+      background: rgba(9,9,9,.78);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+    }
+
+    .brand {
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .brand span { color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      color: #c6c3bd;
+      font-size: 13px;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    .search {
+      width: 170px;
+      padding: 10px 13px;
+      color: white;
+      background: #171717;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      outline: none;
+    }
+
+    .search:focus { border-color: var(--gold); }
+
+    .wrap {
+      width: min(1120px, 88%);
+      margin: auto;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 480px;
+      display: flex;
+      align-items: end;
+      overflow: hidden;
+      margin-top: 32px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.88), rgba(0,0,0,.38) 65%, rgba(0,0,0,.08)),
+        linear-gradient(0deg, rgba(0,0,0,.65), transparent 75%),
+        url("https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1800&q=85") center/cover;
+    }
+
+    .hero-content {
+      max-width: 690px;
+      padding: clamp(28px, 6vw, 68px);
+      animation: rise .9s ease both;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 12px var(--gold);
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      margin: 22px 0 16px;
+      font-family: "Playfair Display", serif;
+      font-size: clamp(44px, 7vw, 76px);
+      font-weight: 500;
+      line-height: 1.06;
+      letter-spacing: -2px;
+    }
+
+    h1 em { color: var(--gold); font-weight: 500; }
+
+    .hero p {
+      max-width: 490px;
+      color: #d0cdc6;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 10px;
+      padding: 13px 18px;
+      color: #111;
+      background: var(--gold);
+      border: 0;
+      border-radius: 12px;
+      font-weight: 700;
+      transition: transform .25s, background .25s;
+    }
+
+    .primary:hover { transform: translateY(-2px); background: #e1c99e; }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 66px 0 24px;
+    }
+
+    .section-head h2 {
+      margin: 9px 0 0;
+      font-family: "Playfair Display", serif;
+      font-size: clamp(28px, 4vw, 38px);
+      font-weight: 500;
+    }
+
+    .section-head p { margin: 0; color: var(--muted); font-size: 13px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .article {
+      overflow: hidden;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      transition: transform .3s, border-color .3s;
+      animation: rise .7s ease both;
+    }
+
+    .article:hover {
+      transform: translateY(-5px);
+      border-color: rgba(201,173,121,.5);
+    }
+
+    .cover {
+      height: 190px;
+      background-position: center;
+      background-size: cover;
+      transition: transform .5s;
+    }
+
+    .article:hover .cover { transform: scale(1.035); }
+
+    .cover-wrap { overflow: hidden; }
+
+    .article-body { padding: 22px; }
+
+    .category {
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+
+    .article h3 {
+      margin: 12px 0;
+      font-family: "Playfair Display", serif;
+      font-size: 22px;
+      font-weight: 500;
+      line-height: 1.35;
+    }
+
+    .article p {
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .read {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #e5d3b2;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .empty {
+      display: none;
+      padding: 36px;
+      color: var(--muted);
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+    }
+
+    .newsletter {
+      margin: 76px 0;
+      padding: clamp(28px, 5vw, 52px);
+      text-align: center;
+      background: linear-gradient(135deg, #171510, #101010 65%);
+      border: 1px solid rgba(201,173,121,.2);
+      border-radius: 22px;
+    }
+
+    .newsletter h2 {
+      margin: 14px 0;
+      font-family: "Playfair Display", serif;
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 500;
+    }
+
+    .newsletter p { color: var(--muted); line-height: 1.8; }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 26px 0 36px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      font-size: 12px;
+    }
+
+    .mobile-menu { display: none; }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 760px) {
+      .nav { padding: 16px 6%; flex-wrap: wrap; }
+      .nav-links { order: 3; width: 100%; justify-content: space-between; gap: 12px; }
+      .nav-links a { font-size: 12px; }
+      .search { width: 125px; }
+      .hero { min-height: 460px; margin-top: 18px; border-radius: 19px; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      .cover { height: 150px; }
+      .article-body { padding: 15px; }
+      .article h3 { font-size: 19px; }
+      .section-head { margin-top: 48px; }
+    }
+
+    @media (max-width: 480px) {
+      .brand { font-size: 16px; letter-spacing: 2px; }
+      .search { width: 112px; font-size: 12px; }
+      .nav-links { overflow-x: auto; }
+      .hero { min-height: 440px; }
+      .hero-content { padding: 25px; }
+      .grid { grid-template-columns: 1fr; }
+      .cover { height: 205px; }
+      .section-head { align-items: start; flex-direction: column; }
+      footer { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="#"><span>THE</span> DOSSIER</a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="#">Home</a>
+      <a href="#latest">Discover</a>
+      <a href="#categories">Categories</a>
+      <a href="#about">About</a>
+    </nav>
+    <input id="search" class="search" type="search" placeholder="Search stories..." aria-label="Search stories">
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero-content">
+        <span class="eyebrow"><span class="dot"></span> Beyond the known</span>
+        <h1>Some secrets<br>were never meant<br>to be <em>found.</em></h1>
+        <p>Uncover the unexplained. Explore forgotten histories, strange encounters and the mysteries that challenge everything we know.</p>
+        <a class="primary" href="#latest">Enter the unknown <span>↗</span></a>
+      </div>
+    </section>
+
+    <section id="latest">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">The archive</span>
+          <h2>Explore the unexplained.</h2>
+        </div>
+        <p>Stories beyond ordinary understanding.</p>
+      </div>
+
+      <div class="grid" id="articles">
+        <article class="article" data-search="space universe signals cosmos wow signal">
+          <div class="cover-wrap">
+            <div class="cover" style="background-image:url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=900&q=80')"></div>
+          </div>
+          <div class="article-body">
+            <span class="category">Space & Cosmos</span>
+            <h3>The Signal That Came From Nowhere</h3>
+            <p>A mysterious radio signal detected in 1977 still inspires questions about what might exist beyond Earth.</p>
+            <a class="read" href="#about">Explore story <span>↗</span></a>
+          </div>
+        </article>
+
+        <article class="article" data-search="paranormal ghost haunting enfield mystery">
+          <div class="cover-wrap">
+            <div class="cover" style="background-image:url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=900&q=80')"></div>
+          </div>
+          <div class="article-body">
+            <span class="category">Paranormal</span>
+            <h3>The House That Refused to Stay Silent</h3>
+            <p>Inside one of the most discussed haunting cases, where witness accounts and skepticism collide.</p>
+            <a class="read" href="#about">Explore story <span>↗</span></a>
+          </div>
+        </article>
+
+        <article class="article" data-search="ancient history civilization ruins archaeology">
+          <div class="cover-wrap">
+            <div class="cover" style="background-image:url('https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?auto=format&fit=crop&w=900&q=80')"></div>
+          </div>
+          <div class="article-body">
+            <span class="category">Lost History</span>
+            <h3>Echoes of a Forgotten Civilization</h3>
+            <p>Ancient places leave behind traces of remarkable lives—and questions that survive for centuries.</p>
+            <a class="read" href="#about">Explore story <span>↗</span></a>
+          </div>
+        </article>
+      </div>
+
+      <div id="empty" class="empty">No stories found. Try another search.</div>
+    </section>
+
+    <section id="categories">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Choose your path</span>
+          <h2>Into the unknown.</h2>
+        </div>
+      </div>
+      <div class="grid">
+        <a class="article article-body" href="#latest">
+          <span class="category">01 / Beyond Earth</span>
+          <h3>Space & Cosmos ↗</h3>
+          <p>Unanswered questions about our universe.</p>
+        </a>
+        <a class="article article-body" href="#latest">
+          <span class="category">02 / Beyond Reason</span>
+          <h3>Paranormal ↗</h3>
+          <p>Encounters, hauntings and strange phenomena.</p>
+        </a>
+        <a class="article article-body" href="#latest">
+          <span class="category">03 / Before Our Time</span>
+          <h3>Lost History ↗</h3>
+          <p>Forgotten stories and unexplained discoveries.</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="newsletter" id="about">
+      <span class="eyebrow">The Dossier</span>
+      <h2>Curiosity has no final chapter.</h2>
+      <p>Question what you know. Investigate what remains unexplained.<br>Every mystery begins with a question.</p>
+      <a class="primary" href="#latest">Continue exploring ↗</a>
+    </section>
+
+    <footer>
+      <a class="brand" href="#"><span>THE</span> DOSSIER</a>
+      <span>Independent stories. Endless questions.</span>
+      <span>© <span id="year"></span> The Dossier</span>
+    </footer>
+  </main>
+
+  <script>
+    const search = document.getElementById("search");
+    const articles = [...document.querySelectorAll("#articles .article")];
+    const empty = document.getElementById("empty");
+
+    search.addEventListener("input", () => {
+      const query = search.value.trim().toLowerCase();
+      let visible = 0;
+
+      articles.forEach(article => {
+        const text = (article.innerText + " " + article.dataset.search).toLowerCase();
+        const match = text.includes(query);
+        article.style.display = match ? "" : "none";
+        if (match) visible++;
+      });
+
+      empty.style.display = visible ? "none" : "block";
+    });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
