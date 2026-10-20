@@ -488,13 +488,179 @@
         cover.hidden = true;
       }
 
+     
       statusBox.hidden = true;
       articleBox.hidden = false;
 
+      currentPostId = post.id;
+      loadCommunity();
       loadRelated(post.id);
+
     }
 
     async function loadRelated(currentId) {
+      
+    let currentPostId = null;
+    let visitorId = localStorage.getItem("dossier-visitor-id");
+
+    if (!visitorId) {
+      visitorId = crypto.randomUUID();
+      localStorage.setItem("dossier-visitor-id", visitorId);
+    }
+
+    async function loadCommunity() {
+      if (!currentPostId) return;
+
+      const [commentsResult, reactionsResult] = await Promise.all([
+        db
+          .from("comments")
+          .select("id, post_id, content, display_name, created_at")
+          .eq("post_id", currentPostId)
+          .order("created_at", { ascending: false }),
+        db
+          .from("reactions")
+          .select("reaction")
+          .eq("post_id", currentPostId)
+      ]);
+
+      const commentStatus = document.getElementById("comment-status");
+
+      if (commentsResult.error) {
+        console.error("Comments loading error:", commentsResult.error);
+        commentStatus.textContent = "Comments could not be loaded.";
+      } else {
+        renderComments(commentsResult.data || []);
+      }
+
+      if (reactionsResult.error) {
+        console.error("Reactions loading error:", reactionsResult.error);
+        return;
+      }
+
+      const reactions = reactionsResult.data || [];
+
+      document.getElementById("like-count").textContent =
+        reactions.filter(item => item.reaction === "interesting").length;
+
+      document.getElementById("mind-count").textContent =
+        reactions.filter(item => item.reaction === "mindblowing").length;
+    }
+
+    function renderComments(comments) {
+      const list = document.getElementById("comments-list");
+      list.replaceChildren();
+
+      if (!comments.length) {
+        const emptyMessage = document.createElement("p");
+        emptyMessage.className = "community-intro";
+        emptyMessage.textContent = "No comments yet. Be the first to share your thoughts.";
+        list.appendChild(emptyMessage);
+        return;
+      }
+
+      comments.forEach(comment => {
+        const card = document.createElement("article");
+        card.className = "comment-card";
+
+        const author = document.createElement("span");
+        author.className = "comment-author";
+        author.textContent = comment.display_name || "Anonymous";
+
+        const date = document.createElement("span");
+        date.className = "comment-date";
+        date.textContent = comment.created_at
+          ? new Date(comment.created_at).toLocaleDateString()
+          : "";
+
+        const content = document.createElement("p");
+        content.className = "comment-text";
+        content.textContent = comment.content || "";
+
+        card.append(author, date, content);
+        list.appendChild(card);
+      });
+    }
+
+    async function addReaction(reaction) {
+      if (!currentPostId) return;
+
+      const buttons = document.querySelectorAll(".reaction-btn");
+      buttons.forEach(button => button.disabled = true);
+
+      const { error } = await db.from("reactions").insert({
+        post_id: currentPostId,
+        reaction,
+        visitor_id: visitorId,
+        user_id: null
+      });
+
+      buttons.forEach(button => button.disabled = false);
+
+      if (error) {
+        console.error("Reaction insert error:", error);
+        document.getElementById("comment-status").textContent =
+          "Reaction failed. Please try again.";
+        return;
+      }
+
+      document.getElementById("comment-status").textContent =
+        "Thanks for your reaction!";
+      await loadCommunity();
+    }
+
+    async function submitComment() {
+      const nameInput = document.getElementById("comment-name");
+      const contentInput = document.getElementById("comment-input");
+      const status = document.getElementById("comment-status");
+      const button = document.getElementById("comment-submit");
+
+      const name = nameInput.value.trim();
+      const content = contentInput.value.trim();
+
+      if (!content) {
+        status.textContent = "Please write a comment first.";
+        return;
+      }
+
+      if (content.length > 2000 || name.length > 40) {
+        status.textContent = "Your comment or name is too long.";
+        return;
+      }
+
+      button.disabled = true;
+      status.textContent = "Posting comment...";
+
+      const { error } = await db.from("comments").insert({
+        post_id: currentPostId,
+        content,
+        display_name: name || "Anonymous",
+        user_id: null
+      });
+
+      button.disabled = false;
+
+      if (error) {
+        console.error("Comment insert error:", error);
+        status.textContent =
+          "Comment could not be posted. Please try again.";
+        return;
+      }
+
+      contentInput.value = "";
+      status.textContent = "Comment posted!";
+      await loadCommunity();
+    }
+
+    document.getElementById("like-btn").addEventListener("click", () => {
+      addReaction("interesting");
+    });
+
+    document.getElementById("mind-btn").addEventListener("click", () => {
+      addReaction("mindblowing");
+    });
+
+    document.getElementById("comment-submit").addEventListener("click", submitComment);
+
       const { data, error } = await db
         .from("posts")
         .select("id, title, slug, category")
