@@ -1014,7 +1014,21 @@ async function loadRelated(currentId) {
 
         const reactionTypes = ["like", "love", "wow", "sad", "angry"];
 
-document.getElementById("reaction-row").addEventListener("click", event => {
+
+const reactionRow = document.getElementById("reaction-row");
+
+if (reactionRow) {
+  reactionRow.addEventListener("click", event => {
+    const button = event.target.closest(".reaction-btn");
+    if (!button || button.disabled) return;
+
+    const reaction = button.dataset.reaction;
+
+    if (reactionTypes.includes(reaction)) {
+      addReaction(reaction);
+    }
+  });
+}
   const button = event.target.closest(".reaction-btn");
   if (!button || button.disabled) return;
 
