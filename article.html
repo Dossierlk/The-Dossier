@@ -373,6 +373,134 @@
       background: rgba(55, 145, 255, .38);
       border-color: var(--blue);
     }
+        /* ===== iOS glossy upgrade ===== */
+    :root {
+      --spring: cubic-bezier(.34, 1.56, .64, 1);
+    }
+
+    * { -webkit-tap-highlight-color: transparent; }
+
+    /* Floating glass nav */
+    .nav {
+      top: 12px;
+      width: min(1120px, 94%);
+      margin: 12px auto 0;
+      padding: 12px 18px;
+      border-radius: 22px;
+      background: rgba(15, 32, 61, .42);
+      border: 1px solid rgba(255, 255, 255, .14);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .22),
+        0 12px 40px rgba(0, 0, 0, .35);
+    }
+
+    /* Glass panels */
+    .glass {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, .11), rgba(255, 255, 255, .03)),
+        rgba(15, 32, 61, .55);
+      border: 1px solid rgba(255, 255, 255, .13);
+      backdrop-filter: blur(30px) saturate(180%);
+      -webkit-backdrop-filter: blur(30px) saturate(180%);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .25),
+        inset 0 -1px 0 rgba(255, 255, 255, .04),
+        0 24px 70px rgba(0, 0, 0, .35);
+    }
+
+    /* Glossy shine on top of panels */
+    .glass::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 45%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .10), transparent);
+      pointer-events: none;
+    }
+
+    .community { border-radius: 24px; }
+
+    /* Buttons: pill + glossy + spring press */
+    .back,
+    .reaction-btn,
+    .related-card,
+    .submit-btn {
+      transition: transform .35s var(--spring), background .25s, border-color .25s, box-shadow .25s, filter .25s;
+    }
+
+    .back {
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 255, 255, .16);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .22);
+    }
+
+    .reaction-btn {
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .13), rgba(255, 255, 255, .04));
+      border: 1px solid rgba(255, 255, 255, .15);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 6px 18px rgba(0, 0, 0, .2);
+    }
+
+    .reaction-btn.active {
+      background: linear-gradient(180deg, rgba(120, 190, 255, .55), rgba(55, 130, 255, .35));
+      border-color: rgba(140, 200, 255, .7);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .45),
+        0 0 24px rgba(80, 160, 255, .35);
+    }
+
+    .submit-btn {
+      border-radius: 999px;
+      background: linear-gradient(180deg, #9fdcff 0%, #4a92ff 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .6),
+        0 10px 28px rgba(57, 137, 255, .4);
+    }
+
+    .back:active,
+    .reaction-btn:active,
+    .submit-btn:active,
+    .related-card:active {
+      transform: scale(.95);
+    }
+
+    .related-card {
+      border-radius: 22px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, .09), rgba(255, 255, 255, .02));
+      border: 1px solid rgba(255, 255, 255, .13);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    /* Inputs + comments */
+    .comment-form input,
+    .comment-form textarea {
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .05);
+      border: 1px solid rgba(255, 255, 255, .13);
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, .25);
+    }
+
+    .comment-card {
+      border-radius: 20px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .02));
+      border: 1px solid rgba(255, 255, 255, .11);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15);
+    }
+
+    .cover { border-radius: 22px; }
+
+    @media (max-width: 560px) {
+      .nav { padding: 11px 14px; border-radius: 20px; }
+      .glass { border-radius: 24px; }
+    }
   </style>
 </head>
 
