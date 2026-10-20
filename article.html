@@ -665,19 +665,22 @@ async function loadRelated(currentId) {
 
     document.getElementById("comment-submit").addEventListener("click", submitComment);
 
-    async function loadCommunity() {
+        async function loadCommunity() {
       if (!currentPostId) return;
 
-      const [commentsResult, reactionsResult] = await Promise.all([
-        db
-          .from("comments")
+      const [commentsResult, reactionsResult, mineResult] = await Promise.all([
+        db.from("comments")
           .select("id, post_id, content, display_name, created_at")
           .eq("post_id", currentPostId)
           .order("created_at", { ascending: false }),
-        db
-          .from("reactions")
+        db.from("reactions")
+          .select("reaction")
+          .eq("post_id", currentPostId),
+        db.from("reactions")
           .select("reaction")
           .eq("post_id", currentPostId)
+          .eq("visitor_id", visitorId)
+          .maybeSingle()
       ]);
 
       if (commentsResult.error) {
@@ -690,6 +693,17 @@ async function loadRelated(currentId) {
         console.error("Reactions loading error:", reactionsResult.error);
         return;
       }
+
+      const reactions = reactionsResult.data || [];
+      document.getElementById("like-count").textContent =
+        reactions.filter(item => item.reaction === "interesting").length;
+      document.getElementById("mind-count").textContent =
+        reactions.filter(item => item.reaction === "mindblowing").length;
+
+      const mine = mineResult.data ? mineResult.data.reaction : null;
+      document.getElementById("like-btn").classList.toggle("active", mine === "interesting");
+      document.getElementById("mind-btn").classList.toggle("active", mine === "mindblowing");
+    }
 
       const reactions = reactionsResult.data || [];
 
