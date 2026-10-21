@@ -35,6 +35,39 @@
    .event-cta{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 11px;border-radius:999px;background:linear-gradient(135deg,#a8d8ff,#65b5ff);color:#07142b!important;font-size:10px;font-weight:800;white-space:nowrap;box-shadow:inset 0 1px 0 #ffffffaa,0 4px 10px #0002}
    .event-mark{display:inline-grid;place-items:center;margin-left:7px;width:25px;height:25px;border-radius:8px;color:#b9e0ff;background:linear-gradient(145deg,#1b3a65,#10213e);border:1px solid rgba(101,181,255,.3);font-size:14px}
    .event-pill{font-size:10px;font-weight:700;padding:6px 9px;border-radius:999px;border:1px solid rgba(101,181,255,.28)!important;background:rgba(20,48,85,.7)!important;color:#b9e0ff!important;white-space:nowrap}
+
+   /* Search icon stays in its own button; the search field opens as a separate row */
+   .search-control{display:flex;align-items:center;gap:8px;min-width:0;position:relative}
+   .search-icon-button{position:relative;z-index:2;flex:0 0 36px}
+   /* Right-side category drawer shared by every page */
+   .dossier-drawer-backdrop{position:fixed;inset:0;z-index:1998;background:rgba(1,7,18,.48);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);opacity:0;visibility:hidden;transition:opacity .28s ease,visibility .28s ease}
+   .dossier-drawer{position:fixed;z-index:1999;top:0;right:0;width:min(360px,88vw);height:100dvh;padding:26px 20px 28px;overflow-y:auto;transform:translateX(105%);transition:transform .34s cubic-bezier(.22,1,.36,1);background:linear-gradient(155deg,rgba(15,35,68,.98),rgba(5,13,29,.99));border-left:1px solid rgba(120,180,255,.24);box-shadow:-22px 0 70px rgba(0,0,0,.35);color:#f2f7ff}
+   .dossier-drawer.open{transform:translateX(0)}
+   .dossier-drawer-backdrop.open{opacity:1;visibility:visible}
+   .dossier-drawer-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:22px;border-bottom:1px solid rgba(150,190,245,.18)}
+   .dossier-drawer-title{font:700 15px/1.3 system-ui,sans-serif;letter-spacing:2px}
+   .dossier-drawer-title span{color:#65b5ff}
+   .dossier-drawer-close{display:grid;place-items:center;width:38px;height:38px;border:1px solid rgba(120,180,255,.25);border-radius:12px;background:rgba(255,255,255,.06);color:inherit;font-size:23px}
+   .dossier-drawer-label{margin:24px 8px 9px;color:#79bcff;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+   .dossier-drawer-links{display:grid;gap:7px}
+   .dossier-drawer-links a{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 13px;border:1px solid transparent;border-radius:14px;color:#e5efff;text-decoration:none;background:rgba(255,255,255,.035);font:600 14px/1.3 system-ui,sans-serif}
+   .dossier-drawer-links a:after{content:"↗";color:#75baff;font-size:15px}
+   .dossier-drawer-links a:hover,.dossier-drawer-links a:focus-visible{background:rgba(65,140,255,.13);border-color:rgba(110,180,255,.25)}
+   body.dossier-drawer-open{overflow:hidden}
+   body.light-theme .dossier-drawer{background:linear-gradient(155deg,rgba(250,252,255,.99),rgba(232,240,253,.99));color:#182b4a;border-color:#cbdaf0}
+   body.light-theme .dossier-drawer-head{border-color:#d5e0f0}
+   body.light-theme .dossier-drawer-links a{color:#233b60;background:rgba(70,115,180,.06)}
+   body.light-theme .dossier-drawer-links a:hover{background:#e2edff;border-color:#c4d8f4}
+   @media(max-width:760px){
+     .nav .nav-links{display:none!important}
+     .nav .nav-links.open{display:none!important}
+     .search-control{margin-left:auto!important;flex:0 0 auto!important}
+     .search-control.search-open{position:absolute;left:8px;right:8px;top:calc(100% + 7px);display:flex!important;z-index:20}
+     .search-control.search-open .search-icon-button{flex:0 0 34px}
+     .search-control.search-open .search{width:auto;max-width:none;flex:1;min-width:0}
+     .nav .menu-toggle{margin-left:0!important}
+   }
+
    .search-control{display:flex;align-items:center;gap:7px;min-width:0}
    .search-icon-button{display:inline-grid;place-items:center;flex:0 0 36px;width:36px;height:36px;border-radius:12px;border:1px solid rgba(101,181,255,.25);background:rgba(16,31,59,.78);color:#b9dcff;font-size:25px;line-height:1;cursor:pointer;transition:transform .2s ease,background .2s ease}
    .search-icon-button:active,.menu-toggle:active{transform:scale(.94)}
@@ -100,6 +133,23 @@
    `;document.head.appendChild(s);
   }
   document.body.classList.add("event-skinned");
+
+  // One consistent right-side navigation drawer with every category, on every page.
+  const buildDossierDrawer=()=>{
+    if(document.getElementById("dossier-drawer")) return;
+    const backdrop=document.createElement("div");backdrop.className="dossier-drawer-backdrop";backdrop.id="dossier-drawer-backdrop";
+    const drawer=document.createElement("aside");drawer.className="dossier-drawer";drawer.id="dossier-drawer";drawer.setAttribute("aria-label","Site navigation");drawer.setAttribute("aria-hidden","true");
+    drawer.innerHTML='<div class="dossier-drawer-head"><div class="dossier-drawer-title"><span>THE</span> DOSSIER</div><button type="button" class="dossier-drawer-close" aria-label="Close menu">×</button></div><p class="dossier-drawer-label">Explore</p><nav class="dossier-drawer-links"><a href="index.html">Home</a><a href="index.html#latest">Discover latest stories</a><a href="category.html">All stories</a><a href="category.html?category=Astro">Astro &amp; Space</a><a href="category.html?category=Crime">Strange Crimes</a><a href="category.html?category=Paranormal">Paranormal</a><a href="category.html?category=Unexplained">Unexplained Mysteries</a><a href="category.html?category=Quick%20Flashes">Quick Flashes</a><a href="about.html">About The Dossier</a></nav>';
+    document.body.append(backdrop,drawer);
+    const close=()=>{drawer.classList.remove("open");backdrop.classList.remove("open");document.body.classList.remove("dossier-drawer-open");drawer.setAttribute("aria-hidden","true");document.querySelectorAll(".menu-toggle").forEach(b=>b.setAttribute("aria-expanded","false"));};
+    const open=()=>{drawer.classList.add("open");backdrop.classList.add("open");document.body.classList.add("dossier-drawer-open");drawer.setAttribute("aria-hidden","false");document.querySelectorAll(".menu-toggle").forEach(b=>b.setAttribute("aria-expanded","true"));drawer.querySelector(".dossier-drawer-close").focus();};
+    document.querySelectorAll(".menu-toggle").forEach(btn=>{btn.addEventListener("click",ev=>{ev.preventDefault();ev.stopImmediatePropagation();if(drawer.classList.contains("open"))close();else open();},true);});
+    backdrop.addEventListener("click",close);drawer.querySelector(".dossier-drawer-close").addEventListener("click",close);
+    document.addEventListener("keydown",ev=>{if(ev.key==="Escape")close();});
+    drawer.querySelectorAll("a").forEach(a=>a.addEventListener("click",close));
+  };
+  buildDossierDrawer();
+
   const nav=document.querySelector("header.nav, .nav");
   if(nav&&!nav.querySelector(".event-pill")){
     const p=document.createElement("span");p.className="event-pill";p.textContent=name;p.style.cssText="";nav.appendChild(p);
