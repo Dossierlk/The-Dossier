@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,174 +6,163 @@
   <meta name="theme-color" content="#090909">
   <title>About Us — The Dossier</title>
   <meta name="description" content="Learn about The Dossier, its founder, and how to get in touch.">
-
-  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090909;
+      --panel: #111111;
+      --text: #f4f1eb;
+      --muted: #96938d;
+      --gold: #c9ad79;
+      --line: rgba(255,255,255,.09);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    .nav {
+      position: sticky; top: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 24px; padding: 18px max(6%, calc((100% - 1240px)/2));
+      background: rgba(9,9,9,.82); border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+    }
+    .brand { display: inline-flex; align-items: center; gap: 9px; font-size: 19px; font-weight: 700; letter-spacing: 3px; white-space: nowrap; }
+    .brand span { color: var(--gold); }
+    .brand img { width: 29px; height: 29px; object-fit: contain; }
+    .nav-links { display: flex; align-items: center; gap: 26px; color: #c6c3bd; font-size: 13px; }
+    .nav-links a { transition: color .2s ease; }
+    .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--gold); }
+    .about-wrap { width: min(900px, 88%); margin: 54px auto 72px; }
+    .about-eyebrow, .about-label {
+      color: var(--gold); font-size: 11px; font-weight: 700;
+      letter-spacing: 2.5px; text-transform: uppercase;
+    }
+    .about-card {
+      position: relative; overflow: hidden; padding: clamp(26px, 5vw, 58px);
+      border: 1px solid var(--line); border-radius: 24px;
+      background: radial-gradient(ellipse at 10% 0%, rgba(201,173,121,.12), transparent 43%),
+                  linear-gradient(145deg, #14130f, #101010 58%, #0c0c0c);
+      box-shadow: 0 18px 70px rgba(0,0,0,.28);
+      line-height: 1.85;
+      animation: rise .7s ease both;
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 9px; margin-bottom: 22px;
+      color: #c6c3bd; font-size: 13px; transition: color .2s ease, transform .2s ease;
+    }
+    .back-link:hover { color: var(--gold); transform: translateX(-3px); }
+    .about-card h1 {
+      margin: 16px 0 18px; font-family: "Playfair Display", serif;
+      font-size: clamp(38px, 6vw, 62px); font-weight: 500;
+      line-height: 1.12; letter-spacing: -1.5px;
+    }
+    .about-card h1 span { color: var(--gold); }
+    .about-intro { max-width: 690px; color: #c6c3bd; font-size: clamp(15px, 2vw, 18px); line-height: 1.85; }
+    .about-divider { height: 1px; margin: 30px 0; background: linear-gradient(90deg, rgba(201,173,121,.55), var(--line) 70%, transparent); }
+    .about-card h2 { margin: 8px 0 14px; font-family: "Playfair Display", serif; font-size: clamp(25px, 4vw, 34px); font-weight: 500; line-height: 1.3; }
+    .about-card p { color: var(--muted); font-size: 14px; }
+    .about-card .about-label { margin-bottom: 9px; color: var(--gold); }
+    .contact-links { display: grid; gap: 12px; margin-top: 20px; }
+    .contact-links a {
+      display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 14px 16px;
+      color: #e8e2d6; font-size: 13px; overflow-wrap: anywhere;
+      border: 1px solid var(--line); border-radius: 13px;
+      background: rgba(255,255,255,.025);
+      transition: border-color .25s ease, background .25s ease, transform .25s ease;
+    }
+    .contact-links a:hover { border-color: rgba(201,173,121,.55); background: rgba(201,173,121,.07); transform: translateY(-2px); }
+    .about-footer { margin-top: 34px; color: #77736b; font-size: 10px; font-weight: 600; letter-spacing: 2px; }
+    footer {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+      gap: 16px; width: min(1120px, 88%); margin: 0 auto;
+      padding: 25px 0 34px; color: var(--muted); border-top: 1px solid var(--line); font-size: 12px;
+    }
+    footer .brand { font-size: 14px; }
+    @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 700px) {
+      .nav { padding: 15px 6%; flex-wrap: wrap; gap: 15px; }
+      .brand { font-size: 16px; letter-spacing: 2px; }
+      .nav-links { order: 3; width: 100%; justify-content: space-between; gap: 10px; font-size: 12px; }
+      .about-wrap { width: 90%; margin: 28px auto 48px; }
+      .about-card { border-radius: 19px; }
+      footer { width: 90%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+    }
+  </style>
 </head>
 <body>
+  <header class="nav">
+    <a class="brand" href="/" aria-label="The Dossier home">
+      <img src="logo.png" alt="" onerror="this.style.display='none'">
+      <span>THE</span> DOSSIER
+    </a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+      <a href="/#latest">Discover</a>
+      <a href="/#categories">Categories</a>
+      <a href="/about.html" aria-current="page">About</a>
+    </nav>
+  </header>
 
-  <main class="about-page">
+  <main class="about-wrap">
     <a href="/" class="back-link">← Back to Home</a>
-
     <section class="about-card">
-      <div class="about-eyebrow">BEHIND THE DOSSIER</div>
-
+      <div class="about-eyebrow">Behind The Dossier</div>
       <h1>About <span>The Dossier</span></h1>
-
       <p class="about-intro">
         Exploring the unknown. Questioning the unexplained.
         Discovering the stories hidden beyond the ordinary.
       </p>
 
       <div class="about-divider"></div>
-
-      <p class="about-label">FOUNDER & CREATOR</p>
+      <p class="about-label">Founder &amp; Creator</p>
       <h2>Sasmitha Medhan</h2>
-
       <p>
         The Dossier is an independent mystery documentary platform
         exploring unexplained phenomena, cosmic mysteries, strange
         events, hidden history and stories that challenge what we
         think we know about our world and beyond.
       </p>
-
       <p>
         Our mission is to spark curiosity, explore intriguing evidence,
         and keep the search for answers alive.
       </p>
 
       <div class="about-divider"></div>
-
       <h2>Get in touch</h2>
       <p>
         Questions, suggestions or an interesting mystery to share?
         We'd love to hear from you.
       </p>
-
       <div class="contact-links">
-        <a href="mailto:thedossierlk@yahoo.com">
-          Email — thedossierlk@yahoo.com
-        </a>
-
-        <a href="https://wa.me/94781515271"
-           target="_blank" rel="noopener noreferrer">
-          WhatsApp — +94 78 151 5271
-        </a>
-
-        <a href="https://web.facebook.com/profile.php?id=61595210025041"
-           target="_blank" rel="noopener noreferrer">
-          Follow The Dossier on Facebook
-        </a>
+        <a href="mailto:thedossierlk@yahoo.com">Email — thedossierlk@yahoo.com</a>
+        <a href="https://wa.me/94781515271" target="_blank" rel="noopener noreferrer">WhatsApp — +94 78 151 5271 ↗</a>
+        <a href="https://web.facebook.com/profile.php?id=61595210025041" target="_blank" rel="noopener noreferrer">Follow The Dossier on Facebook ↗</a>
       </div>
-
-      <div class="about-footer">
-        THE DOSSIER — UNCOVER THE UNKNOWN.
-      </div>
+      <div class="about-footer">THE DOSSIER — UNCOVER THE UNKNOWN.</div>
     </section>
   </main>
 
-  <style>
-    body {
-      background: #090909;
-      color: #e8e8e8;
-      font-family: Arial, sans-serif;
-      margin: 0;
-    }
-
-    .about-page {
-      max-width: 850px;
-      margin: 0 auto;
-      padding: 40px 20px 70px;
-    }
-
-    .back-link {
-      display: inline-block;
-      color: #aaa;
-      text-decoration: none;
-      margin-bottom: 25px;
-    }
-
-    .back-link:hover {
-      color: white;
-    }
-
-    .about-card {
-      padding: 36px;
-      border: 1px solid #292929;
-      border-radius: 22px;
-      background:
-        radial-gradient(ellipse at top left, #14202b 0%, transparent 55%),
-        #101010;
-      line-height: 1.8;
-    }
-
-    .about-eyebrow,
-    .about-label {
-      color: #8abfff;
-      font-size: 12px;
-      letter-spacing: 2px;
-      font-weight: bold;
-    }
-
-    .about-card h1 {
-      font-size: clamp(30px, 6vw, 48px);
-      line-height: 1.2;
-    }
-
-    .about-card h1 span {
-      color: #8abfff;
-    }
-
-    .about-intro {
-      color: #bdbdbd;
-      font-size: 17px;
-    }
-
-    .about-divider {
-      height: 1px;
-      background: #303030;
-      margin: 28px 0;
-    }
-
-    .contact-links {
-      display: grid;
-      gap: 12px;
-      margin-top: 20px;
-    }
-
-    .contact-links a {
-      display: block;
-      padding: 13px 16px;
-      color: #dedede;
-      text-decoration: none;
-      border: 1px solid #303030;
-      border-radius: 12px;
-      background: #ffffff05;
-      overflow-wrap: anywhere;
-    }
-
-    .contact-links a:hover {
-      border-color: #8abfff;
-      background: #8abfff0d;
-    }
-
-    .about-footer {
-      margin-top: 32px;
-      color: #777;
-      font-size: 11px;
-      letter-spacing: 1.5px;
-    }
-
-    @media (max-width: 600px) {
-      .about-page {
-        padding: 24px 14px 45px;
-      }
-
-      .about-card {
-        padding: 23px 19px;
-      }
-    }
-  </style>
-
+  <footer>
+    <a class="brand" href="/"><span>THE</span> DOSSIER</a>
+    <span>Independent stories. Endless questions.</span>
+    <span>© <span id="year"></span> The Dossier</span>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
-```
