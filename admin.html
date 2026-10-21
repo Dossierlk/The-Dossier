@@ -75,6 +75,42 @@
       .grid { grid-template-columns: 1fr; gap: 0; }
       h1 { font-size: 23px; }
     }
+    
+.ai-review {
+  margin-top: 24px;
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+}
+.ai-draft-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 14px 0;
+  background: #0b0d12;
+}
+.ai-draft-card h3 { margin: 0 0 8px; }
+.ai-draft-card .draft-meta {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+.ai-draft-card textarea { min-height: 180px; }
+.ai-draft-card .draft-content { margin-top: 12px; }
+.ai-draft-card .draft-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+.ai-draft-card .approve-ai {
+  background: #dceaff;
+  color: #101827;
+  font-weight: 800;
+}
+.ai-draft-card .reject-ai {
+  background: #321619;
+  color: #ffb5b5;
+}
   </style>
 </head>
 <body>
@@ -101,6 +137,22 @@
           <button class="primary" id="loginBtn" type="submit">Sign in</button>
         </div>
       </form>
+      
+<div class="ai-review">
+  <div class="topline">
+    <div>
+      <h2>AI Articles Approval</h2>
+      <p>Review AI drafts before publishing.</p>
+    </div>
+    <button id="refreshAiBtn" type="button">Refresh drafts</button>
+  </div>
+
+  <div id="aiDraftMessage" class="hint">
+    Sign in to load pending AI articles.
+  </div>
+
+  <div id="aiDraftList"></div>
+</div>
     </section>
 
     <section class="panel" id="editor">
@@ -196,6 +248,13 @@
 
       loginPanel.style.display = allowed ? "none" : "block";
       editor.style.display = allowed ? "block" : "none";
+      
+if (allowed) {
+  loadAiDrafts();
+} else {
+  aiDraftList.replaceChildren();
+  setAiMessage("Sign in to load pending AI articles.");
+}
       $("logoutBtn").style.display = allowed ? "inline-flex" : "none";
 
       if (user && !allowed) {
@@ -386,6 +445,248 @@
       }
     });
 
+const aiDraftList = $("aiDraftList");
+const aiDraftMessage = $("aiDraftMessage");
+const refreshAiBtn = $("refreshAiBtn");
+
+function setAiMessage(text, isError = false) {
+  aiDraftMessage.textContent = text;
+  aiDraftMessage.style.color = isError ? "#ffb5b5" : "";
+}
+
+async function loadAiDrafts() {
+  const { data: authData, error: authError } = await db.auth.getUser();
+
+  if (authError || authData.user?.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+    setAiMessage("Please sign in with your admin account.", true);
+    aiDraftList.replaceChildren();
+    return;
+  }
+
+  refreshAiBtn.disabled = true;
+  setAiMessage("Loading pending drafts...");
+  aiDraftList.replaceChildren();
+
+  try {
+    const { data, error } = await db
+      .from("ai_article_drafts")
+      .select("id,title,content,slug,tags,sources,image_url,created_at,status")
+      .eq("status", "pending")
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    if (!data.length) {
+      setAiMessage("No pending AI drafts. New drafts will appear here.");
+      return;
+    }
+
+    setAiMessage(`${data.length} pending draft(s). Review before approving.`);
+
+    data.forEach(draft => {
+      const card = document.createElement("article");
+      card.className = "ai-draft-card";
+
+      const heading = document.createElement("h3");
+      heading.textContent = draft.title;
+
+      const meta = document.createElement("div");
+      meta.className = "draft-meta";
+      meta.textContent = `Created: ${new Date(draft.created_at).toLocaleString()} · Status: ${draft.status}`;
+
+      const titleLabel = document.createElement("label");
+      titleLabel.textContent = "Article title";
+
+      const titleInput = document.createElement("input");
+      titleInput.value = draft.title;
+      titleInput.maxLength = 200;
+
+      const contentLabel = document.createElement("label");
+      contentLabel.textContent = "Article content";
+
+      const contentInput = document.createElement("textarea");
+      contentInput.value = draft.content;
+      contentInput.style.minHeight = "250px";
+
+      const imageLabel = document.createElement("label");
+      imageLabel.textContent = "Cover image (required to publish)";
+
+      const imageInput = document.createElement("input");
+      imageInput.type = "file";
+      imageInput.accept = "image/jpeg,image/png,image/webp";
+
+      const imageHint = document.createElement("div");
+      imageHint.className = "hint";
+      imageHint.textContent = draft.image_url
+        ? "An image URL already exists. Choose another image to replace it."
+        : "Choose a JPG, PNG or WebP image under 5 MB.";
+
+      const preview = document.createElement("img");
+      preview.alt = "Cover image preview";
+      preview.style.cssText = "display:none;max-width:100%;max-height:220px;margin-top:10px;border-radius:10px";
+
+      if (draft.image_url) {
+        preview.src = draft.image_url;
+        preview.style.display = "block";
+      }
+
+      imageInput.addEventListener("change", () => {
+        const file = imageInput.files[0];
+        if (!file) return;
+
+        if (!["image/jpeg", "image/png", "image/webp"].includes(file.type) ||
+            file.size > 5 * 1024 * 1024) {
+          imageInput.value = "";
+          setAiMessage("Choose a JPG, PNG or WebP image under 5 MB.", true);
+          return;
+        }
+
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+        setAiMessage("Image selected. Save the draft only after checking the article.");
+      });
+
+      const actions = document.createElement("div");
+      actions.className = "draft-actions";
+
+      const approveBtn = document.createElement("button");
+      approveBtn.type = "button";
+      approveBtn.className = "approve-ai";
+      approveBtn.textContent = "Approve & Publish";
+
+      const rejectBtn = document.createElement("button");
+      rejectBtn.type = "button";
+      rejectBtn.className = "reject-ai";
+      rejectBtn.textContent = "Reject draft";
+
+      approveBtn.addEventListener("click", async () => {
+        if (!confirm("Publish this article to the live website?")) return;
+
+        approveBtn.disabled = true;
+        rejectBtn.disabled = true;
+
+        let uploadedPath = null;
+
+        try {
+          const { data: currentAuth, error: currentAuthError } = await db.auth.getUser();
+          if (currentAuthError) throw currentAuthError;
+          if (currentAuth.user?.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+            throw new Error("Admin login required.");
+          }
+
+          const title = titleInput.value.trim();
+          const content = contentInput.value.trim();
+          const file = imageInput.files[0];
+          let imageUrl = draft.image_url || "";
+
+          if (!title || !content) {
+            throw new Error("Title and article content are required.");
+          }
+
+          if (file) {
+            const extension = ({
+              "image/jpeg": "jpg",
+              "image/png": "png",
+              "image/webp": "webp"
+            })[file.type];
+
+            uploadedPath = `${crypto.randomUUID()}.${extension}`;
+
+            const { error: uploadError } = await db.storage
+              .from("post-images")
+              .upload(uploadedPath, file, {
+                contentType: file.type,
+                upsert: false
+              });
+
+            if (uploadError) throw uploadError;
+
+            imageUrl = db.storage
+              .from("post-images")
+              .getPublicUrl(uploadedPath).data.publicUrl;
+          }
+
+          if (!imageUrl) {
+            throw new Error("Select a cover image before publishing.");
+          }
+
+          const { error: approvalError } = await db.rpc(
+            "approve_ai_article_draft",
+            {
+              p_draft_id: draft.id,
+              p_title: title,
+              p_content: content,
+              p_image_url: imageUrl
+            }
+          );
+
+          if (approvalError) throw approvalError;
+
+          setAiMessage("Article approved and published successfully.");
+          await loadAiDrafts();
+
+        } catch (error) {
+          setAiMessage(
+            "Approval failed: " + (error.message || "Unknown error") +
+            (uploadedPath ? " Check Storage before retrying." : ""),
+            true
+          );
+          approveBtn.disabled = false;
+          rejectBtn.disabled = false;
+        }
+      });
+
+      rejectBtn.addEventListener("click", async () => {
+        if (!confirm("Reject this AI draft? It will not be published.")) return;
+
+        rejectBtn.disabled = true;
+        approveBtn.disabled = true;
+
+        try {
+          const { data: currentAuth, error: currentAuthError } = await db.auth.getUser();
+          if (currentAuthError) throw currentAuthError;
+          if (currentAuth.user?.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+            throw new Error("Admin login required.");
+          }
+
+          const { error } = await db
+            .from("ai_article_drafts")
+            .update({ status: "rejected", reviewed_at: new Date().toISOString() })
+            .eq("id", draft.id)
+            .eq("status", "pending");
+
+          if (error) throw error;
+
+          setAiMessage("Draft rejected.");
+          await loadAiDrafts();
+
+        } catch (error) {
+          setAiMessage("Reject failed: " + (error.message || "Unknown error"), true);
+          rejectBtn.disabled = false;
+          approveBtn.disabled = false;
+        }
+      });
+
+      actions.append(approveBtn, rejectBtn);
+      card.append(
+        heading, meta,
+        titleLabel, titleInput,
+        contentLabel, contentInput,
+        imageLabel, imageInput, imageHint, preview,
+        actions
+      );
+
+      aiDraftList.appendChild(card);
+    });
+
+  } catch (error) {
+    setAiMessage("Could not load drafts: " + (error.message || "Unknown error"), true);
+  } finally {
+    refreshAiBtn.disabled = false;
+  }
+}
+
+refreshAiBtn.addEventListener("click", loadAiDrafts);
     db.auth.onAuthStateChange((_event, session) => {
       setLoggedIn(session?.user || null);
     });
