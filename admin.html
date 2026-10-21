@@ -473,7 +473,7 @@ async function loadAiDrafts() {
     return;
   }
 
-  refreshAiBtn.disabled = true;
+  if (refreshAiBtn) refreshAiBtn.disabled = true;
   setAiMessage("Loading pending drafts...");
   aiDraftList.replaceChildren();
 
@@ -692,7 +692,7 @@ async function loadAiDrafts() {
   } catch (error) {
     setAiMessage("Could not load drafts: " + (error.message || "Unknown error"), true);
   } finally {
-    refreshAiBtn.disabled = false;
+    if (refreshAiBtn) refreshAiBtn.disabled = false;
   }
 }
 
