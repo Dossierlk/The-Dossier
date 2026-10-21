@@ -1392,7 +1392,20 @@ const quickFlashesEmpty = document.getElementById("quick-flashes-empty");
     if (!query) {
       searchControl?.classList.remove("search-open");
       document.getElementById("latest").querySelector("h2").textContent = "🔥 Trending Stories";
-      loadArticles();
+
+      // Restore the cached home results without reloading from Supabase.
+      // Calling loadArticles() here caused loadArticles() -> filterArticles() -> loadArticles()
+      // repeatedly, creating network requests, layout shifts and the home-page flicker.
+      const regularPosts = allPublishedPosts.filter(post => normalizedCategory(post) !== "quick flashes");
+      const trendingPosts = [...regularPosts].sort((a, b) =>
+        (Number(b.views) || 0) - (Number(a.views) || 0) ||
+        new Date(b.created_at || 0) - new Date(a.created_at || 0)
+      ).slice(0, 3);
+
+      articlesGrid.replaceChildren();
+      trendingPosts.forEach(post => articlesGrid.appendChild(makePostCard(post, "🔥 TRENDING")));
+      empty.style.display = trendingPosts.length ? "none" : "block";
+      empty.textContent = trendingPosts.length ? "" : "No published stories yet.";
       return;
     }
     searchControl?.classList.add("search-open");
