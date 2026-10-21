@@ -1115,7 +1115,7 @@ body.light-theme footer {
       let safeText = escapeHTML(String(value));
 
       // Turn Markdown-style links such as [Source](https://example.com) into links.
-      safeText = safeText.replace(/\\[([^\\]\\n]+)\\]\\((https?:\\/\\/[^\\s)]+)\\)/g, (match, label, url) => {
+      safeText = safeText.replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g, (match, label, url) => {
         const index = savedLinks.push(
           '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + label + '</a>'
         ) - 1;
@@ -1123,7 +1123,7 @@ body.light-theme footer {
       });
 
       // Make plain http(s) URLs clickable as well.
-      safeText = safeText.replace(/https?:\\/\\/[^\\s<>"']+/g, (rawUrl) => {
+      safeText = safeText.replace(/https?:\/\/[^\s<>"']+/g, (rawUrl) => {
         const trailing = rawUrl.match(/[.,!?;:)]*$/)?.[0] || "";
         const url = rawUrl.slice(0, rawUrl.length - trailing.length);
         if (!url) return rawUrl;
@@ -1133,7 +1133,7 @@ body.light-theme footer {
         return '%%DOSSIER_LINK_' + index + '%%' + trailing;
       });
 
-      return safeText.replace(/%%DOSSIER_LINK_(\\d+)%%/g, (_, index) => savedLinks[Number(index)]);
+      return safeText.replace(/%%DOSSIER_LINK_(\d+)%%/g, (_, index) => savedLinks[Number(index)]);
     }
 
     async function loadArticle() {
