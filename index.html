@@ -1085,13 +1085,10 @@
     <a href="/about.html">About</a>
   </nav>
 
-  <input
-    id="search"
-    class="search"
-    type="search"
-    placeholder="Search stories..."
-    aria-label="Search stories"
-  >
+  <div class="search-control" id="search-control">
+    <button type="button" class="search-icon-button" id="search-open" aria-label="Open search" title="Search stories">⌕</button>
+    <input id="search" class="search" type="search" placeholder="Search all stories..." aria-label="Search all published stories" autocomplete="off">
+  </div>
 
   <button
     class="menu-toggle"
@@ -1197,6 +1194,9 @@
   );
 
   const search = document.getElementById("search");
+  const searchControl = document.getElementById("search-control");
+  const searchOpen = document.getElementById("search-open");
+  let allPublishedPosts = [];
   const articlesGrid = document.getElementById("articles");
 const empty = document.getElementById("empty");
   const quickFlashesSection = document.getElementById("quick-flashes-section");
@@ -1289,6 +1289,7 @@ const quickFlashesEmpty = document.getElementById("quick-flashes-empty");
     }
 
     const posts = data || [];
+    allPublishedPosts = posts;
     const regularPosts = posts.filter(post => normalizedCategory(post) !== "quick flashes");
     const quickFlashPosts = posts.filter(post => normalizedCategory(post) === "quick flashes");
 
@@ -1384,25 +1385,38 @@ const quickFlashesEmpty = document.getElementById("quick-flashes-empty");
     history.replaceState(null, "", `#${encodeURIComponent(post.slug || post.id)}`);
   }
 
+  let searchTimer = null;
   function filterArticles() {
     const query = (search?.value || "").trim().toLowerCase();
-    const cards = document.querySelectorAll("#latest .article, #quick-flashes .article, .category-posts .article");
-    let trendingVisible = 0;
-
-    cards.forEach(card => {
-      const text = (card.innerText + " " + (card.dataset.search || "")).toLowerCase();
-      const match = text.includes(query);
-      card.style.display = match ? "" : "none";
-      if (match && card.closest("#latest")) trendingVisible++;
-    });
-
-    empty.style.display = query && !trendingVisible ? "block" : "none";
-    if (query && !trendingVisible) {
-      empty.textContent = cards.length ? "No matching trending stories. Check the category sections for matching stories." : "No published stories yet.";
+    clearTimeout(searchTimer);
+    if (!query) {
+      searchControl?.classList.remove("search-open");
+      document.getElementById("latest").querySelector("h2").textContent = "🔥 Trending Stories";
+      loadArticles();
+      return;
     }
+    searchControl?.classList.add("search-open");
+    document.getElementById("latest").querySelector("h2").textContent = "Search results";
+    searchTimer = setTimeout(() => {
+      const terms = query.split(/\\s+/).filter(Boolean);
+      const results = allPublishedPosts.filter(post => {
+        const haystack = `${post.title || ""} ${post.category || ""} ${post.content || ""}`.toLowerCase();
+        return terms.every(term => haystack.includes(term));
+      });
+      articlesGrid.replaceChildren();
+      results.slice(0, 30).forEach(post => articlesGrid.appendChild(makePostCard(post, post.category || "STORY")));
+      empty.style.display = results.length ? "none" : "block";
+      empty.textContent = results.length ? "" : "No matching stories yet. Try another keyword.";
+      document.getElementById("latest").scrollIntoView({behavior:"smooth",block:"start"});
+    }, 120);
   }
-
   search?.addEventListener("input", filterArticles);
+  searchOpen?.addEventListener("click", () => {
+    const open = searchControl.classList.toggle("search-open");
+    if (open) { search.focus(); }
+    else { search.value = ""; filterArticles(); }
+  });
+  search?.addEventListener("keydown", e => { if (e.key === "Escape") { search.value = ""; searchControl?.classList.remove("search-open"); filterArticles(); search.blur(); } });
   document.getElementById("year").textContent =
     new Date().getFullYear();
 
