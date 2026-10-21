@@ -137,15 +137,6 @@
           <button class="primary" id="loginBtn" type="submit">Sign in</button>
         </div>
       </form>
-      
-<div class="ai-review">
-  <div class="topline">
-    <div>
-      <h2>AI Articles Approval</h2>
-      <p>Review AI drafts before publishing.</p>
-    </div>
-    <button id="refreshAiBtn" type="button">Refresh drafts</button>
-  </div>
 
   <div id="aiDraftMessage" class="hint">
     Sign in to load pending AI articles.
@@ -163,6 +154,24 @@
         </div>
         <button id="logoutBtn" type="button">Log out</button>
       </div>
+
+<section class="panel" id="aiReviewPanel">
+  <div class="ai-review">
+    <div class="topline">
+      <div>
+        <h2>AI Articles Approval</h2>
+        <p>Review AI drafts before publishing.</p>
+      </div>
+      <button id="refreshAiBtn" type="button">Refresh drafts</button>
+    </div>
+
+    <div id="aiDraftMessage" class="hint">
+      Sign in to load pending AI articles.
+    </div>
+
+    <div id="aiDraftList"></div>
+  </div>
+</section>
 
       <form id="postForm">
         <label for="title">Article title</label>
@@ -248,7 +257,7 @@
 
       loginPanel.style.display = allowed ? "none" : "block";
       editor.style.display = allowed ? "block" : "none";
-      
+      $("aiReviewPanel").style.display = allowed ? "block" : "none";
 if (allowed) {
   loadAiDrafts();
 } else {
