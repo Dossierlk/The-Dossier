@@ -354,7 +354,7 @@
       background:
         radial-gradient(ellipse at 50% -15%, #123f83 0%, transparent 48%),
         var(--bg);
-      background-attachment: fixed;
+      background-attachment: scroll;
     }
 
     .nav {
@@ -1016,6 +1016,16 @@
     @media (max-width: 480px) {
       .category-section .section-head { align-items: start; }
     }
+  
+    /* Stability: avoid repaint-heavy effects on the home page while scrolling. */
+    body { background-attachment: scroll !important; }
+    .nav { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+    .search, .glass, .event-highlight { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+    .hero-content, .article { animation: none !important; }
+    .article, .cover, .primary { transition: none !important; }
+    .article:hover { transform: none !important; }
+    .article:hover .cover { transform: none !important; }
+
   </style>
   
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
