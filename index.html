@@ -1058,8 +1058,8 @@
     <section id="latest">
       <div class="section-head">
         <div>
-          <span class="eyebrow">The archive</span>
-          <h2>Explore the unexplained.</h2>
+          <span class="eyebrow">FRESH FROM THE ARCHIVE</span>
+<h2>Latest Stories</h2>
         </div>
         <p>Stories beyond ordinary understanding.</p>
       </div>
@@ -1202,14 +1202,12 @@ const quickFlashesEmpty = document.getElementById("quick-flashes-empty");
       empty.style.display = "block";
       return;
     }
-const regularPosts = (data || []).filter(
-  post => (post.category || "").trim().toUpperCase() !== "QUICK FLASHES"
-);
+const latestPosts = (data || []).slice(0, 6);
 
 const quickFlashPosts = (data || []).filter(
   post => (post.category || "").trim().toUpperCase() === "QUICK FLASHES"
 );
-    regularPosts.forEach(post => {
+    latestPosts.forEach(post => {
       const article = document.createElement("article");
       article.className = "article";
       article.dataset.search =
