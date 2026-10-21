@@ -34,15 +34,23 @@
    .event-cta{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 17px;border-radius:999px;background:linear-gradient(135deg,${pale},${accent});color:#20142a!important;font-size:12px;font-weight:800;white-space:nowrap;box-shadow:inset 0 1px 0 #ffffffaa,0 8px 20px #0003}
    .event-mark{display:inline-grid;place-items:center;margin-left:8px;width:30px;height:30px;border-radius:10px;color:${pale};background:linear-gradient(145deg,${accent},${deep});border:1px solid ${pale}77;font-size:17px}
    .dossier-theme-toggle{position:fixed;right:18px;bottom:18px;z-index:9999;display:inline-flex;align-items:center;gap:8px;padding:11px 15px;border:1px solid #ffffff35;border-radius:999px;background:rgba(16,31,59,.88);backdrop-filter:blur(20px);color:#f2f7ff;font:650 12px system-ui,sans-serif;box-shadow:inset 0 1px 0 #ffffff22,0 8px 28px #0004;cursor:pointer}
-   body.light-theme{background:#f3f6fc!important;color:#17243b!important;color-scheme:light}
-   body.light-theme .nav,body.light-theme header.nav{background:rgba(245,248,255,.88)!important;border-color:#cbd8ed!important;color:#17243b!important}
-   body.light-theme .nav-links,body.light-theme .nav-links a,body.light-theme .brand,body.light-theme .back,body.light-theme .toolbar,body.light-theme footer{color:#243653!important}
-   body.light-theme .wrap,body.light-theme main{color:#17243b}
-   body.light-theme .glass,body.light-theme .article,body.light-theme .about-card,body.light-theme .intro,body.light-theme .panel,body.light-theme .community,body.light-theme .related-card{background:rgba(255,255,255,.86)!important;color:#17243b!important;border-color:#d5deec!important;box-shadow:0 14px 40px #1b37600f}
-   body.light-theme h1,body.light-theme h2,body.light-theme h3,body.light-theme p,body.light-theme .content,body.light-theme .intro p,body.light-theme .body-copy,body.light-theme .label{color:#243653}
-   body.light-theme input,body.light-theme textarea,body.light-theme select,body.light-theme .search{background:#fff!important;color:#17243b!important;border-color:#cbd6e7!important}
+   /* Optional light theme: warm porcelain + ink + electric blue, with readable contrast */
+   html{color-scheme:dark}
+   body.light-theme{color-scheme:light!important;background:radial-gradient(ellipse at 15% 0%,#dceaff 0%,transparent 42%),radial-gradient(ellipse at 95% 20%,#f3e7ff 0%,transparent 38%),#f6f8fd!important;color:#18243b!important}
+   body.light-theme *{scrollbar-color:#b7c8e2 #edf2fa}
+   body.light-theme .nav,body.light-theme header.nav,body.light-theme header:not(.event-highlight){color:#18243b}
+   body.light-theme .nav{background:rgba(248,250,255,.9)!important;border-color:#d5e0f1!important;box-shadow:0 8px 30px #203f6a12!important}
+   body.light-theme .nav a,body.light-theme .nav-links,body.light-theme .nav-links a,body.light-theme .brand,body.light-theme .back,body.light-theme .toolbar,body.light-theme footer,body.light-theme label,body.light-theme .small,body.light-theme .eyebrow,body.light-theme .category,body.light-theme .meta,body.light-theme .muted{color:#536581!important}
+   body.light-theme h1,body.light-theme h2,body.light-theme h3,body.light-theme h4,body.light-theme h5,body.light-theme strong,body.light-theme b,body.light-theme .title,body.light-theme .section-head,body.light-theme .section-head *,body.light-theme .brand{color:#142443!important}
+   body.light-theme p,body.light-theme li,body.light-theme .description,body.light-theme .excerpt,body.light-theme .content,body.light-theme .body-copy,body.light-theme .intro p,body.light-theme .label,body.light-theme .article-content,body.light-theme .article-content *{color:#33445f}
+   body.light-theme .glass,body.light-theme .article,body.light-theme .about-card,body.light-theme .intro,body.light-theme .panel,body.light-theme .community,body.light-theme .related-card,body.light-theme .card,body.light-theme .category-card,body.light-theme .feature-card,body.light-theme .story-card,body.light-theme .content-card,body.light-theme .wrap>section,body.light-theme .archive-card{background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(237,243,253,.94))!important;color:#18243b!important;border:1px solid #d7e2f2!important;box-shadow:0 16px 44px #28476c12,inset 0 1px 0 #fff!important}
+   body.light-theme .glass *,body.light-theme .article *,body.light-theme .about-card *,body.light-theme .intro *,body.light-theme .panel *,body.light-theme .community *,body.light-theme .related-card *,body.light-theme .card *,body.light-theme .category-card *,body.light-theme .feature-card *,body.light-theme .story-card *,body.light-theme .content-card *{text-shadow:none}
+   body.light-theme input,body.light-theme textarea,body.light-theme select,body.light-theme .search{background:#fff!important;color:#17243b!important;border-color:#bdcde4!important}
+   body.light-theme input::placeholder,body.light-theme textarea::placeholder{color:#7585a0!important;opacity:1}
+   body.light-theme button:not(.event-cta):not(.dossier-theme-toggle),body.light-theme .button,body.light-theme .btn{color:#18365f}
    body.light-theme .event-highlight{color:#fff!important}
-   body.light-theme .dossier-theme-toggle{background:rgba(255,255,255,.92);color:#17243b;border-color:#cbd6e7}
+   body.light-theme .event-highlight h2,body.light-theme .event-highlight p{color:#fff!important}
+   body.light-theme .dossier-theme-toggle{background:linear-gradient(135deg,#ffffff,#e8efff)!important;color:#19345b!important;border:1px solid #bdcfe9!important;box-shadow:0 10px 30px #23436a20,inset 0 1px 0 #fff!important}
    @keyframes dossierEventIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
    @media(max-width:720px){.event-highlight{grid-template-columns:60px minmax(0,1fr)!important;gap:13px!important;width:94%!important;margin:14px auto 22px!important;padding:16px!important;border-radius:21px!important}.event-icon-box{width:56px;height:56px;font-size:30px;border-radius:16px}.event-title{font-size:21px}.event-copy{font-size:12px}.event-cta{grid-column:1/-1;width:100%;padding:11px}.dossier-theme-toggle{right:12px;bottom:12px}}
    @media(max-width:420px){.event-highlight{grid-template-columns:1fr!important}.event-icon-box{width:54px;height:54px}.event-cta{grid-column:auto}}
@@ -63,10 +71,16 @@
   }
   let toggle=document.getElementById("dossier-global-theme-toggle");
   if(!toggle){toggle=document.createElement("button");toggle.type="button";toggle.className="dossier-theme-toggle";toggle.id="dossier-global-theme-toggle";toggle.setAttribute("aria-label","Toggle light and dark appearance");document.body.appendChild(toggle)}
-  const apply=()=>{let light=document.body.classList.contains("light-theme");toggle.textContent=light?"☀️ Light mode":"🌙 Dark mode";toggle.setAttribute("aria-pressed",String(light));const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=light?"#f3f6fc":deep};
+  const apply=()=>{let light=document.body.classList.contains("light-theme");toggle.textContent=light?"🌙 Switch to Dark":"☀️ Switch to Light";toggle.setAttribute("aria-pressed",String(light));const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=light?"#f3f6fc":deep};
   try{if(localStorage.getItem("dossier-theme")==="light")document.body.classList.add("light-theme")}catch(_){}
   if(!toggle.dataset.dossierBound){toggle.addEventListener("click",()=>{document.body.classList.toggle("light-theme");try{localStorage.setItem("dossier-theme",document.body.classList.contains("light-theme")?"light":"dark")}catch(_){}apply()});toggle.dataset.dossierBound="1"}
   apply();
+  // Keep the article page's built-in theme control and this site-wide control in sync.
+  document.addEventListener("click",ev=>{
+    if(ev.target && ev.target.closest && ev.target.closest("#theme-toggle") && !ev.target.closest("#dossier-global-theme-toggle")){
+      setTimeout(apply,0);
+    }
+  });
   document.documentElement.dataset.dossierEvent=key;
  };
  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",run,{once:true});else run();
