@@ -1224,6 +1224,11 @@ titleLink.style.textDecoration = "none";
 
 title.appendChild(titleLink);
 
+      article.dataset.search = [
+  post.title,
+  post.category,
+  post.content
+].filter(Boolean).join(" ").toLowerCase();
 
       const description = document.createElement("p");
       description.textContent = (post.content || "").slice(0, 180);
