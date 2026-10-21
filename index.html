@@ -1004,6 +1004,18 @@
     box-sizing: border-box;
   }
 }
+    /* Home archive layout: right-aligned archive links */
+    .section-action {
+      flex-shrink: 0;
+      white-space: nowrap;
+      margin-bottom: 2px;
+    }
+    .category-section[hidden],
+    #quick-flashes-section[hidden] { display: none !important; }
+    .category-section .section-head { align-items: end; }
+    @media (max-width: 480px) {
+      .category-section .section-head { align-items: start; }
+    }
   </style>
   
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1058,52 +1070,15 @@
     <section id="latest">
       <div class="section-head">
         <div>
-          <span class="eyebrow">The archive</span>
-          <h2>Explore the unexplained.</h2>
+          <span class="eyebrow">Most watched</span>
+          <h2>🔥 Trending Stories</h2>
         </div>
-        <p>Stories beyond ordinary understanding.</p>
+        <p>The mysteries everyone's exploring.</p>
       </div>
-
       <div class="grid" id="articles">
-        <article class="article" data-search="space universe signals cosmos wow signal">
-          <div class="cover-wrap">
-            <div class="cover" style="background-image:url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=900&q=80')"></div>
-          </div>
-          <div class="article-body">
-            <span class="category">Space & Cosmos</span>
-            <h3>The Signal That Came From Nowhere</h3>
-            <p>A mysterious radio signal detected in 1977 still inspires questions about what might exist beyond Earth.</p>
-            <a class="read" href="#about">Explore story <span>↗</span></a>
-          </div>
-        </article>
-
-        <article class="article" data-search="paranormal ghost haunting enfield mystery">
-          <div class="cover-wrap">
-            <div class="cover" style="background-image:url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=900&q=80')"></div>
-          </div>
-          <div class="article-body">
-            <span class="category">Paranormal</span>
-            <h3>The House That Refused to Stay Silent</h3>
-            <p>Inside one of the most discussed haunting cases, where witness accounts and skepticism collide.</p>
-            <a class="read" href="#about">Explore story <span>↗</span></a>
-          </div>
-        </article>
-
-        <article class="article" data-search="ancient history civilization ruins archaeology">
-          <div class="cover-wrap">
-            <div class="cover" style="background-image:url('https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?auto=format&fit=crop&w=900&q=80')"></div>
-          </div>
-          <div class="article-body">
-            <span class="category">Lost History</span>
-            <h3>Echoes of a Forgotten Civilization</h3>
-            <p>Ancient places leave behind traces of remarkable lives—and questions that survive for centuries.</p>
-            <a class="read" href="#about">Explore story <span>↗</span></a>
-          </div>
-        </article>
+        <p class="empty" style="display:block">Discovering trending stories...</p>
       </div>
-
-      
-      <div id="empty" class="empty">No stories found. Try another search.</div>
+      <div id="empty" class="empty">No published stories yet.</div>
     </section>
 
     <section id="quick-flashes-section" hidden>
@@ -1112,7 +1087,7 @@
           <span class="eyebrow">Short & mysterious</span>
           <h2>⚡ Quick Flashes</h2>
         </div>
-        <p>Small stories. Big questions.</p>
+        <a class="read section-action" href="category.html?category=Quick%20Flashes">Read More <span>↗</span></a>
       </div>
 
       <div class="grid" id="quick-flashes"></div>
@@ -1121,48 +1096,39 @@
       </div>
     </section>
 
-    <section id="trending">
-
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">Most watched</span>
-          <h2>🔥 Trending Stories</h2>
+    <div id="categories">
+      <section class="category-section" id="astro-section">
+        <div class="section-head">
+          <div><span class="eyebrow">01 / Beyond Earth</span><h2>ASTRO</h2></div>
+          <a class="read section-action" href="category.html?category=Astro">Read More <span>↗</span></a>
         </div>
-        <p>The mysteries everyone's exploring.</p>
-      </div>
+        <div class="grid category-posts" id="astro-posts"></div>
+      </section>
 
-      <div class="grid" id="trending-articles">
-        <p class="empty" id="trending-loading" style="display:block">
-          Discovering trending stories...
-        </p>
-      </div>
-    </section>
-
-    <section id="categories">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">Choose your path</span>
-          <h2>Into the unknown.</h2>
+      <section class="category-section" id="crime-section">
+        <div class="section-head">
+          <div><span class="eyebrow">02 / Dark Cases</span><h2>CRIME</h2></div>
+          <a class="read section-action" href="category.html?category=Crime">Read More <span>↗</span></a>
         </div>
-      </div>
-      <div class="grid">
-        <a class="article article-body" href="#latest">
-          <span class="category">01 / Beyond Earth</span>
-          <h3>Space & Cosmos ↗</h3>
-          <p>Unanswered questions about our universe.</p>
-        </a>
-        <a class="article article-body" href="#latest">
-          <span class="category">02 / Beyond Reason</span>
-          <h3>Paranormal ↗</h3>
-          <p>Encounters, hauntings and strange phenomena.</p>
-        </a>
-        <a class="article article-body" href="#latest">
-          <span class="category">03 / Before Our Time</span>
-          <h3>Lost History ↗</h3>
-          <p>Forgotten stories and unexplained discoveries.</p>
-        </a>
-      </div>
-    </section>
+        <div class="grid category-posts" id="crime-posts"></div>
+      </section>
+
+      <section class="category-section" id="paranormal-section">
+        <div class="section-head">
+          <div><span class="eyebrow">03 / Beyond Reason</span><h2>PARANORMAL</h2></div>
+          <a class="read section-action" href="category.html?category=Paranormal">Read More <span>↗</span></a>
+        </div>
+        <div class="grid category-posts" id="paranormal-posts"></div>
+      </section>
+
+      <section class="category-section" id="unexplained-section">
+        <div class="section-head">
+          <div><span class="eyebrow">04 / The Unknown</span><h2>UNEXPLAINED</h2></div>
+          <a class="read section-action" href="category.html?category=Unexplained">Read More <span>↗</span></a>
+        </div>
+        <div class="grid category-posts" id="unexplained-posts"></div>
+      </section>
+    </div>
 
     <footer>
       <a class="brand" href="#"><span>THE</span> DOSSIER</a>
@@ -1187,12 +1153,79 @@ const empty = document.getElementById("empty");
 const quickFlashesGrid = document.getElementById("quick-flashes");
 const quickFlashesEmpty = document.getElementById("quick-flashes-empty");
 
+  function articleUrl(post) {
+    return `article.html?${post.slug
+      ? `slug=${encodeURIComponent(post.slug)}`
+      : `id=${encodeURIComponent(post.id)}`}`;
+  }
+
+  function makePostCard(post, label) {
+    const article = document.createElement("article");
+    article.className = "article";
+    article.dataset.search = `${post.title || ""} ${post.category || ""} ${post.content || ""}`.toLowerCase();
+
+    const coverWrap = document.createElement("div");
+    coverWrap.className = "cover-wrap";
+    const cover = document.createElement("div");
+    cover.className = "cover";
+    if (post.image_url) cover.style.backgroundImage = `url("${String(post.image_url).replace(/["\\\\]/g, "")}")`;
+    coverWrap.appendChild(cover);
+
+    const body = document.createElement("div");
+    body.className = "article-body";
+    const category = document.createElement("span");
+    category.className = "category";
+    category.textContent = label || post.category || "Mystery";
+
+    const title = document.createElement("h3");
+    const titleLink = document.createElement("a");
+    titleLink.href = articleUrl(post);
+    titleLink.textContent = post.title || "Untitled story";
+    titleLink.style.color = "inherit";
+    titleLink.style.textDecoration = "none";
+    title.appendChild(titleLink);
+
+    const description = document.createElement("p");
+    description.textContent = (post.content || "").slice(0, 180);
+
+    const link = document.createElement("a");
+    link.className = "read";
+    link.href = articleUrl(post);
+    link.textContent = "Explore story ↗";
+
+    body.append(category, title, description, link);
+    article.append(coverWrap, body);
+    return article;
+  }
+
+  function normalizedCategory(post) {
+    return (post.category || "").trim().toLowerCase().replace(/\\s+/g, " ");
+  }
+
+  function matchesCategory(post, group) {
+    const category = normalizedCategory(post);
+    if (group === "astro") return ["astro", "astronomy", "space", "space & cosmos", "space and cosmos", "cosmos", "space & cosmos"].includes(category);
+    if (group === "crime") return ["crime", "crimes", "strange crimes"].includes(category);
+    if (group === "paranormal") return category === "paranormal";
+    if (group === "unexplained") return category === "unexplained";
+    return false;
+  }
+
+  function renderLatestThree(gridId, posts, label) {
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
+    grid.replaceChildren();
+    posts.slice(0, 3).forEach(post => grid.appendChild(makePostCard(post, label)));
+    const section = grid.closest("section");
+    if (section && gridId !== "quick-flashes") section.hidden = posts.length === 0;
+  }
+
   async function loadArticles() {
     articlesGrid.replaceChildren();
 
     const { data, error } = await dossierSupabase
       .from("posts")
-      .select("id, title, slug, content, image_url, category, created_at")
+      .select("id, title, slug, content, image_url, category, created_at, views")
       .eq("published", true)
       .order("created_at", { ascending: false });
 
@@ -1200,134 +1233,43 @@ const quickFlashesEmpty = document.getElementById("quick-flashes-empty");
       console.error("Could not load articles:", error);
       empty.textContent = "Stories could not be loaded. Please try again later.";
       empty.style.display = "block";
+      document.getElementById("quick-flashes-section").hidden = true;
+      document.getElementById("category-sections").hidden = true;
       return;
     }
-const regularPosts = (data || []).filter(
-  post => (post.category || "").trim().toUpperCase() !== "QUICK FLASHES"
-);
 
-const quickFlashPosts = (data || []).filter(
-  post => (post.category || "").trim().toUpperCase() === "QUICK FLASHES"
-);
-    regularPosts.forEach(post => {
-      const article = document.createElement("article");
-      article.className = "article";
-      article.dataset.search =
-        `${post.title || ""} ${post.category || ""} ${post.content || ""}`;
+    const posts = data || [];
+    const regularPosts = posts.filter(post => normalizedCategory(post) !== "quick flashes");
+    const quickFlashPosts = posts.filter(post => normalizedCategory(post) === "quick flashes");
 
-      const coverWrap = document.createElement("div");
-      coverWrap.className = "cover-wrap";
+    // Trending: top 3 by views, with newest posts breaking ties.
+    const trendingPosts = [...regularPosts].sort((a, b) =>
+      (Number(b.views) || 0) - (Number(a.views) || 0) ||
+      new Date(b.created_at || 0) - new Date(a.created_at || 0)
+    ).slice(0, 3);
 
-      const cover = document.createElement("div");
-      cover.className = "cover";
+    trendingPosts.forEach(post => articlesGrid.appendChild(makePostCard(post, "🔥 TRENDING")));
+    empty.style.display = trendingPosts.length ? "none" : "block";
+    if (!trendingPosts.length) empty.textContent = "No published stories yet.";
 
-      if (post.image_url) {
-        cover.style.backgroundImage =
-          `url("${post.image_url.replace(/["\\]/g, "")}")`;
-      }
+    quickFlashesGrid.replaceChildren();
+    quickFlashPosts.slice(0, 3).forEach(post => quickFlashesGrid.appendChild(makePostCard(post, "⚡ QUICK FLASHES")));
+    quickFlashesSection.hidden = quickFlashPosts.length === 0;
+    quickFlashesEmpty.style.display = quickFlashPosts.length ? "none" : "block";
 
-      coverWrap.appendChild(cover);
-
-      const body = document.createElement("div");
-      body.className = "article-body";
-
-      const category = document.createElement("span");
-      category.className = "category";
-      category.textContent = post.category || "Mystery";
-
-      
-const title = document.createElement("h3");
-
-const titleLink = document.createElement("a");
-titleLink.href = `article.html?${
-  post.slug
-    ? `slug=${encodeURIComponent(post.slug)}`
-    : `id=${encodeURIComponent(post.id)}`
-}`;
-titleLink.textContent = post.title || "Untitled story";
-titleLink.style.color = "inherit";
-titleLink.style.textDecoration = "none";
-
-title.appendChild(titleLink);
-
-      article.dataset.search = [
-  post.title,
-  post.category,
-  post.content
-].filter(Boolean).join(" ").toLowerCase();
-
-      const description = document.createElement("p");
-      description.textContent = (post.content || "").slice(0, 180);
-
-      
-    
-      const link = document.createElement("a");
-      link.className = "read";
-      link.href = `article.html?${post.slug
-        ? `slug=${encodeURIComponent(post.slug)}`
-        : `id=${encodeURIComponent(post.id)}`}`;
-      link.textContent = "Explore story ↗";
-
-      body.append(category, title, description, link);
-      article.append(coverWrap, body);
-      articlesGrid.appendChild(article);
+    const groups = [
+      ["astro", "astro-posts", "astro-section", "ASTRO"],
+      ["crime", "crime-posts", "crime-section", "CRIME"],
+      ["paranormal", "paranormal-posts", "paranormal-section", "PARANORMAL"],
+      ["unexplained", "unexplained-posts", "unexplained-section", "UNEXPLAINED"]
+    ];
+    groups.forEach(([group, gridId, sectionId, label]) => {
+      const groupPosts = posts.filter(post => matchesCategory(post, group));
+      renderLatestThree(gridId, groupPosts, label);
+      const section = document.getElementById(sectionId);
+      if (section) section.hidden = groupPosts.length === 0;
     });
-quickFlashesGrid.replaceChildren();
 
-quickFlashPosts.forEach(post => {
-  const article = document.createElement("article");
-  article.className = "article";
-
-  const coverWrap = document.createElement("div");
-  coverWrap.className = "cover-wrap";
-
-  const cover = document.createElement("div");
-  cover.className = "cover";
-
-  if (post.image_url) {
-    cover.style.backgroundImage =
-      `url("${post.image_url.replace(/["\\]/g, "")}")`;
-  }
-
-  coverWrap.appendChild(cover);
-
-  const body = document.createElement("div");
-  body.className = "article-body";
-
-  const category = document.createElement("span");
-  category.className = "category";
-  category.textContent = "⚡ QUICK FLASHES";
-
-  const title = document.createElement("h3");
-  const titleLink = document.createElement("a");
-
-  titleLink.href = `article.html?${
-    post.slug
-      ? `slug=${encodeURIComponent(post.slug)}`
-      : `id=${encodeURIComponent(post.id)}`
-  }`;
-
-  titleLink.textContent = post.title || "Untitled story";
-  titleLink.style.color = "inherit";
-  titleLink.style.textDecoration = "none";
-  title.appendChild(titleLink);
-
-  const description = document.createElement("p");
-  description.textContent = (post.content || "").slice(0, 180);
-
-  const link = document.createElement("a");
-  link.className = "read";
-  link.href = titleLink.href;
-  link.textContent = "Explore story ↗";
-
-  body.append(category, title, description, link);
-  article.append(coverWrap, body);
-  quickFlashesGrid.appendChild(article);
-});
-
-quickFlashesSection.hidden = quickFlashPosts.length === 0;
-quickFlashesEmpty.style.display =
-  quickFlashPosts.length ? "none" : "block";
     filterArticles();
   }
 
@@ -1394,108 +1336,27 @@ quickFlashesEmpty.style.display =
 
   function filterArticles() {
     const query = (search?.value || "").trim().toLowerCase();
-    const articles = articlesGrid.querySelectorAll(".article");
-    let visible = 0;
+    const cards = document.querySelectorAll("#latest .article, #quick-flashes .article, .category-posts .article");
+    let trendingVisible = 0;
 
-    articles.forEach(article => {
-      const text =
-        (article.innerText + " " + article.dataset.search).toLowerCase();
+    cards.forEach(card => {
+      const text = (card.innerText + " " + (card.dataset.search || "")).toLowerCase();
       const match = text.includes(query);
-      article.style.display = match ? "" : "none";
-      if (match) visible++;
+      card.style.display = match ? "" : "none";
+      if (match && card.closest("#latest")) trendingVisible++;
     });
 
-    empty.style.display = visible ? "none" : "block";
-
-    if (!visible && !query) {
-      empty.textContent = "No published stories yet.";
-    } else if (!visible) {
-      empty.textContent = "No stories found. Try another search.";
+    empty.style.display = query && !trendingVisible ? "block" : "none";
+    if (query && !trendingVisible) {
+      empty.textContent = cards.length ? "No matching trending stories. Check the category sections for matching stories." : "No published stories yet.";
     }
   }
 
-  async function loadTrendingStories() {
-    const trendingGrid = document.getElementById("trending-articles");
-
-    const { data, error } = await dossierSupabase
-      .from("posts")
-      .select("id, title, slug, image_url, category, views")
-      .eq("published", true)
-      .order("views", { ascending: false })
-      .order("created_at", { ascending: false })
-      .limit(4);
-
-    if (error) {
-      console.error("Trending stories error:", error);
-      trendingGrid.innerHTML =
-        '<p class="empty" style="display:block">Trending stories are temporarily unavailable.</p>';
-      return;
-    }
-
-    trendingGrid.replaceChildren();
-
-    if (!data || data.length === 0) {
-      trendingGrid.innerHTML =
-        '<p class="empty" style="display:block">No trending stories yet.</p>';
-      return;
-    }
-
-    data.forEach((post, index) => {
-      const article = document.createElement("article");
-      article.className = "article";
-
-      const coverWrap = document.createElement("div");
-      coverWrap.className = "cover-wrap";
-
-      const cover = document.createElement("div");
-      cover.className = "cover";
-
-      if (post.image_url) {
-        cover.style.backgroundImage =
-          `url("${post.image_url.replace(/["\\]/g, "")}")`;
-      }
-
-      coverWrap.appendChild(cover);
-
-      const body = document.createElement("div");
-      body.className = "article-body";
-
-      const category = document.createElement("span");
-      category.className = "category";
-      category.textContent = `🔥 TRENDING #${index + 1}`;
-
-      const title = document.createElement("h3");
-      const titleLink = document.createElement("a");
-
-      titleLink.href = `article.html?${
-        post.slug
-          ? `slug=${encodeURIComponent(post.slug)}`
-          : `id=${encodeURIComponent(post.id)}`
-      }`;
-
-      titleLink.textContent = post.title || "Untitled story";
-      title.appendChild(titleLink);
-
-      const details = document.createElement("p");
-      details.textContent =
-        `${post.category || "Mystery"} · 👁 ${(post.views || 0).toLocaleString()} views`;
-
-      const link = document.createElement("a");
-      link.className = "read";
-      link.href = titleLink.href;
-      link.textContent = "Explore story ↗";
-
-      body.append(category, title, details, link);
-      article.append(coverWrap, body);
-      trendingGrid.appendChild(article);
-    });
-  }
   search?.addEventListener("input", filterArticles);
   document.getElementById("year").textContent =
     new Date().getFullYear();
 
   loadArticles();
-    loadTrendingStories();
     // Cursor spotlight on cards
   document.addEventListener("pointermove", (e) => {
     const card = e.target.closest?.(".article");
