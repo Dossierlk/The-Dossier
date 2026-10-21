@@ -494,6 +494,11 @@ async function loadAiDrafts() {
     setAiMessage(`${data.length} pending draft(s). Review before approving.`);
 aiDraftList.replaceChildren();
     data.forEach(draft => {
+      console.log("AI DRAFT DATA:", {
+  title: draft.title,
+  contentStart: draft.content?.slice(0, 100),
+  image_url: draft.image_url
+});
       const card = document.createElement("article");
       card.className = "ai-draft-card";
 
