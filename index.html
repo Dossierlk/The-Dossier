@@ -1102,10 +1102,27 @@
         </article>
       </div>
 
+      
       <div id="empty" class="empty">No stories found. Try another search.</div>
     </section>
 
+    <section id="quick-flashes-section" hidden>
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Short & mysterious</span>
+          <h2>⚡ Quick Flashes</h2>
+        </div>
+        <p>Small stories. Big questions.</p>
+      </div>
+
+      <div class="grid" id="quick-flashes"></div>
+      <div id="quick-flashes-empty" class="empty">
+        No Quick Flashes published yet.
+      </div>
+    </section>
+
     <section id="trending">
+
       <div class="section-head">
         <div>
           <span class="eyebrow">Most watched</span>
@@ -1165,7 +1182,10 @@
 
   const search = document.getElementById("search");
   const articlesGrid = document.getElementById("articles");
-  const empty = document.getElementById("empty");
+const empty = document.getElementById("empty");
+  const quickFlashesSection = document.getElementById("quick-flashes-section");
+const quickFlashesGrid = document.getElementById("quick-flashes");
+const quickFlashesEmpty = document.getElementById("quick-flashes-empty");
 
   async function loadArticles() {
     articlesGrid.replaceChildren();
@@ -1182,8 +1202,14 @@
       empty.style.display = "block";
       return;
     }
+const regularPosts = (data || []).filter(
+  post => (post.category || "").trim().toUpperCase() !== "QUICK FLASHES"
+);
 
-    (data || []).forEach(post => {
+const quickFlashPosts = (data || []).filter(
+  post => (post.category || "").trim().toUpperCase() === "QUICK FLASHES"
+);
+    regularPosts.forEach(post => {
       const article = document.createElement("article");
       article.className = "article";
       article.dataset.search =
@@ -1246,7 +1272,62 @@ title.appendChild(titleLink);
       article.append(coverWrap, body);
       articlesGrid.appendChild(article);
     });
+quickFlashesGrid.replaceChildren();
 
+quickFlashPosts.forEach(post => {
+  const article = document.createElement("article");
+  article.className = "article";
+
+  const coverWrap = document.createElement("div");
+  coverWrap.className = "cover-wrap";
+
+  const cover = document.createElement("div");
+  cover.className = "cover";
+
+  if (post.image_url) {
+    cover.style.backgroundImage =
+      `url("${post.image_url.replace(/["\\]/g, "")}")`;
+  }
+
+  coverWrap.appendChild(cover);
+
+  const body = document.createElement("div");
+  body.className = "article-body";
+
+  const category = document.createElement("span");
+  category.className = "category";
+  category.textContent = "⚡ QUICK FLASHES";
+
+  const title = document.createElement("h3");
+  const titleLink = document.createElement("a");
+
+  titleLink.href = `article.html?${
+    post.slug
+      ? `slug=${encodeURIComponent(post.slug)}`
+      : `id=${encodeURIComponent(post.id)}`
+  }`;
+
+  titleLink.textContent = post.title || "Untitled story";
+  titleLink.style.color = "inherit";
+  titleLink.style.textDecoration = "none";
+  title.appendChild(titleLink);
+
+  const description = document.createElement("p");
+  description.textContent = (post.content || "").slice(0, 180);
+
+  const link = document.createElement("a");
+  link.className = "read";
+  link.href = titleLink.href;
+  link.textContent = "Explore story ↗";
+
+  body.append(category, title, description, link);
+  article.append(coverWrap, body);
+  quickFlashesGrid.appendChild(article);
+});
+
+quickFlashesSection.hidden = quickFlashPosts.length === 0;
+quickFlashesEmpty.style.display =
+  quickFlashPosts.length ? "none" : "block";
     filterArticles();
   }
 
