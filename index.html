@@ -1004,20 +1004,6 @@
     box-sizing: border-box;
   }
 }
-    
-.section-action {
-  display: flex;
-  justify-content: flex-start;
-  margin-top: 20px;
-}
-
-.category-more {
-  text-decoration: none;
-}
-
-.category-grid:empty {
-  display: none;
-}
   </style>
   
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1135,62 +1121,6 @@
       </div>
     </section>
 
-<section id="category-paranormal">
-  <div class="section-head">
-    <div>
-      <span class="eyebrow">BEYOND REASON</span>
-      <h2>Paranormal</h2>
-    </div>
-    <p>Hauntings and strange encounters.</p>
-  </div>
-  <div class="grid category-grid" data-category="Paranormal"></div>
-  <div class="section-action">
-    <a class="read category-more" href="category.html?category=Paranormal">Read More ↗</a>
-  </div>
-</section>
-
-<section id="category-astro">
-  <div class="section-head">
-    <div>
-      <span class="eyebrow">BEYOND EARTH</span>
-      <h2>Astro</h2>
-    </div>
-    <p>Space and the unknown.</p>
-  </div>
-  <div class="grid category-grid" data-category="Astro"></div>
-  <div class="section-action">
-    <a class="read category-more" href="category.html?category=Astro">Read More ↗</a>
-  </div>
-</section>
-
-<section id="category-crimes">
-  <div class="section-head">
-    <div>
-      <span class="eyebrow">DARK FILES</span>
-      <h2>Crimes</h2>
-    </div>
-    <p>Mysterious cases and unanswered questions.</p>
-  </div>
-  <div class="grid category-grid" data-category="Crimes"></div>
-  <div class="section-action">
-    <a class="read category-more" href="category.html?category=Crimes">Read More ↗</a>
-  </div>
-</section>
-
-<section id="category-unexplained">
-  <div class="section-head">
-    <div>
-      <span class="eyebrow">NO EASY ANSWERS</span>
-      <h2>Unexplained</h2>
-    </div>
-    <p>Events that remain a mystery.</p>
-  </div>
-  <div class="grid category-grid" data-category="Unexplained"></div>
-  <div class="section-action">
-    <a class="read category-more" href="category.html?category=Unexplained">Read More ↗</a>
-  </div>
-</section>
-
     <section id="trending">
 
       <div class="section-head">
@@ -1209,39 +1139,30 @@
     </section>
 
     <section id="categories">
-  <div class="section-head">
-    <div>
-      <span class="eyebrow">Choose your path</span>
-      <h2>Into the unknown.</h2>
-    </div>
-  </div>
-
-  <div class="grid">
-    <a class="article article-body" href="category.html?category=Astro">
-      <span class="category">01 / Beyond Earth</span>
-      <h3>Astro ↗</h3>
-      <p>Unanswered questions about space, planets and our universe.</p>
-    </a>
-
-    <a class="article article-body" href="category.html?category=Paranormal">
-      <span class="category">02 / Beyond Reason</span>
-      <h3>Paranormal ↗</h3>
-      <p>Encounters, hauntings and strange phenomena.</p>
-    </a>
-
-    <a class="article article-body" href="category.html?category=Crimes">
-      <span class="category">03 / Dark Cases</span>
-      <h3>Crimes ↗</h3>
-      <p>Mysterious crimes, strange cases and unanswered questions.</p>
-    </a>
-
-    <a class="article article-body" href="category.html?category=Unexplained">
-      <span class="category">04 / The Unknown</span>
-      <h3>Unexplained ↗</h3>
-      <p>Unsolved mysteries and events without clear answers.</p>
-    </a>
-  </div>
-</section>
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Choose your path</span>
+          <h2>Into the unknown.</h2>
+        </div>
+      </div>
+      <div class="grid">
+        <a class="article article-body" href="#latest">
+          <span class="category">01 / Beyond Earth</span>
+          <h3>Space & Cosmos ↗</h3>
+          <p>Unanswered questions about our universe.</p>
+        </a>
+        <a class="article article-body" href="#latest">
+          <span class="category">02 / Beyond Reason</span>
+          <h3>Paranormal ↗</h3>
+          <p>Encounters, hauntings and strange phenomena.</p>
+        </a>
+        <a class="article article-body" href="#latest">
+          <span class="category">03 / Before Our Time</span>
+          <h3>Lost History ↗</h3>
+          <p>Forgotten stories and unexplained discoveries.</p>
+        </a>
+      </div>
+    </section>
 
     <footer>
       <a class="brand" href="#"><span>THE</span> DOSSIER</a>
@@ -1266,93 +1187,6 @@ const empty = document.getElementById("empty");
 const quickFlashesGrid = document.getElementById("quick-flashes");
 const quickFlashesEmpty = document.getElementById("quick-flashes-empty");
 
-function renderCategorySections(posts) {
-  const categories = [
-    { name: "Paranormal", aliases: ["paranormal"] },
-    { name: "Astro", aliases: ["astro", "astronomy", "space", "space & cosmos", "space and cosmos", "cosmos"] },
-    { name: "Crimes", aliases: ["crimes", "crime", "strange crimes"] },
-    { name: "Unexplained", aliases: ["unexplained"] }
-  ];
-
-  categories.forEach(category => {
-    const grid = document.querySelector(
-      `.category-grid[data-category="${category.name}"]`
-    );
-
-    if (!grid) return;
-
-    const matches = posts.filter(post => {
-      const actual = (post.category || "").trim().toLowerCase();
-      return actual !== "quick flashes" &&
-        category.aliases.includes(actual);
-    });
-
-    grid.replaceChildren();
-
-    matches.slice(0, 3).forEach(post => {
-      grid.appendChild(createCategoryCard(post, category.name));
-    });
-
-    const section = grid.closest("section");
-    const more = section.querySelector(".category-more");
-
-    if (more) {
-      more.style.display = matches.length > 3 ? "inline-flex" : "none";
-    }
-  });
-}
-  section.hidden = matches.length === 0;
-
-function createCategoryCard(post, categoryName) {
-  const article = document.createElement("article");
-  article.className = "article";
-
-  const coverWrap = document.createElement("div");
-  coverWrap.className = "cover-wrap";
-
-  const cover = document.createElement("div");
-  cover.className = "cover";
-
-  if (post.image_url) {
-    cover.style.backgroundImage =
-      `url("${post.image_url.replace(/["\\]/g, "")}")`;
-  }
-
-  coverWrap.appendChild(cover);
-
-  const body = document.createElement("div");
-  body.className = "article-body";
-
-  const category = document.createElement("span");
-  category.className = "category";
-  category.textContent = categoryName;
-
-  const title = document.createElement("h3");
-  const titleLink = document.createElement("a");
-
-  titleLink.href = `article.html?${
-    post.slug
-      ? `slug=${encodeURIComponent(post.slug)}`
-      : `id=${encodeURIComponent(post.id)}`
-  }`;
-
-  titleLink.textContent = post.title || "Untitled story";
-  title.appendChild(titleLink);
-
-  const description = document.createElement("p");
-  description.textContent = (post.content || "").slice(0, 180);
-
-  const link = document.createElement("a");
-  link.className = "read";
-  link.href = titleLink.href;
-  link.textContent = "Explore story ↗";
-
-  body.append(category, title, description, link);
-  article.append(coverWrap, body);
-
-  return article;
-}
-
   async function loadArticles() {
     articlesGrid.replaceChildren();
 
@@ -1368,14 +1202,11 @@ function createCategoryCard(post, categoryName) {
       empty.style.display = "block";
       return;
     }
-const latestPosts = (data || [])
-  .filter(post => (post.category || "").trim().toLowerCase() !== "quick flashes")
-  .slice(0, 3);
+const latestPosts = (data || []).slice(0, 6);
 
 const quickFlashPosts = (data || []).filter(
   post => (post.category || "").trim().toUpperCase() === "QUICK FLASHES"
 );
-    renderCategorySections(data || []);
     latestPosts.forEach(post => {
       const article = document.createElement("article");
       article.className = "article";
