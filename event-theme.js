@@ -61,7 +61,7 @@
    banner.querySelector(".event-icon-box").textContent=icon;banner.querySelector(".event-kicker").textContent="TODAY'S SPECIAL HIGHLIGHT";banner.querySelector(".event-title").textContent=title;banner.querySelector(".event-copy").textContent=copy;banner.querySelector(".event-meta").textContent=d.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"})+" · "+name;
    if(nav)nav.insertAdjacentElement("afterend",banner);else {const main=document.querySelector("main");if(main)main.insertAdjacentElement("afterbegin",banner);else document.body.prepend(banner)}
   }
-  let toggle=document.getElementById("theme-toggle");
+  let toggle=document.getElementById("dossier-global-theme-toggle");
   if(!toggle){toggle=document.createElement("button");toggle.type="button";toggle.className="dossier-theme-toggle";toggle.id="dossier-global-theme-toggle";toggle.setAttribute("aria-label","Toggle light and dark appearance");document.body.appendChild(toggle)}
   const apply=()=>{let light=document.body.classList.contains("light-theme");toggle.textContent=light?"☀️ Light mode":"🌙 Dark mode";toggle.setAttribute("aria-pressed",String(light));const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=light?"#f3f6fc":deep};
   try{if(localStorage.getItem("dossier-theme")==="light")document.body.classList.add("light-theme")}catch(_){}
