@@ -492,7 +492,7 @@ async function loadAiDrafts() {
     }
 
     setAiMessage(`${data.length} pending draft(s). Review before approving.`);
-
+aiDraftList.replaceChildren();
     data.forEach(draft => {
       const card = document.createElement("article");
       card.className = "ai-draft-card";
