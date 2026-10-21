@@ -139,6 +139,20 @@
       overflow-wrap: anywhere;
     }
 
+    .content a {
+      color: var(--blue);
+      text-decoration: underline;
+      text-decoration-color: rgba(101, 181, 255, .65);
+      text-underline-offset: 3px;
+      overflow-wrap: anywhere;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .content a:hover {
+      color: #b9e1ff;
+    }
+
     .related {
       margin-top: 48px;
     }
@@ -1088,6 +1102,40 @@ body.light-theme footer {
 
     document.getElementById("year").textContent = new Date().getFullYear();
 
+    function renderArticleLinks(value) {
+      const escapeHTML = (text) => text.replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+
+      const savedLinks = [];
+      let safeText = escapeHTML(String(value));
+
+      // Turn Markdown-style links such as [Source](https://example.com) into links.
+      safeText = safeText.replace(/\\[([^\\]\\n]+)\\]\\((https?:\\/\\/[^\\s)]+)\\)/g, (match, label, url) => {
+        const index = savedLinks.push(
+          '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + label + '</a>'
+        ) - 1;
+        return '%%DOSSIER_LINK_' + index + '%%';
+      });
+
+      // Make plain http(s) URLs clickable as well.
+      safeText = safeText.replace(/https?:\\/\\/[^\\s<>"']+/g, (rawUrl) => {
+        const trailing = rawUrl.match(/[.,!?;:)]*$/)?.[0] || "";
+        const url = rawUrl.slice(0, rawUrl.length - trailing.length);
+        if (!url) return rawUrl;
+        const index = savedLinks.push(
+          '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + url + '</a>'
+        ) - 1;
+        return '%%DOSSIER_LINK_' + index + '%%' + trailing;
+      });
+
+      return safeText.replace(/%%DOSSIER_LINK_(\\d+)%%/g, (_, index) => savedLinks[Number(index)]);
+    }
+
     async function loadArticle() {
       if (!slug && !postId) {
         statusBox.textContent = "No story selected. Please return to all stories.";
@@ -1132,8 +1180,10 @@ function updateReadingTime() {
       document.getElementById("date").textContent = post.created_at
         ? new Date(post.created_at).toLocaleDateString()
         : "";
-      document.getElementById("content").textContent =
-        post.content || "No article content available.";
+      const articleContent = document.getElementById("content");
+      articleContent.innerHTML = renderArticleLinks(
+        post.content || "No article content available."
+      );
      const contentElement = document.getElementById("content");
 const readingTimeElement = document.getElementById("readingTime");
 
