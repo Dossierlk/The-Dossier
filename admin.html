@@ -112,6 +112,56 @@
   color: #ffb5b5;
 }
   </style>
+
+  <!-- THE DOSSIER • iOS-inspired interaction polish -->
+  <style id="dossier-ios-polish">
+    :root { --ios-ease: cubic-bezier(.22,1,.36,1); --ios-spring: cubic-bezier(.34,1.56,.64,1); }
+    html { -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; }
+    button, .btn, .button, [role="button"], input[type="button"], input[type="submit"], input[type="reset"] {
+      position: relative; overflow: hidden; border-radius: 999px;
+      transition: transform .24s var(--ios-spring), box-shadow .25s var(--ios-ease),
+                  border-color .25s ease, background-color .25s ease, filter .25s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    button:not(:disabled):hover, .btn:hover, .button:hover, [role="button"]:hover,
+    input[type="button"]:hover, input[type="submit"]:hover, input[type="reset"]:hover {
+      transform: translateY(-2px); filter: brightness(1.06);
+      box-shadow: 0 9px 26px rgba(50,139,255,.18), inset 0 1px 0 rgba(255,255,255,.24);
+    }
+    button:not(:disabled):active, .btn:active, .button:active, [role="button"]:active,
+    input[type="button"]:active, input[type="submit"]:active, input[type="reset"]:active {
+      transform: scale(.97); filter: brightness(.98);
+    }
+    button:disabled, input:disabled { cursor: not-allowed; opacity: .58; }
+    button::after, .btn::after, .button::after {
+      content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+      background: linear-gradient(145deg, rgba(255,255,255,.16), transparent 48%);
+      opacity: .65;
+    }
+    a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
+    a { transition: color .2s ease, border-color .2s ease, background-color .2s ease; }
+    a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+      outline: 2px solid rgba(91,177,255,.95); outline-offset: 3px;
+    }
+    input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+    textarea, select {
+      transition: border-color .22s ease, box-shadow .22s ease, background-color .22s ease;
+    }
+    input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):focus,
+    textarea:focus, select:focus {
+      border-color: rgba(86,169,255,.72) !important;
+      box-shadow: 0 0 0 4px rgba(62,145,255,.12);
+    }
+    img, .card, .article, .story-card, .category-card, .glass, .panel {
+      transition: border-color .28s ease, box-shadow .28s ease, transform .32s var(--ios-ease);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+
 </head>
 <body>
   <main class="wrap">
