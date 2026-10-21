@@ -1062,7 +1062,17 @@ body.light-theme footer {
         statusBox.textContent = "Story not found. It may have been unpublished.";
         return;
       }
+function updateReadingTime() {
+  const contentElement = document.getElementById("content");
+  const readingTimeElement = document.getElementById("readingTime");
 
+  if (!contentElement || !readingTimeElement) return;
+
+  const words = contentElement.textContent.trim().split(/\s+/).filter(Boolean).length;
+  const minutes = Math.max(1, Math.ceil(words / 200));
+
+  readingTimeElement.textContent = `${minutes} min read`;
+}
       document.title = `${post.title || "Story"} | The Dossier`;
       document.getElementById("category").textContent = post.category || "Mystery";
       document.getElementById("title").textContent = post.title || "Untitled story";
