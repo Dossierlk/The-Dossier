@@ -94,6 +94,7 @@
    `;document.head.appendChild(s);
   }
   document.body.classList.add("event-skinned");
+  document.documentElement.classList.add("dossier-theme-ready");
 
   // One consistent right-side navigation drawer with every category, on every page.
   const buildDossierDrawer=()=>{
