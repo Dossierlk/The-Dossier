@@ -1071,7 +1071,14 @@ body.light-theme footer {
         : "";
       document.getElementById("content").textContent =
         post.content || "No article content available.";
-      updateReadingTime();
+     const contentElement = document.getElementById("content");
+const readingTimeElement = document.getElementById("readingTime");
+
+if (contentElement && readingTimeElement) {
+  const wordCount = (post.content || "").trim().split(/\s+/).filter(Boolean).length;
+  const minutes = Math.max(1, Math.ceil(wordCount / 200));
+  readingTimeElement.textContent = `${minutes} min read`;
+}
 
       const cover = document.getElementById("cover");
       if (post.image_url) {
