@@ -709,7 +709,47 @@ aiDraftList.replaceChildren();
   }
 }
 
-refreshAiBtn.addEventListener("click", loadAiDrafts);
+
+refreshAiBtn.addEventListener("click", async () => {
+  const { data: authData, error: authError } = await db.auth.getUser();
+
+  if (
+    authError ||
+    authData.user?.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()
+  ) {
+    setAiMessage("Please sign in with your admin account.", true);
+    return;
+  }
+
+  refreshAiBtn.disabled = true;
+  refreshAiBtn.textContent = "Generating new article...";
+
+  try {
+    const { data, error } = await db.functions.invoke(
+      "generate-quick-flashes",
+      { body: {} }
+    );
+
+    if (error) throw error;
+    if (!data?.success) {
+      throw new Error(data?.error || "Article generation failed.");
+    }
+
+    setAiMessage(
+      "New article saved as pending: " + (data.draft?.title || "Quick Flash")
+    );
+
+    await loadAiDrafts();
+  } catch (error) {
+    setAiMessage(
+      "Generation failed: " + (error.message || "Unknown error"),
+      true
+    );
+  } finally {
+    refreshAiBtn.disabled = false;
+    refreshAiBtn.textContent = "Refresh";
+  }
+});
     db.auth.onAuthStateChange((_event, session) => {
       setLoggedIn(session?.user || null);
     });
