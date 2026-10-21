@@ -1062,17 +1062,19 @@ body.light-theme footer {
         statusBox.textContent = "Story not found. It may have been unpublished.";
         return;
       }
+
 function updateReadingTime() {
   const contentElement = document.getElementById("content");
-  const readingTimeElement = document.getElementById("readingTime");
+  const readingTimeElement = document.getElementById("reading-time");
 
   if (!contentElement || !readingTimeElement) return;
 
   const words = contentElement.textContent.trim().split(/\s+/).filter(Boolean).length;
   const minutes = Math.max(1, Math.ceil(words / 200));
 
-  readingTimeElement.textContent = `${minutes} min read`;
+  readingTimeElement.textContent = `◷ ${minutes} min read`;
 }
+
       document.title = `${post.title || "Story"} | The Dossier`;
       document.getElementById("category").textContent = post.category || "Mystery";
       document.getElementById("title").textContent = post.title || "Untitled story";
@@ -1084,12 +1086,7 @@ function updateReadingTime() {
      const contentElement = document.getElementById("content");
 const readingTimeElement = document.getElementById("readingTime");
 
-if (contentElement && readingTimeElement) {
-  const wordCount = (post.content || "").trim().split(/\s+/).filter(Boolean).length;
-  const minutes = Math.max(1, Math.ceil(wordCount / 200));
-  readingTimeElement.textContent = `${minutes} min read`;
-}
-
+updateReadingTime();
       const cover = document.getElementById("cover");
       if (post.image_url) {
         cover.src = post.image_url;
@@ -1428,6 +1425,117 @@ window.addEventListener("resize", updateReadingProgress);
 window.addEventListener("load", updateReadingProgress);
 
 updateReadingProgress();
+    
+/* ===== THE DOSSIER: Reading controls ===== */
+
+const themeToggle = document.getElementById("theme-toggle");
+const fontIncrease = document.getElementById("font-increase");
+const fontDecrease = document.getElementById("font-decrease");
+const shareButton = document.getElementById("share-article");
+const articleContent = document.getElementById("content");
+
+const defaultFontSize = 17;
+const minFontSize = 13;
+const maxFontSize = 27;
+let currentFontSize = defaultFontSize;
+
+// Restore saved theme and font size safely.
+try {
+  if (localStorage.getItem("dossier-theme") === "light") {
+    document.body.classList.add("light-theme");
+  }
+
+  const savedSize = Number(localStorage.getItem("dossier-font-size"));
+
+  if (savedSize >= minFontSize && savedSize <= maxFontSize) {
+    currentFontSize = savedSize;
+  }
+} catch (error) {
+  console.warn("Reading preferences unavailable:", error);
+}
+
+function applyTheme() {
+  const isLight = document.body.classList.contains("light-theme");
+
+  themeToggle.textContent = isLight ? "🌙 Dark" : "☀️ Light";
+  themeToggle.setAttribute(
+    "aria-label",
+    isLight ? "Switch to dark mode" : "Switch to light mode"
+  );
+
+  document.querySelector('meta[name="theme-color"]')
+    ?.setAttribute("content", isLight ? "#f3f6fc" : "#07142b");
+}
+
+function applyFontSize() {
+  if (!articleContent) return;
+
+  articleContent.style.fontSize = `${currentFontSize}px`;
+
+  try {
+    localStorage.setItem("dossier-font-size", String(currentFontSize));
+  } catch (error) {
+    console.warn("Could not save font size:", error);
+  }
+}
+
+themeToggle?.addEventListener("click", () => {
+  document.body.classList.toggle("light-theme");
+
+  try {
+    localStorage.setItem(
+      "dossier-theme",
+      document.body.classList.contains("light-theme")
+        ? "light"
+        : "dark"
+    );
+  } catch (error) {
+    console.warn("Could not save theme:", error);
+  }
+
+  applyTheme();
+});
+
+fontIncrease?.addEventListener("click", () => {
+  currentFontSize = Math.min(maxFontSize, currentFontSize + 2);
+  applyFontSize();
+});
+
+fontDecrease?.addEventListener("click", () => {
+  currentFontSize = Math.max(minFontSize, currentFontSize - 2);
+  applyFontSize();
+});
+
+shareButton?.addEventListener("click", async () => {
+  const shareData = {
+    title: document.getElementById("title")?.textContent || document.title,
+    text: "Discover this mystery on The Dossier.",
+    url: window.location.href
+  };
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+    } else if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(shareData.url);
+      shareButton.textContent = "✓ Link copied";
+
+      setTimeout(() => {
+        shareButton.textContent = "↗ Share";
+      }, 2000);
+    } else {
+      window.prompt("Copy this article link:", shareData.url);
+    }
+  } catch (error) {
+    if (error?.name !== "AbortError") {
+      console.error("Share failed:", error);
+    }
+  }
+});
+
+applyTheme();
+applyFontSize();
+
   </script>
 </body>
 </html>
