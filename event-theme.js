@@ -72,8 +72,8 @@
   let toggle=document.getElementById("dossier-global-theme-toggle");
   if(!toggle){toggle=document.createElement("button");toggle.type="button";toggle.className="dossier-theme-toggle";toggle.id="dossier-global-theme-toggle";toggle.setAttribute("aria-label","Toggle light and dark appearance");document.body.appendChild(toggle)}
   const apply=()=>{let light=document.body.classList.contains("light-theme");toggle.textContent=light?"🌙 Switch to Dark":"☀️ Switch to Light";toggle.setAttribute("aria-pressed",String(light));const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=light?"#f3f6fc":deep};
-  try{if(localStorage.getItem("dossier-theme")==="light")document.body.classList.add("light-theme")}catch(_){}
-  if(!toggle.dataset.dossierBound){toggle.addEventListener("click",()=>{document.body.classList.toggle("light-theme");try{localStorage.setItem("dossier-theme",document.body.classList.contains("light-theme")?"light":"dark")}catch(_){}apply()});toggle.dataset.dossierBound="1"}
+  try{if(localStorage.getItem("dossier-theme-v2")==="light")document.body.classList.add("light-theme")}catch(_){}
+  if(!toggle.dataset.dossierBound){toggle.addEventListener("click",()=>{document.body.classList.toggle("light-theme");try{localStorage.setItem("dossier-theme-v2",document.body.classList.contains("light-theme")?"light":"dark")}catch(_){}apply()});toggle.dataset.dossierBound="1"}
   apply();
   // Keep the article page's built-in theme control and this site-wide control in sync.
   document.addEventListener("click",ev=>{
