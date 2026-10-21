@@ -104,7 +104,8 @@
   <nav class="nav-links" aria-label="Main navigation">
     <a href="index.html">Home</a><a href="index.html#latest">Discover</a><a href="index.html#categories">Categories</a><a href="about.html">About</a>
   </nav>
-  <input id="search" class="search" type="search" placeholder="Search this archive..." aria-label="Search stories">
+  <div class="search-control" id="search-control"><button type="button" class="search-icon-button" id="search-open" aria-label="Open search" title="Search stories">⌕</button><input id="search" class="search" type="search" placeholder="Search this archive..." aria-label="Search stories" autocomplete="off"></div>
+  <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false"><span></span><span></span><span></span></button>
 </header>
 <main class="wrap">
   <section class="intro">
@@ -209,6 +210,11 @@
     if (!filtered.length) empty.textContent = query ? "No stories match your search. Try another keyword." : "No published stories were found in this category.";
   }
   search.addEventListener("input", render);
+  document.getElementById("search-open")?.addEventListener("click",()=>{const c=document.getElementById("search-control");const open=c.classList.toggle("search-open");if(open)search.focus();else{search.value="";render();}});
+  search.addEventListener("keydown",e=>{if(e.key==="Escape"){search.value="";document.getElementById("search-control")?.classList.remove("search-open");render();search.blur();}});
+  const menuToggle=document.getElementById("menu-toggle");
+  const navLinks=document.querySelector(".nav-links");
+  menuToggle?.addEventListener("click",()=>{const open=navLinks.classList.toggle("open");menuToggle.setAttribute("aria-expanded",String(open));menuToggle.setAttribute("aria-label",open?"Close navigation menu":"Open navigation menu");});
 
   async function loadArchive() {
     const {data,error} = await db.from("posts")
