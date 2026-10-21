@@ -1017,16 +1017,38 @@
       .category-section .section-head { align-items: start; }
     }
   
-    /* Stability: avoid repaint-heavy effects on the home page while scrolling. */
-    body { background-attachment: scroll !important; }
-    .nav { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
-    .search, .glass, .event-highlight { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
-    .hero-content, .article { animation: none !important; }
-    .article, .cover, .primary { transition: none !important; }
-    .article:hover { transform: none !important; }
-    .article:hover .cover { transform: none !important; }
-
-  </style>
+    /* Final card stability override: keep card layout and hover effects static. */
+    .article,
+    .article:hover,
+    .article:active {
+      animation: none !important;
+      transform: none !important;
+      transition: none !important;
+      filter: none !important;
+      box-shadow: 0 12px 28px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.04) !important;
+      will-change: auto !important;
+    }
+    .article::before,
+    .article::after,
+    .article:hover::before,
+    .article:hover::after {
+      content: none !important;
+      display: none !important;
+      animation: none !important;
+      transition: none !important;
+      opacity: 0 !important;
+    }
+    .cover,
+    .article:hover .cover {
+      transform: none !important;
+      transition: none !important;
+      filter: none !important;
+    }
+    .article img,
+    .article .cover {
+      animation: none !important;
+    }
+    </style>
   
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -1444,16 +1466,7 @@ const quickFlashesEmpty = document.getElementById("quick-flashes-empty");
     new Date().getFullYear();
 
   loadArticles();
-    // Cursor spotlight on cards
-  document.addEventListener("pointermove", (e) => {
-    const card = e.target.closest?.(".article");
-    if (!card) return;
-    const rect = card.getBoundingClientRect();
-    card.style.setProperty("--mx", `${e.clientX - rect.left}px`);
-    card.style.setProperty("--my", `${e.clientY - rect.top}px`);
-  });
-  
-const menuToggle = document.getElementById("menu-toggle");
+  const menuToggle = document.getElementById("menu-toggle");
 const navLinks = document.getElementById("nav-links");
 
 if (menuToggle && navLinks) {
