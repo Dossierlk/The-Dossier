@@ -1062,16 +1062,16 @@ body.light-theme footer {
         statusBox.textContent = "Story not found. It may have been unpublished.";
         return;
       }
-function updatereading-time() {
+function updateReadingTime() {
   const contentElement = document.getElementById("content");
-  const reading-timeElement = document.getElementById("reading-time");
+  const readingTimeElement = document.getElementById("readingTime");
 
-  if (!contentElement || !reading-timeElement) return;
+  if (!contentElement || !readingTimeElement) return;
 
   const words = contentElement.textContent.trim().split(/\s+/).filter(Boolean).length;
   const minutes = Math.max(1, Math.ceil(words / 200));
 
-  reading-timeElement.textContent = `${minutes} min read`;
+  readingTimeElement.textContent = `${minutes} min read`;
 }
       document.title = `${post.title || "Story"} | The Dossier`;
       document.getElementById("category").textContent = post.category || "Mystery";
@@ -1082,12 +1082,12 @@ function updatereading-time() {
       document.getElementById("content").textContent =
         post.content || "No article content available.";
      const contentElement = document.getElementById("content");
-const reading-timeElement = document.getElementById("reading-time");
+const readingTimeElement = document.getElementById("readingTime");
 
-if (contentElement && reading-timeElement) {
+if (contentElement && readingTimeElement) {
   const wordCount = (post.content || "").trim().split(/\s+/).filter(Boolean).length;
   const minutes = Math.max(1, Math.ceil(wordCount / 200));
-  reading-timeElement.textContent = `${minutes} min read`;
+  readingTimeElement.textContent = `${minutes} min read`;
 }
 
       const cover = document.getElementById("cover");
