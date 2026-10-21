@@ -965,18 +965,47 @@ if (!visitorId) {
   localStorage.setItem("dossier-visitor-id", visitorId);
 }
     
+
 async function loadPostViews(postId) {
   const viewElement = document.getElementById("view-count");
+  if (!viewElement) return;
+
+  const storageKey = `dossier_viewed_${postId}`;
 
   try {
-    const { data, error } = await db.rpc("increment_post_views", {
-      p_post_id: postId
-    });
+    // Has this browser already counted this article?
+    const alreadyViewed = localStorage.getItem(storageKey);
+
+    if (alreadyViewed) {
+      // Read the current count without incrementing it
+      const { data, error } = await db
+        .from("posts")
+        .select("views")
+        .eq("id", postId)
+        .eq("published", true)
+        .single();
+
+      if (error) throw error;
+
+      viewElement.textContent =
+        `👁 ${(data.views ?? 0).toLocaleString()} views`;
+      return;
+    }
+
+    // First view from this browser: increment once
+    const { data, error } = await db.rpc(
+      "increment_post_views",
+      { p_post_id: postId }
+    );
 
     if (error) throw error;
 
+    // Remember only after the increment succeeds
+    localStorage.setItem(storageKey, "1");
+
     viewElement.textContent =
       `👁 ${(data ?? 0).toLocaleString()} views`;
+
   } catch (error) {
     console.error("View counter error:", error);
     viewElement.hidden = true;
