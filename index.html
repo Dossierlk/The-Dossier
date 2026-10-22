@@ -1395,9 +1395,9 @@
 
 
   <main class="wrap">
-    <section class="world-news dossier-news-card" id="world-news-ticker" aria-label="Live 24/7 world headlines and daily special">
+    <section class="world-news dossier-news-card" id="world-news-ticker" aria-label="Live Today world headlines and daily special">
       <div class="world-news-heading">
-        <h1><span class="world-news-kicker"><span class="world-news-pulse"></span> LIVE 24/7 WORLD</span></h1>
+        <h1><span class="world-news-kicker"><span class="world-news-pulse"></span> LIVE TODAY</span></h1>
       </div>
       <div class="world-news-divider"></div>
       <div class="world-news-track" aria-live="polite">
@@ -1775,15 +1775,25 @@ if (menuToggle && navLinks) {
   });
 }
 
-  // Premium cursor-following light for the live news glass card.
+  // Cursor-following spotlight for the live news card AND every home-page article card.
   (() => {
-    const card = document.getElementById("world-news-ticker");
-    if (!card || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-    card.addEventListener("pointermove", (event) => {
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+    document.addEventListener("pointermove", (event) => {
+      const card = event.target.closest?.(".dossier-news-card, .article");
+      if (!card) return;
       const rect = card.getBoundingClientRect();
-      card.style.setProperty("--news-mx", (event.clientX - rect.left) + "px");
-      card.style.setProperty("--news-my", (event.clientY - rect.top) + "px");
-    });
+      const x = (event.clientX - rect.left) + "px";
+      const y = (event.clientY - rect.top) + "px";
+
+      if (card.classList.contains("dossier-news-card")) {
+        card.style.setProperty("--news-mx", x);
+        card.style.setProperty("--news-my", y);
+      } else {
+        card.style.setProperty("--mx", x);
+        card.style.setProperty("--my", y);
+      }
+    }, { passive: true });
   })();
 
   // Fetch fresh, deduplicated headlines from the Cloudflare Worker API.
