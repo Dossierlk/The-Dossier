@@ -118,7 +118,7 @@
   if(!document.querySelector(".event-highlight")){
    const banner=document.createElement("section");banner.className="event-highlight";banner.setAttribute("aria-label","Today's special event");
    banner.innerHTML='<div class="event-icon-box" aria-hidden="true"></div><div><p class="event-kicker"></p><h2 class="event-title"></h2><p class="event-copy"></p><div class="event-meta"></div></div><a class="event-cta" href="index.html#categories">Explore The Dossier <span aria-hidden="true">↗</span></a>';
-   banner.querySelector(".event-icon-box").textContent=icon;banner.querySelector(".event-kicker").textContent="TODAY'S SPECIAL HIGHLIGHT";banner.querySelector(".event-title").textContent=d.toLocaleDateString("en-US",{month:"long",day:"numeric"})+": "+name;banner.querySelector(".event-copy").textContent=copy;banner.querySelector(".event-meta").textContent="";
+   banner.querySelector(".event-icon-box").textContent=icon;banner.querySelector(".event-kicker").textContent="";banner.querySelector(".event-title").textContent=d.toLocaleDateString("en-US",{month:"long",day:"numeric"})+" (Special)";banner.querySelector(".event-copy").textContent=copy;banner.querySelector(".event-meta").textContent="";
    const newsHighlight=document.getElementById("world-news-highlight");
    if(newsHighlight)newsHighlight.appendChild(banner);
    else if(nav)nav.insertAdjacentElement("afterend",banner);
