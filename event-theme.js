@@ -99,7 +99,7 @@
    #world-news-highlight{display:block;width:100%;margin:0;padding:0;border-top:1px solid rgba(120,180,255,.16)}
    #world-news-highlight .event-highlight{display:flex!important;align-items:center!important;gap:9px!important;width:100%!important;margin:0!important;padding:10px 2px 1px!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible!important;grid-template-columns:none!important}
    #world-news-highlight .event-icon-box{display:none!important}
-   #world-news-highlight .event-kicker{display:inline!important;margin:0 8px 0 0!important;color:#7dbdff!important;font:800 10px/1.35 system-ui,sans-serif!important;letter-spacing:.6px!important;white-space:nowrap}
+   #world-news-highlight .event-kicker{display:inline!important;margin:0 5px 0 0!important;color:#7dbdff!important;font:800 10px/1.35 system-ui,sans-serif!important;letter-spacing:0!important;white-space:nowrap}
    #world-news-highlight .event-title{display:inline!important;margin:0!important;color:#e7f2ff!important;font:500 11px/1.5 system-ui,sans-serif!important;letter-spacing:0!important}
    #world-news-highlight .event-copy{display:inline!important;margin:0!important;color:#c9d8ee!important;font:400 11px/1.5 system-ui,sans-serif!important} #world-news-highlight .event-meta,#world-news-highlight .event-cta{display:none!important}
    #world-news-highlight .event-highlight>div:nth-child(2){display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:0!important;min-width:0}
@@ -118,7 +118,7 @@
   if(!document.querySelector(".event-highlight")){
    const banner=document.createElement("section");banner.className="event-highlight";banner.setAttribute("aria-label","Today's special event");
    banner.innerHTML='<div class="event-icon-box" aria-hidden="true"></div><div><p class="event-kicker"></p><h2 class="event-title"></h2><p class="event-copy"></p><div class="event-meta"></div></div><a class="event-cta" href="index.html#categories">Explore The Dossier <span aria-hidden="true">↗</span></a>';
-   banner.querySelector(".event-icon-box").textContent=icon;banner.querySelector(".event-kicker").textContent=d.toLocaleDateString("en-US",{month:"long",day:"numeric"})+" · TODAY'S SPECIAL";banner.querySelector(".event-title").textContent="";banner.querySelector(".event-copy").textContent=copy;banner.querySelector(".event-meta").textContent="";
+   banner.querySelector(".event-icon-box").textContent=icon;banner.querySelector(".event-kicker").textContent=d.toLocaleDateString("en-US",{month:"long",day:"numeric"});banner.querySelector(".event-title").textContent=name;banner.querySelector(".event-copy").textContent="";banner.querySelector(".event-meta").textContent="";
    const newsHighlight=document.getElementById("world-news-highlight");
    if(newsHighlight)newsHighlight.appendChild(banner);
    else if(nav)nav.insertAdjacentElement("afterend",banner);
