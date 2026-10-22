@@ -1271,6 +1271,61 @@
     }
   </style>
 
+<style id="dossier-world-news-styles">
+
+  /* Dossier live-news hero: remove the stock forest image, keep the glossy mystery look. */
+  .hero {
+    background:
+      radial-gradient(ellipse at 82% 20%, rgba(52,135,255,.20), transparent 42%),
+      linear-gradient(135deg, rgba(13,30,57,.98), rgba(5,11,23,.98) 70%) !important;
+    border-color: rgba(120,180,255,.22) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 24px 60px rgba(0,0,0,.22);
+  }
+  .world-news {
+    margin: 22px 0 12px;
+    overflow: hidden;
+    border: 1px solid rgba(112,174,255,.26);
+    border-radius: 16px;
+    background: linear-gradient(110deg, rgba(10,27,52,.92), rgba(18,43,77,.72));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.10), 0 12px 32px rgba(0,0,0,.18);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+  }
+  .world-news-top {
+    display:flex; align-items:center; gap:10px; padding:11px 15px;
+    border-bottom:1px solid rgba(130,180,255,.15);
+    color:#d9eaff; font-size:11px; font-weight:800; letter-spacing:2px;
+  }
+  .world-news-live {
+    display:inline-flex; align-items:center; gap:7px; color:#ffb5b5;
+    letter-spacing:1.5px;
+  }
+  .world-news-live::before {
+    content:""; width:7px; height:7px; border-radius:50%; background:#ff4d67;
+    box-shadow:0 0 12px rgba(255,77,103,.8); animation: newsPulse 1.6s ease-in-out infinite;
+  }
+  .world-news-source { margin-left:auto; color:#91b9eb; font-size:10px; letter-spacing:1px; }
+  .world-news-track { overflow:hidden; white-space:nowrap; padding:13px 0; }
+  .world-news-items {
+    display:inline-flex; align-items:center; gap:34px; min-width:max-content;
+    padding-left:100%; animation: newsTicker 68s linear infinite;
+  }
+  .world-news:hover .world-news-items { animation-play-state:paused; }
+  .world-news-item { display:inline-flex; align-items:center; gap:10px; color:#eaf3ff; text-decoration:none; font-size:13px; }
+  .world-news-item::before { content:""; width:5px; height:5px; border-radius:50%; background:#60a5fa; flex-shrink:0; }
+  .world-news-item:hover { color:#8ec5ff; }
+  .world-news-status { padding:0 15px 12px; color:#8fa9cb; font-size:11px; }
+  @keyframes newsTicker { from { transform:translateX(0); } to { transform:translateX(-100%); } }
+  @keyframes newsPulse { 50% { opacity:.45; transform:scale(.82); } }
+  @media (prefers-reduced-motion: reduce) { .world-news-items { animation:none; padding-left:15px; flex-wrap:wrap; white-space:normal; } }
+  @media (max-width:600px) {
+    .world-news { border-radius:13px; margin-top:16px; }
+    .world-news-top { padding:10px 12px; }
+    .world-news-items { animation-duration:52s; }
+    .world-news-item { font-size:12px; }
+  }
+
+</style>
 </head>
 <body>
  
@@ -1314,6 +1369,20 @@
         <p>Uncover the unexplained. Explore forgotten histories, strange encounters and the mysteries that challenge everything we know.</p>
         <a class="primary" href="#latest">Enter the unknown <span>↗</span></a>
       </div>
+    </section>
+
+    <section class="world-news" id="world-news-ticker" aria-label="Latest world news">
+      <div class="world-news-top">
+        <span class="world-news-live">LIVE FEED</span>
+        <span>WORLD NEWS</span>
+        <span class="world-news-source" id="world-news-source">BBC WORLD</span>
+      </div>
+      <div class="world-news-track" aria-live="polite">
+        <div class="world-news-items" id="world-news-items">
+          <span class="world-news-item">Connecting to the latest international headlines…</span>
+        </div>
+      </div>
+      <div class="world-news-status" id="world-news-status">Loading headlines from BBC News World…</div>
     </section>
 
     <section id="latest-posts-section">
@@ -1680,6 +1749,51 @@ if (menuToggle && navLinks) {
     });
   });
 }
+
+  // Live headline ticker: fetch BBC World RSS via RSS2JSON and refresh every 10 minutes.
+  (() => {
+    const track = document.getElementById("world-news-items");
+    const status = document.getElementById("world-news-status");
+    const sourceLabel = document.getElementById("world-news-source");
+    if (!track || !status) return;
+    const feedUrl = "https://feeds.bbci.co.uk/news/world/rss.xml";
+    const endpoint = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(feedUrl);
+    const renderHeadline = (item) => {
+      const a = document.createElement("a");
+      a.className = "world-news-item";
+      a.href = item.link;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.textContent = item.title || "Read latest world news";
+      a.title = item.title || "Read latest world news";
+      return a;
+    };
+    async function loadWorldNews() {
+      try {
+        const response = await fetch(endpoint, { cache: "no-store" });
+        if (!response.ok) throw new Error("News feed request failed");
+        const data = await response.json();
+        const items = Array.isArray(data.items) ? data.items.filter(x => x && x.title && x.link).slice(0, 14) : [];
+        if (!items.length || (data.status && data.status !== "ok")) throw new Error("No headlines returned");
+        track.replaceChildren();
+        const allItems = [...items, ...items];
+        allItems.forEach(item => track.appendChild(renderHeadline(item)));
+        status.textContent = "Latest headlines from BBC News World • Updated " + new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"});
+        if (sourceLabel) sourceLabel.textContent = "BBC WORLD";
+      } catch (error) {
+        status.textContent = "Live headlines are temporarily unavailable. Please try again shortly.";
+        if (!track.children.length) {
+          const fallback = document.createElement("span");
+          fallback.className = "world-news-item";
+          fallback.textContent = "BBC World News feed is currently unavailable.";
+          track.replaceChildren(fallback);
+        }
+      }
+    }
+    loadWorldNews();
+    window.setInterval(loadWorldNews, 10 * 60 * 1000);
+  })();
+
 </script>
   
 
