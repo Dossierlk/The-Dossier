@@ -28,7 +28,7 @@
    /* Slim daily highlight bar */
    .event-highlight{display:grid!important;position:relative;z-index:1;grid-template-columns:27px minmax(0,1fr);align-items:center;gap:8px;width:min(1120px,calc(100% - 28px));margin:9px auto 12px;padding:7px 11px;border-radius:12px;overflow:hidden;border:1px solid rgba(101,181,255,.2);background:linear-gradient(120deg,#0a1428 0%,#102447 65%,#12365c 100%);box-shadow:inset 0 1px 0 #ffffff10,0 4px 12px #0002;color:#f2f7ff}
    .event-icon-box{display:grid;place-items:center;width:26px;height:26px;border-radius:8px;font-size:15px;background:linear-gradient(145deg,#1b3a65,#10213e);border:1px solid rgba(101,181,255,.24)}
-   .event-kicker,.event-copy,.event-meta,.event-cta{display:none!important}
+   .event-kicker,.event-meta,.event-cta{display:none!important}
    .event-title{margin:0;color:#f2f7ff;font:750 12px/1.2 system-ui,sans-serif;letter-spacing:-.01em}
    .event-mark{display:inline-grid;place-items:center;margin-left:7px;width:25px;height:25px;border-radius:8px;color:#b9e0ff;background:linear-gradient(145deg,#1b3a65,#10213e);border:1px solid rgba(101,181,255,.3);font-size:14px}
    .event-pill{font-size:10px;font-weight:700;padding:6px 9px;border-radius:999px;border:1px solid rgba(101,181,255,.28)!important;background:rgba(20,48,85,.7)!important;color:#b9e0ff!important;white-space:nowrap}
@@ -99,9 +99,9 @@
    #world-news-highlight{display:block;width:100%;margin:0;padding:0;border-top:1px solid rgba(120,180,255,.16)}
    #world-news-highlight .event-highlight{display:flex!important;align-items:center!important;gap:9px!important;width:100%!important;margin:0!important;padding:10px 2px 1px!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible!important;grid-template-columns:none!important}
    #world-news-highlight .event-icon-box{display:none!important}
-   #world-news-highlight .event-kicker{display:inline!important;margin:0 8px 0 0!important;color:#7dbdff!important;font:800 9px/1.2 system-ui,sans-serif!important;letter-spacing:1px!important;white-space:nowrap}
-   #world-news-highlight .event-title{display:inline!important;margin:0!important;color:#e7f2ff!important;font:650 11px/1.45 system-ui,sans-serif!important;letter-spacing:0!important}
-   #world-news-highlight .event-copy,#world-news-highlight .event-meta,#world-news-highlight .event-cta{display:none!important}
+   #world-news-highlight .event-kicker{display:inline!important;margin:0 8px 0 0!important;color:#7dbdff!important;font:800 10px/1.35 system-ui,sans-serif!important;letter-spacing:.6px!important;white-space:nowrap}
+   #world-news-highlight .event-title{display:inline!important;margin:0!important;color:#e7f2ff!important;font:500 11px/1.5 system-ui,sans-serif!important;letter-spacing:0!important}
+   #world-news-highlight .event-copy{display:inline!important;margin:0!important;color:#c9d8ee!important;font:400 11px/1.5 system-ui,sans-serif!important} #world-news-highlight .event-meta,#world-news-highlight .event-cta{display:none!important}
    #world-news-highlight .event-highlight>div:nth-child(2){display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:0!important;min-width:0}
    #world-news-highlight .event-mark,#world-news-highlight .event-pill{display:none!important}
    body.light-theme #world-news-highlight .event-title{color:#18365c!important}
@@ -118,7 +118,7 @@
   if(!document.querySelector(".event-highlight")){
    const banner=document.createElement("section");banner.className="event-highlight";banner.setAttribute("aria-label","Today's special event");
    banner.innerHTML='<div class="event-icon-box" aria-hidden="true"></div><div><p class="event-kicker"></p><h2 class="event-title"></h2><p class="event-copy"></p><div class="event-meta"></div></div><a class="event-cta" href="index.html#categories">Explore The Dossier <span aria-hidden="true">↗</span></a>';
-   banner.querySelector(".event-icon-box").textContent=icon;banner.querySelector(".event-kicker").textContent="TODAY'S SPECIAL";banner.querySelector(".event-title").textContent=d.toLocaleDateString("en-US",{month:"long",day:"numeric"})+": "+name;banner.querySelector(".event-copy").textContent=copy;banner.querySelector(".event-meta").textContent="";
+   banner.querySelector(".event-icon-box").textContent=icon;banner.querySelector(".event-kicker").textContent=d.toLocaleDateString("en-US",{month:"long",day:"numeric"})+" · TODAY'S SPECIAL";banner.querySelector(".event-title").textContent="";banner.querySelector(".event-copy").textContent=copy;banner.querySelector(".event-meta").textContent="";
    const newsHighlight=document.getElementById("world-news-highlight");
    if(newsHighlight)newsHighlight.appendChild(banner);
    else if(nav)nav.insertAdjacentElement("afterend",banner);
