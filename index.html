@@ -1321,7 +1321,7 @@
   @media (max-width:600px) {
     .world-news { border-radius:13px; margin-top:16px; }
     .world-news-top { padding:10px 12px; }
-    .world-news-items { animation-duration:52s; }
+    .world-news-items { animation-duration:82s; }
     .world-news-item { font-size:12px; }
   }
 
@@ -1329,7 +1329,7 @@
 <style id="dossier-live-news-card">
     /* Compact, premium editorial news strip directly under the navigation */
     .hero{display:none!important}
-    .dossier-news-card{position:relative;display:block;width:min(1120px,calc(100% - 28px));margin:12px auto 22px;padding:15px 20px 12px;overflow:hidden;min-height:0;border:1px solid rgba(110,180,255,.2);border-radius:18px;background:linear-gradient(115deg,rgba(13,30,58,.98),rgba(5,13,29,.98) 72%);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 10px 30px rgba(0,0,0,.2)}
+    .dossier-news-card{position:relative;display:block;width:min(1260px,calc(100% - 20px));margin:12px auto 22px;padding:15px 20px 12px;overflow:hidden;min-height:0;border:1px solid rgba(110,180,255,.2);border-radius:18px;background:linear-gradient(115deg,rgba(13,30,58,.98),rgba(5,13,29,.98) 72%);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 10px 30px rgba(0,0,0,.2)}
     .world-news-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
     .world-news-kicker{display:inline-flex;align-items:center;gap:7px;color:#91caff;font-size:9px;font-weight:800;letter-spacing:1.5px}
     .world-news-pulse{width:6px;height:6px;border-radius:50%;background:#ff4d64;box-shadow:0 0 10px #ff405c;animation:dossierPulse 1.1s ease-in-out infinite}
@@ -1340,7 +1340,7 @@
     .world-news-source{flex-shrink:0;color:#8cc9ff;border:1px solid rgba(120,190,255,.2);border-radius:999px;padding:6px 9px;font-size:8px;letter-spacing:.9px;font-weight:800;background:rgba(80,150,255,.07)}
     .world-news-divider{height:1px;margin:10px 0 0;background:linear-gradient(90deg,rgba(105,180,255,.3),rgba(105,180,255,.02))}
     .world-news-track{position:relative;overflow:hidden;width:100%;padding:13px 0 10px;mask-image:linear-gradient(90deg,transparent,#000 2%,#000 98%,transparent)}
-    .world-news-items{display:flex;align-items:center;width:max-content;gap:0;animation:dossierNewsScroll 24s linear infinite;will-change:transform}
+    .world-news-items{display:flex;align-items:center;width:max-content;gap:0;animation:dossierNewsScroll 68s linear infinite;will-change:transform}
     .world-news-track:hover .world-news-items{animation-play-state:paused}
     .world-news-item{display:inline-flex;align-items:center;flex-shrink:0;color:#edf5ff;text-decoration:none;font-size:clamp(11px,1.15vw,13px);font-weight:600;white-space:nowrap;padding:0 17px}
     .world-news-item::before{content:"";display:inline-block;width:4px;height:4px;margin-right:10px;border-radius:50%;background:#55adff;box-shadow:0 0 8px rgba(70,160,255,.7)}
@@ -1812,7 +1812,8 @@ if (menuToggle && navLinks) {
         }).slice(0, 24);
         if (!items.length) throw new Error("No fresh headlines");
         track.replaceChildren();
-        items.forEach(item => {
+        // Render two identical runs so the -50% ticker animation loops seamlessly.
+        [items, items].forEach(run => run.forEach(item => {
           const link = document.createElement("a");
           link.className = "world-news-item";
           link.href = item.url;
@@ -1821,7 +1822,7 @@ if (menuToggle && navLinks) {
           link.textContent = item.title;
           link.title = item.title + (item.source ? " — " + item.source : "");
           track.appendChild(link);
-        });
+        }));
         track.dataset.hasHeadlines = "true";
         if (sourceLabel) sourceLabel.textContent = "BBC · BLOOMBERG · CNN · GLOBAL";
         status.textContent = "Updated " + new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"}) + " · Fresh headlines";
