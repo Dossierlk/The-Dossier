@@ -1526,6 +1526,47 @@
   }
 </style>
 
+
+<style id="dossier-live-news-light-theme-fix">
+  /* Match the existing article-card treatment in light mode; live-news content and behavior stay unchanged. */
+  body.light-theme .dossier-news-card{
+    background:
+      radial-gradient(ellipse at 12% 0%,rgba(88,145,225,.10),transparent 52%),
+      linear-gradient(145deg,rgba(255,255,255,.98),rgba(237,243,253,.96) 58%,rgba(225,235,250,.92))!important;
+    border-color:#d7e2f2!important;
+    box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(75,105,150,.04),0 16px 44px rgba(40,71,108,.12)!important;
+    color:#18243b!important;
+  }
+  body.light-theme .dossier-news-card:before{
+    background:linear-gradient(180deg,rgba(255,255,255,.72),transparent)!important;
+  }
+  body.light-theme .dossier-news-card h1{color:#142443!important}
+  body.light-theme .dossier-news-card h1 em{color:#3678c9!important}
+  body.light-theme .dossier-news-card .world-news-kicker{color:#536581!important}
+  body.light-theme .dossier-news-card .world-news-divider{
+    background:linear-gradient(90deg,rgba(86,132,195,.30),rgba(86,132,195,.08) 65%,transparent)!important;
+  }
+  body.light-theme .dossier-news-card .world-news-track{
+    mask-image:linear-gradient(90deg,transparent,#000 2%,#000 98%,transparent);
+  }
+  body.light-theme .dossier-news-card .world-news-item{color:#33445f!important}
+  body.light-theme .dossier-news-card .world-news-item:before{
+    background:#4d8bd7!important;box-shadow:0 0 8px rgba(70,130,210,.22)!important;
+  }
+  body.light-theme .dossier-news-card .world-news-item:hover{color:#1d64b5!important}
+  body.light-theme .dossier-news-card #world-news-highlight{
+    border-top-color:rgba(86,132,195,.18)!important;
+  }
+  body.light-theme .dossier-news-card .event-highlight{
+    background:linear-gradient(135deg,rgba(255,255,255,.98),rgba(230,239,252,.96))!important;
+    border-color:#d0def1!important;
+    box-shadow:inset 0 1px 0 #fff,0 8px 20px rgba(40,71,108,.08)!important;
+  }
+  @media(prefers-reduced-motion:reduce){
+    body.light-theme .dossier-news-card{transition:none!important}
+  }
+</style>
+
 </head>
 <body>
  
