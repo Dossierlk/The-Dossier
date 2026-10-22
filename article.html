@@ -984,6 +984,88 @@ body.light-theme footer {
     }
   </style>
 
+
+  <style id="dossier-light-mode-readability">
+    /* Light mode: preserve the glass look, but keep every text element readable. */
+    body.light-theme {
+      color-scheme: light !important;
+      background: radial-gradient(ellipse at 15% 0%, rgba(98,160,255,.16), transparent 38%),
+                  linear-gradient(160deg, #f4f7fd 0%, #eaf1fb 52%, #f8faff 100%) !important;
+      color: #17243a !important;
+    }
+    body.light-theme .nav,
+    body.light-theme .glass,
+    body.light-theme .community {
+      color: #17243a !important;
+      background: linear-gradient(145deg, rgba(255,255,255,.88), rgba(238,245,255,.78)) !important;
+      border-color: rgba(75,115,170,.22) !important;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.95), 0 16px 42px rgba(35,65,110,.10) !important;
+      -webkit-backdrop-filter: blur(24px) saturate(150%);
+      backdrop-filter: blur(24px) saturate(150%);
+    }
+    body.light-theme .brand,
+    body.light-theme .back,
+    body.light-theme h1,
+    body.light-theme h2,
+    body.light-theme h3,
+    body.light-theme h4,
+    body.light-theme .category,
+    body.light-theme .date,
+    body.light-theme .community-intro,
+    body.light-theme .status,
+    body.light-theme .related,
+    body.light-theme .related * {
+      color: #17243a !important;
+    }
+    body.light-theme #content,
+    body.light-theme #content p,
+    body.light-theme #content li,
+    body.light-theme #content span,
+    body.light-theme #content strong,
+    body.light-theme #content em,
+    body.light-theme #content b,
+    body.light-theme #content i,
+    body.light-theme #content h1,
+    body.light-theme #content h2,
+    body.light-theme #content h3,
+    body.light-theme #content h4,
+    body.light-theme #content div,
+    body.light-theme #comments-list,
+    body.light-theme #comments-list p {
+      color: #263750 !important;
+    }
+    body.light-theme #content a { color: #075eb5 !important; text-decoration-color: rgba(7,94,181,.45); }
+    body.light-theme #content blockquote {
+      color: #314763 !important;
+      background: rgba(218,232,251,.72) !important;
+      border-left-color: #3985d8 !important;
+    }
+    body.light-theme #content pre,
+    body.light-theme #content code {
+      color: #18304f !important;
+      background: #e4edf9 !important;
+      border-color: rgba(75,115,170,.2) !important;
+    }
+    body.light-theme .reading-tools,
+    body.light-theme .related-card,
+    body.light-theme .comment-card,
+    body.light-theme .reaction-btn,
+    body.light-theme .reading-actions button,
+    body.light-theme .comment-form input,
+    body.light-theme .comment-form textarea {
+      color: #17243a !important;
+      background: linear-gradient(145deg, rgba(255,255,255,.96), rgba(232,241,253,.9)) !important;
+      border-color: rgba(75,115,170,.24) !important;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 5px 18px rgba(35,65,110,.07);
+    }
+    body.light-theme .comment-form input::placeholder,
+    body.light-theme .comment-form textarea::placeholder {
+      color: #687b96 !important;
+      opacity: 1;
+    }
+    body.light-theme footer { color: #596b84 !important; border-color: rgba(75,115,170,.2) !important; }
+  </style>
+
 </head>
 
 <body>
