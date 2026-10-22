@@ -1788,52 +1788,50 @@ if (menuToggle && navLinks) {
   });
 }
 
-  // Direct GDELT JSONP feed avoids browser CORS blocks from third-party RSS converters.
+  // Fetch fresh, deduplicated headlines from the Cloudflare Worker API.
   (() => {
-    const track=document.getElementById("world-news-items");
-    const status=document.getElementById("world-news-status");
-    const sourceLabel=document.getElementById("world-news-source");
-    if(!track||!status)return;
-    let requestTimer=null, refreshTimer=null, scriptNode=null, loaded=false;
-    function showItems(articles){
-      const items=(articles||[]).filter(x=>x&&x.title&&x.url&&/^https?:/i.test(x.url)).slice(0,24);
-      if(items.length<3)return false;
-      track.replaceChildren();
-      [...items,...items].forEach(item=>{
-        const link=document.createElement("a");
-        link.className="world-news-item";link.href=item.url;link.target="_blank";
-        link.rel="noopener noreferrer";link.textContent=item.title;link.title=item.title;
-        track.appendChild(link);
-      });
-      track.dataset.hasHeadlines="true";
-      if(sourceLabel)sourceLabel.textContent="GLOBAL NEWS";
-      status.textContent="Updated "+new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+" · Live headlines";
-      loaded=true;return true;
-    }
-    function loadNews(){
-      status.textContent=loaded?"Refreshing world headlines…":"Connecting to live world headlines…";
-      if(scriptNode)scriptNode.remove();
-      if(requestTimer)clearTimeout(requestTimer);
-      const callback="dossierNewsCallback";
-      window[callback]=data=>{
-        if(requestTimer)clearTimeout(requestTimer);
-        if(data&&showItems(data.articles))return;
-        status.textContent="Live news is temporarily busy. Retrying shortly…";
-      };
-      scriptNode=document.createElement("script");
-      scriptNode.src="https://api.gdeltproject.org/api/v2/doc/doc?query=world&mode=ArtList&format=json&maxrecords=30&sort=DateDesc&callback="+callback+"&_="+Date.now();
-      scriptNode.async=true;
-      scriptNode.onerror=()=>{
-        if(requestTimer)clearTimeout(requestTimer);
-        status.textContent="World headlines are reconnecting…";
-      };
-      document.head.appendChild(scriptNode);
-      requestTimer=setTimeout(()=>{
-        if(!loaded)status.textContent="Live headlines are taking longer than usual. Reconnecting…";
-      },12000);
+    const track = document.getElementById("world-news-items");
+    const status = document.getElementById("world-news-status");
+    const sourceLabel = document.getElementById("world-news-source");
+    if (!track || !status) return;
+    let loaded = false;
+
+    async function loadNews() {
+      status.textContent = loaded ? "Refreshing world headlines…" : "Connecting to live world headlines…";
+      try {
+        const response = await fetch("/api/news", { cache: "no-store" });
+        if (!response.ok) throw new Error("News service unavailable");
+        const data = await response.json();
+        const seen = new Set();
+        const items = (data.articles || []).filter(item => {
+          if (!item || !item.title || !item.url || !/^https?:\/\//i.test(item.url)) return false;
+          const key = item.title.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+          if (!key || seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        }).slice(0, 24);
+        if (!items.length) throw new Error("No fresh headlines");
+        track.replaceChildren();
+        items.forEach(item => {
+          const link = document.createElement("a");
+          link.className = "world-news-item";
+          link.href = item.url;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = item.title;
+          link.title = item.title + (item.source ? " — " + item.source : "");
+          track.appendChild(link);
+        });
+        track.dataset.hasHeadlines = "true";
+        if (sourceLabel) sourceLabel.textContent = "BBC · BLOOMBERG · CNN · GLOBAL";
+        status.textContent = "Updated " + new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"}) + " · Fresh headlines";
+        loaded = true;
+      } catch (error) {
+        status.textContent = loaded ? "Showing latest available headlines · retrying…" : "Live headlines are reconnecting…";
+      }
     }
     loadNews();
-    refreshTimer=setInterval(loadNews,5*60*1000);
+    setInterval(loadNews, 5 * 60 * 1000);
   })();
 
 </script>
