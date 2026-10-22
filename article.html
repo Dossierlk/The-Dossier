@@ -1064,6 +1064,18 @@ body.light-theme footer {
     body.light-theme footer { color: #596b84 !important; border-color: rgba(75,115,170,.2) !important; }
   </style>
 
+
+<style id="dossier-premium-motion">
+@media (prefers-reduced-motion:no-preference){
+ body{animation:dossierPageIn .4s cubic-bezier(.22,1,.36,1) both}
+ @keyframes dossierPageIn{from{opacity:.72;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+ .dossier-reveal{opacity:0;transform:translateY(18px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
+ .dossier-reveal.dossier-visible{opacity:1;transform:translateY(0)}
+ body.dossier-leaving{opacity:0;transform:translateY(4px);transition:opacity .16s ease,transform .16s ease}
+}
+@media(prefers-reduced-motion:reduce){.dossier-reveal{opacity:1;transform:none}}
+</style>
+
 </head>
 
 <body>
@@ -1788,5 +1800,14 @@ if(inc&&!inc.querySelector('.dossier-icon')){inc.replaceChildren(icon('plus'));i
 document.querySelectorAll('a.linkbtn').forEach(el=>{if(!el.querySelector('.dossier-icon'))el.append(icon('external'));});
 })();
 </script>
+
+<script id="dossier-premium-motion-script">
+(()=>{const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+if(!reduce&&"IntersectionObserver"in window){const targets=document.querySelectorAll("main section,section,.panel,.article,.article-content,.comments,.related,.story-card,.content");const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("dossier-visible");io.unobserve(e.target)}}),{threshold:.06,rootMargin:"0px 0px -24px 0px"});targets.forEach((el,i)=>{el.classList.add("dossier-reveal");el.style.transitionDelay=Math.min((i%3)*45,90)+"ms";io.observe(el)})}
+if(sessionStorage.getItem("dossier-page-enter")==="1"){sessionStorage.removeItem("dossier-page-enter");if(!reduce){document.body.style.opacity="0";requestAnimationFrame(()=>{document.body.style.transition="opacity .25s ease";document.body.style.opacity="1"})}}
+document.addEventListener("click",e=>{const a=e.target.closest("a[href]");if(!a||reduce||e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||a.target==="_blank"||a.hasAttribute("download"))return;let u;try{u=new URL(a.href,location.href)}catch{return}if(u.origin!==location.origin||u.href===location.href||(u.hash&&u.pathname===location.pathname))return;sessionStorage.setItem("dossier-page-enter","1");e.preventDefault();document.body.classList.add("dossier-leaving");setTimeout(()=>location.href=u.href,140)},true);
+addEventListener("pageshow",()=>{document.body.classList.remove("dossier-leaving");document.body.style.opacity=""})})();
+</script>
+
 </body>
 </html>
