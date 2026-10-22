@@ -1339,8 +1339,8 @@ const quickFlashesEmpty = document.getElementById("quick-flashes-empty");
     const regularPosts = posts.filter(post => normalizedCategory(post) !== "quick flashes");
     const quickFlashPosts = posts.filter(post => normalizedCategory(post) === "quick flashes");
 
-    // Latest Stories: the three newest regular posts.
-    const latestPosts = [...regularPosts]
+    // Latest Stories: newest 3 posts from ALL published categories, including Quick Flashes.
+    const latestPosts = [...posts]
       .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
       .slice(0, 3);
     latestPostsGrid.replaceChildren();
