@@ -1101,6 +1101,54 @@
     }
   </style>
 
+
+  <!-- Sticky glossy navigation fix -->
+  <style id="dossier-sticky-glass-nav">
+    header.nav,
+    .nav {
+      position: -webkit-sticky !important;
+      position: sticky !important;
+      top: 12px !important;
+      z-index: 1000 !important;
+      background: linear-gradient(
+        135deg,
+        rgba(24, 48, 82, .48),
+        rgba(7, 17, 36, .40)
+      ) !important;
+      border: 1px solid rgba(160, 205, 255, .24) !important;
+      -webkit-backdrop-filter: blur(30px) saturate(185%) !important;
+      backdrop-filter: blur(30px) saturate(185%) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .22),
+        0 12px 38px rgba(0, 0, 0, .28) !important;
+      isolation: isolate;
+    }
+
+    @media (max-width: 768px) {
+      header.nav,
+      .nav {
+        position: -webkit-sticky !important;
+        position: sticky !important;
+        top: 8px !important;
+        width: 94% !important;
+        margin: 8px auto 0 !important;
+        background: linear-gradient(
+          135deg,
+          rgba(24, 48, 82, .52),
+          rgba(7, 17, 36, .46)
+        ) !important;
+        -webkit-backdrop-filter: blur(30px) saturate(185%) !important;
+        backdrop-filter: blur(30px) saturate(185%) !important;
+      }
+    }
+
+    header.nav .nav-links.open {
+      background: rgba(8, 20, 42, .78) !important;
+      -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+      backdrop-filter: blur(28px) saturate(180%) !important;
+    }
+  </style>
+
 </head>
 <body>
  
