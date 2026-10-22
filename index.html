@@ -1146,6 +1146,19 @@
       </div>
     </section>
 
+    <section id="latest-posts-section">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Freshly uncovered</span>
+          <h2>🆕 Latest Stories</h2>
+        </div>
+        <p>The three newest stories.</p>
+      </div>
+      <div class="grid" id="latest-posts">
+        <p class="empty" style="display:block">Loading latest stories...</p>
+      </div>
+    </section>
+
     <section id="latest">
       <div class="section-head">
         <div>
@@ -1230,6 +1243,7 @@
   const searchOpen = document.getElementById("search-open");
   let allPublishedPosts = [];
   const articlesGrid = document.getElementById("articles");
+const latestPostsGrid = document.getElementById("latest-posts");
 const empty = document.getElementById("empty");
   const quickFlashesSection = document.getElementById("quick-flashes-section");
 const quickFlashesGrid = document.getElementById("quick-flashes");
@@ -1324,6 +1338,14 @@ const quickFlashesEmpty = document.getElementById("quick-flashes-empty");
     allPublishedPosts = posts;
     const regularPosts = posts.filter(post => normalizedCategory(post) !== "quick flashes");
     const quickFlashPosts = posts.filter(post => normalizedCategory(post) === "quick flashes");
+
+    // Latest Stories: the three newest regular posts.
+    const latestPosts = [...regularPosts]
+      .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
+      .slice(0, 3);
+    latestPostsGrid.replaceChildren();
+    latestPosts.forEach(post => latestPostsGrid.appendChild(makePostCard(post, "🆕 LATEST")));
+    document.getElementById("latest-posts-section").hidden = latestPosts.length === 0;
 
     // Trending: top 3 by views, with newest posts breaking ties.
     const trendingPosts = [...regularPosts].sort((a, b) =>
