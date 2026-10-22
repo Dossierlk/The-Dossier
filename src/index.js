@@ -38,12 +38,13 @@ function normalize(title) {
   return title.toLowerCase().replace(/\b(video|live|watch|update|breaking|analysis|opinion)\b/g," ").replace(/[^a-z0-9]+/g," ").trim().split(/\s+/).filter(w => w.length > 2).join(" ");
 }
 function overlap(a,b) {
-  const aa = new Set(normalize(a).split(" "));
-  const bb = new Set(normalize(b).split(" "));
-  if (!aa.size || !bb.size) return false;
+  const aa = new Set(normalize(a).split(" ").filter(Boolean));
+  const bb = new Set(normalize(b).split(" ").filter(Boolean));
+  if (aa.size < 5 || bb.size < 5) return false;
   let common = 0;
   for (const word of aa) if (bb.has(word)) common++;
-  return common / Math.min(aa.size,bb.size) >= 0.82;
+  // Only suppress near-identical long headlines; broad topic overlap is not enough.
+  return common / Math.max(aa.size,bb.size) >= 0.90;
 }
 export default {
   async fetch(request, env) {
