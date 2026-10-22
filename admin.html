@@ -163,6 +163,23 @@
     }
   </style>
 
+
+<style id="dossier-admin-studio">
+:root{--bg:#07142b;--panel:rgba(11,29,57,.82);--line:rgba(151,194,255,.2);--text:#f2f7ff;--muted:#a6b8d2;--blue:#8fc4ff}
+body{background:radial-gradient(ellipse at 50% -12%,#183c70 0,transparent 48%),linear-gradient(160deg,#07142b,#050b18 72%);color:var(--text)}
+.wrap{max-width:1040px;padding-top:30px}
+.panel{background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.018)),rgba(8,24,49,.83);border:1px solid rgba(150,194,255,.2);border-radius:24px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 24px 70px rgba(0,0,0,.25);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
+.ai-draft-card{background:linear-gradient(145deg,rgba(255,255,255,.055),transparent),rgba(5,17,36,.68);border:1px solid rgba(145,191,255,.18);border-radius:20px;padding:20px}
+input,textarea,select{background:rgba(3,12,27,.72);border:1px solid rgba(151,194,255,.22);border-radius:14px;color:#f2f7ff}
+button,.linkbtn{border-radius:999px;border:1px solid rgba(151,194,255,.24);background:linear-gradient(145deg,rgba(255,255,255,.14),rgba(255,255,255,.035)),rgba(14,39,75,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.12);color:#eff7ff}
+button.primary,.approve-ai{background:linear-gradient(135deg,#b8dcff,#77b7ff);color:#06152b;border-color:transparent}
+.reject-ai{background:rgba(135,34,55,.35);color:#ffc2cd}
+#refreshAiBtn{background:linear-gradient(135deg,rgba(107,170,255,.32),rgba(255,255,255,.05)),rgba(12,35,70,.8);border-color:rgba(143,196,255,.42);padding:12px 20px;font-weight:750}
+#aiDraftMessage{padding:12px 14px;border-radius:14px;background:rgba(5,17,36,.48);border:1px solid rgba(151,194,255,.12)}
+header .brand{letter-spacing:2.5px}
+@media(max-width:560px){.ai-draft-card{padding:14px}.topline{align-items:flex-start;flex-wrap:wrap}}
+</style>
+
 </head>
 <body>
   <main class="wrap">
@@ -191,20 +208,6 @@
 
      </section>
 
-    <section class="panel" id="aiApprovalPanel">
-      <h2>AI Articles Approval</h2>
-      <p>Review AI drafts before publishing.</p>
-
-      <div class="actions">
-        <button id="refreshAiBtn" type="button">Refresh drafts</button>
-      </div>
-
-      <div id="aiDraftMessage" class="hint">
-        Loading pending AI articles...
-      </div>
-
-      <div id="aiDraftList"></div>
-    </section>
     <section class="panel" id="editor">
       <div class="topline">
         <div>
@@ -219,10 +222,10 @@
   <div class="ai-review">
     <div class="topline">
       <div>
-        <h2>AI Articles Approval</h2>
-        <p>Review AI drafts before publishing.</p>
+        <h2>AI Article Studio</h2>
+        <p>Generate a researched story, then review and publish it.</p>
       </div>
-      <button id="refreshAiBtn" type="button">Refresh drafts</button>
+      <button id="refreshAiBtn" type="button">✦ Generate article</button>
     </div>
 
     <div id="aiDraftMessage" class="hint">
@@ -241,13 +244,10 @@
           <div>
             <label for="category">Category</label>
             <select id="category" required>
-              <option value="Mystery">Mystery</option>
-              <option value="Space">Space & Universe</option>
-              <option value="Paranormal">Paranormal</option>
-              <option value="Astrology">Astrology</option>
-              <option value="Ancient Mysteries">Ancient Mysteries</option>
-              <option value="Strange Crimes">Strange Crimes</option>
-              <option value="Unexplained">Unexplained</option>
+              <option value="ASTRO & COSMOS">ASTRO &amp; COSMOS</option>
+              <option value="UNEXPLAINED">UNEXPLAINED</option>
+              <option value="CRIME">CRIME</option>
+              <option value="PARANORMAL">PARANORMAL</option>
             </select>
           </div>
           <div>
@@ -539,7 +539,7 @@ async function loadAiDrafts() {
   try {
     const { data, error } = await db
       .from("ai_article_drafts")
-      .select("id,title,content,slug,tags,sources,image_url,created_at,status")
+       .select("id,title,content,slug,tags,sources,image_url,created_at,status,category")
       .eq("status", "pending")
       .order("created_at", { ascending: false });
 
@@ -627,6 +627,23 @@ aiDraftList.replaceChildren();
       approveBtn.type = "button";
       approveBtn.className = "approve-ai";
       approveBtn.textContent = "Approve & Publish";
+
+      const loadBtn = document.createElement("button");
+      loadBtn.type = "button";
+      loadBtn.textContent = "Load into manual editor";
+      loadBtn.addEventListener("click", () => {
+        $("title").value = titleInput.value.trim();
+        $("content").value = contentInput.value.trim();
+        const categorySelect = $("category");
+        const draftCategory = String(draft.category || "").toUpperCase();
+        if ([...categorySelect.options].some(option => option.value === draftCategory)) {
+          categorySelect.value = draftCategory;
+        }
+        $("slug").value = makeSlug(titleInput.value);
+        $("slug").dataset.edited = "";
+        editor.scrollIntoView({ behavior: "smooth", block: "start" });
+        showMessage("AI title and content loaded into the manual editor. Add a cover image before publishing.");
+      });
 
       const rejectBtn = document.createElement("button");
       rejectBtn.type = "button";
@@ -741,7 +758,7 @@ aiDraftList.replaceChildren();
         }
       });
 
-      actions.append(approveBtn, rejectBtn);
+      actions.append(loadBtn, approveBtn, rejectBtn);
       card.append(
         heading, meta,
         titleLabel, titleInput,
@@ -798,7 +815,7 @@ refreshAiBtn.addEventListener("click", async () => {
     );
   } finally {
     refreshAiBtn.disabled = false;
-    refreshAiBtn.textContent = "Refresh";
+    refreshAiBtn.textContent = "✦ Generate article";
   }
 });
     db.auth.onAuthStateChange((_event, session) => {
