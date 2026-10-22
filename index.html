@@ -1395,7 +1395,7 @@
   /* Keep the live card aligned with the site content and prevent clipping on narrow screens */
   .dossier-news-card{
     box-sizing:border-box!important;
-    width:min(1240px,88%)!important;
+    width:min(1240px,88vw)!important;
     max-width:1240px!important;
     left:auto!important;
     right:auto!important;
@@ -1409,7 +1409,7 @@
   .dossier-news-card .world-news-track{padding:10px 0 8px!important}
   @media(max-width:600px){
     .dossier-news-card{
-      width:88%!important;
+      width:calc(100% - 12%)!important;
       left:auto!important;
       right:auto!important;
       transform:none!important;
