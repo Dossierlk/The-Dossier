@@ -180,6 +180,46 @@ header .brand{letter-spacing:2.5px}
 @media(max-width:560px){.ai-draft-card{padding:14px}.topline{align-items:flex-start;flex-wrap:wrap}}
 </style>
 
+
+<style id="dossier-midnight-aurora">
+  /* Midnight Aurora — ambient background only; content and components remain unchanged. */
+  html{background:#050914!important}
+  body{
+    position:relative;isolation:isolate;
+    background:
+      radial-gradient(ellipse at 12% 18%,rgba(37,91,166,.12),transparent 36%),
+      radial-gradient(ellipse at 88% 42%,rgba(91,47,151,.10),transparent 34%),
+      radial-gradient(ellipse at 48% 78%,rgba(18,94,135,.09),transparent 38%),
+      #050914!important;
+    background-attachment:scroll!important;
+  }
+  body::before{
+    content:"";position:fixed;z-index:-1;pointer-events:none;inset:-24%;opacity:.78;
+    background:
+      radial-gradient(ellipse at 18% 28%,rgba(30,104,204,.22),transparent 28%),
+      radial-gradient(ellipse at 78% 24%,rgba(105,62,184,.17),transparent 30%),
+      radial-gradient(ellipse at 62% 72%,rgba(27,125,157,.14),transparent 32%),
+      radial-gradient(ellipse at 30% 82%,rgba(57,68,165,.12),transparent 30%);
+    filter:blur(26px);transform:translate3d(0,0,0) scale(1.04);
+    animation:dossierAuroraDrift 34s ease-in-out infinite alternate;will-change:transform;
+  }
+  @keyframes dossierAuroraDrift{
+    0%{transform:translate3d(-1.5%,-1%,0) scale(1.04) rotate(-1deg)}
+    50%{transform:translate3d(1.2%,1.5%,0) scale(1.08) rotate(1deg)}
+    100%{transform:translate3d(-.5%,2%,0) scale(1.05) rotate(-.5deg)}
+  }
+  @media(max-width:760px){body::before{opacity:.62;filter:blur(30px);animation-duration:42s}}
+  @media(prefers-reduced-motion:reduce){body::before{animation:none!important;transform:none!important;will-change:auto}}
+  body.light-theme{
+    background:
+      radial-gradient(ellipse at 12% 18%,rgba(102,158,230,.15),transparent 36%),
+      radial-gradient(ellipse at 88% 42%,rgba(168,135,220,.12),transparent 34%),
+      radial-gradient(ellipse at 48% 78%,rgba(99,180,198,.10),transparent 38%),
+      #f6f8fd!important;
+  }
+  body.light-theme::before{opacity:.26;filter:blur(32px)}
+</style>
+
 </head>
 <body>
   <main class="wrap">
