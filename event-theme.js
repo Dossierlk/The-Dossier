@@ -13,7 +13,7 @@
    "07-20":["Moon Day","🌕","One small step into the unknown","Our nearest cosmic neighbour still holds plenty of questions.","#172b50","#8ab8ff","#e0ecff"],
    "08-12":["Perseid Meteor Watch","🌠","Look up. Wonder more.","The night sky reminds us how much is still out there.","#10152f","#7c8dff","#e3e5ff"],
    "09-21":["International Day of Peace","🕊️","A world of stories, a hope for peace","Different lives, different stories—one shared world.","#12395a","#70d6ff","#d7f6ff"],
-   "10-22":["National Color Day","🎨","A World Full of Colour","Today is a perfect excuse to notice the colours and details around you—and discover the stories behind them.","#38206d","#ff8b55","#ffe0a8"],
+   "10-22":["International Stuttering Awareness Day","🌍","Every voice deserves to be heard","Observed worldwide on October 22 to raise awareness, encourage understanding, and support people who stutter. Learn more from the International Stuttering Association: isastutter.org.","#12345a","#75c5ff","#d9f1ff"],
    "10-23":["International Snow Leopard Day","🐆","Ghost of the mountains","Meet one of the world's most elusive big cats.","#18354b","#8bd3e6","#e2faff"],
    "10-24":["United Nations Day","🌐","A world connected by stories","Explore the people, places and events that shape our shared history.","#12345a","#75c5ff","#d9f1ff"],
    "10-31":["Halloween","🎃","Tonight, the unknown feels closer","Haunted places, unexplained encounters and mysteries that refuse to rest.","#26123e","#ff8a3d","#ffd0a8"],
@@ -21,7 +21,7 @@
    "12-10":["Human Rights Day","🕊️","Every voice has a story","A day to reflect on dignity, freedom and the stories behind human rights.","#12345a","#75c5ff","#d9f1ff"],
    "12-25":["Christmas Day","🎄","A day for wonder","May your day be full of warmth, kindness and stories worth remembering.","#143d35","#e46d7a","#ffe3e5"]
   };
-  const e=events[key]||(d.getMonth()===9?["Mystery Season","🌙","Step into the unknown","Every day has a story. Today, follow your curiosity.","#20183d","#9a8cff","#e5e0ff"]:["Daily Discovery","✦","Every day holds a new mystery","Discover something unusual, surprising or unforgettable today.","#102b5d","#53b8ff","#d9f3ff"]);
+  const e=events[key]||["No verified global observance today","✦","Curiosity has no calendar","We could not verify a worldwide special observance for today. Check a trusted international calendar before naming a day.","#102b5d","#53b8ff","#d9f3ff"];
   const [name,icon,title,copy,deep,accent,pale]=e;
   if(!document.getElementById("dossier-live-fixes")){
    const s=document.createElement("style");s.id="dossier-live-fixes";s.textContent=`
