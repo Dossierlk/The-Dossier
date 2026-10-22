@@ -1329,8 +1329,12 @@
 <style id="dossier-live-news-card">
     /* THE DOSSIER — compact iOS-style live news glass card */
     .hero{display:none!important}
-    .dossier-news-card{position:relative;isolation:isolate;display:block;width:min(1240px,94%);margin:12px auto 22px;padding:17px 22px 13px;overflow:hidden;min-height:0;border-radius:24px;border:1px solid rgba(145,195,255,.22);background:radial-gradient(ellipse at 12% 0%,rgba(75,151,255,.20),transparent 52%),linear-gradient(135deg,rgba(255,255,255,.105),rgba(255,255,255,.025) 48%,rgba(65,132,220,.07)),rgba(9,22,43,.78);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(255,255,255,.035),0 18px 48px rgba(0,0,0,.28),0 0 32px rgba(38,116,225,.07);backdrop-filter:blur(30px) saturate(175%);-webkit-backdrop-filter:blur(30px) saturate(175%)}
+    .dossier-news-card{position:relative;isolation:isolate;display:block;width:min(1240px,94vw);max-width:1240px;left:50%;transform:translateX(-50%);margin:12px 0 22px;padding:17px 22px 13px;overflow:hidden;min-height:0;border-radius:24px;border:1px solid rgba(145,195,255,.22);background:radial-gradient(ellipse at 12% 0%,rgba(75,151,255,.20),transparent 52%),linear-gradient(135deg,rgba(255,255,255,.105),rgba(255,255,255,.025) 48%,rgba(65,132,220,.07)),rgba(9,22,43,.78);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(255,255,255,.035),0 18px 48px rgba(0,0,0,.28),0 0 32px rgba(38,116,225,.07);backdrop-filter:blur(30px) saturate(175%);-webkit-backdrop-filter:blur(30px) saturate(175%)}
     .dossier-news-card:before{content:"";position:absolute;inset:0 0 auto;height:48%;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.075),transparent)}
+    .dossier-news-card{transition:transform .48s cubic-bezier(.22,1,.36,1),box-shadow .48s ease,border-color .35s ease;will-change:transform}
+    .dossier-news-card:after{content:"";position:absolute;inset:0;z-index:0;border-radius:inherit;pointer-events:none;opacity:0;background:radial-gradient(340px circle at var(--news-mx,50%) var(--news-my,50%),rgba(108,180,255,.23),transparent 65%);transition:opacity .35s ease}
+    .dossier-news-card>*{position:relative;z-index:1}
+    @media(hover:hover) and (pointer:fine){.dossier-news-card:hover{transform:translateX(-50%) translateY(-5px);border-color:rgba(145,205,255,.38);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -1px 0 rgba(255,255,255,.04),0 25px 58px rgba(0,0,0,.34),0 0 30px rgba(38,116,225,.13)}.dossier-news-card:hover:after{opacity:1}}
     .world-news-heading{display:flex;align-items:center;justify-content:flex-start;gap:10px}
     .world-news-kicker{display:inline-flex;align-items:center;gap:9px;color:#eaf5ff;font-size:12px;font-weight:800;letter-spacing:1.8px}
     .world-news-pulse{width:7px;height:7px;flex-shrink:0;border-radius:50%;background:#ff4d64;box-shadow:0 0 12px rgba(255,64,92,.85);animation:dossierPulse 1.5s ease-in-out infinite}
@@ -1352,7 +1356,7 @@
     .event-kicker{display:none!important}
     .event-title{font-size:12px!important;line-height:1.35!important;margin:0!important;color:#eaf4ff!important}
     .event-copy,.event-meta,.event-cta{display:none!important}
-    @media(max-width:600px){.dossier-news-card{width:94%;margin:9px auto 16px;padding:14px 13px 12px;border-radius:20px}.world-news-kicker{font-size:10px;letter-spacing:1.2px}.dossier-news-card h1{font-size:18px}.world-news-track{padding:12px 0 10px}.world-news-items{animation-duration:38s}.world-news-item{font-size:13px;padding:0 15px}#world-news-highlight{padding-top:9px}.event-highlight{padding:9px 10px!important;border-radius:13px!important}}
+    @media(max-width:600px){.dossier-news-card{width:94vw;left:50%;transform:translateX(-50%);margin:9px 0 16px;padding:14px 13px 12px;border-radius:20px}.world-news-kicker{font-size:10px;letter-spacing:1.2px}.dossier-news-card h1{font-size:18px}.world-news-track{padding:12px 0 10px}.world-news-items{animation-duration:38s}.world-news-item{font-size:13px;padding:0 15px}#world-news-highlight{padding-top:9px}.event-highlight{padding:9px 10px!important;border-radius:13px!important}}
     @media(prefers-reduced-motion:reduce){.world-news-pulse{animation:none}.world-news-items{animation:none}}
   </style>
 </head>
@@ -1770,6 +1774,17 @@ if (menuToggle && navLinks) {
     });
   });
 }
+
+  // Premium cursor-following light for the live news glass card.
+  (() => {
+    const card = document.getElementById("world-news-ticker");
+    if (!card || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    card.addEventListener("pointermove", (event) => {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty("--news-mx", (event.clientX - rect.left) + "px");
+      card.style.setProperty("--news-my", (event.clientY - rect.top) + "px");
+    });
+  })();
 
   // Fetch fresh, deduplicated headlines from the Cloudflare Worker API.
   (() => {
