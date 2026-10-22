@@ -12,7 +12,7 @@ const FEEDS = [
 const HEADERS = { "User-Agent": "TheDossierNews/1.0 (+https://github.com/Dossierlk/The-Dossier)", "Accept": "application/rss+xml, application/xml, text/xml, */*" };
 const decode = (s) => (s || "").replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1").replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n))).replace(/&#x([\da-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n,16))).replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim();
 function tag(block, name) {
-  const re = new RegExp("<(?:[\\w.-]+:)?"+name+"(?:\\s[^>]*)?>([\\s\\S]*?)<\\/(?:[\\w.-]+:)?"+name+"\\s*>", "i");
+  const re = new RegExp("<" + name + "(?:\\s[^>]*)?>([\\s\\S]*?)</" + name + "\\s*>", "i");
   const m = block.match(re);
   return m ? decode(m[1]) : "";
 }
