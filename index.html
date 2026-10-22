@@ -1149,6 +1149,129 @@
     }
   </style>
 
+
+  <!-- Final navigation layout correction: sticky glass bar + aligned mobile controls -->
+  <style id="dossier-nav-layout-correction">
+    html, body {
+      overflow-x: clip;
+    }
+
+    body > header.nav {
+      position: -webkit-sticky !important;
+      position: sticky !important;
+      top: 10px !important;
+      z-index: 9999 !important;
+      flex-wrap: nowrap !important;
+      background: linear-gradient(135deg, rgba(22, 48, 83, .58), rgba(5, 15, 32, .48)) !important;
+      -webkit-backdrop-filter: blur(32px) saturate(190%) !important;
+      backdrop-filter: blur(32px) saturate(190%) !important;
+      border: 1px solid rgba(160, 205, 255, .24) !important;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 12px 38px rgba(0,0,0,.28) !important;
+    }
+
+    .search-control {
+      position: relative;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      gap: 8px;
+    }
+
+    .search-icon-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      flex: 0 0 40px;
+      padding: 0;
+      border: 1px solid rgba(160,205,255,.22);
+      border-radius: 50%;
+      color: #d9edff;
+      background: rgba(255,255,255,.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.18);
+      font-size: 25px;
+      line-height: 1;
+    }
+
+    .search-control .search {
+      width: 170px;
+      min-width: 0;
+    }
+
+    @media (max-width: 768px) {
+      body > header.nav {
+        width: 94% !important;
+        margin: 8px auto 0 !important;
+        padding: 10px 12px !important;
+        gap: 9px !important;
+        flex-wrap: wrap !important;
+        border-radius: 20px !important;
+        top: 8px !important;
+      }
+
+      body > header.nav .brand {
+        order: 1 !important;
+        flex: 1 1 auto;
+        min-width: 0;
+        margin: 0 !important;
+        font-size: 15px !important;
+        letter-spacing: 1.5px;
+        gap: 7px;
+      }
+
+      body > header.nav .brand .logo {
+        width: 30px !important;
+        height: 30px !important;
+      }
+
+      body > header.nav .menu-toggle {
+        order: 3 !important;
+        width: 40px !important;
+        height: 40px !important;
+        margin: 0 !important;
+      }
+
+      body > header.nav .search-control {
+        order: 2 !important;
+        flex: 0 0 40px;
+        width: 40px;
+        margin-left: auto;
+      }
+
+      body > header.nav .search-icon-button {
+        width: 40px;
+        height: 40px;
+      }
+
+      body > header.nav .search-control .search {
+        display: none;
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        z-index: 10001;
+        width: min(76vw, 320px);
+        height: 44px;
+        background: rgba(7, 19, 39, .94);
+        border: 1px solid rgba(145, 195, 255, .32);
+        box-shadow: 0 12px 32px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.12);
+        -webkit-backdrop-filter: blur(28px) saturate(180%);
+        backdrop-filter: blur(28px) saturate(180%);
+      }
+
+      body > header.nav .search-control.search-open .search {
+        display: block;
+      }
+
+      body > header.nav .nav-links {
+        order: 4 !important;
+        flex: 0 0 100%;
+        width: 100%;
+        margin: 0;
+      }
+    }
+  </style>
+
 </head>
 <body>
  
