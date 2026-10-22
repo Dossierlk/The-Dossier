@@ -237,5 +237,72 @@
 </script>
 
 <script src="event-theme.js?v=15" defer></script>
+
+<style id="dossier-pro-icons">
+:root{--icon-blue:rgba(142,196,255,.95);--icon-glass:rgba(17,37,67,.62)}
+.dossier-icon{width:18px;height:18px;display:block;flex:0 0 18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.search-icon-button,.back,.reading-actions button,.menu-toggle,.linkbtn,#logoutBtn,#refreshAiBtn{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:9px;
+  -webkit-appearance:none;appearance:none;
+}
+.search-icon-button,.reading-actions button,.menu-toggle{
+  border:1px solid rgba(160,202,255,.22)!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.035)),rgba(12,30,58,.62)!important;
+  color:#eaf4ff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.17),0 5px 16px rgba(0,0,0,.18),0 0 0 1px rgba(95,160,255,.035);
+  -webkit-backdrop-filter:blur(22px) saturate(175%);backdrop-filter:blur(22px) saturate(175%);
+  transition:transform .22s cubic-bezier(.2,.8,.2,1),border-color .22s,box-shadow .22s,background .22s!important;
+}
+.search-icon-button{width:42px!important;height:42px!important;border-radius:15px!important;font-size:0!important;padding:0!important}
+.search-icon-button .dossier-icon{width:19px;height:19px}
+.back{min-height:42px;padding:10px 15px!important;border-radius:15px!important;border:1px solid rgba(145,195,255,.22)!important;background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.025)),rgba(13,32,61,.62)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 6px 18px rgba(0,0,0,.15);font-weight:600}
+.back .dossier-icon{width:17px;height:17px;color:#9bcaff}
+.menu-toggle{width:43px!important;height:43px!important;border-radius:15px!important;padding:10px!important}
+.menu-toggle .dossier-icon{width:21px;height:21px}
+.reading-actions button{min-height:40px!important;padding:9px 13px!important;border-radius:14px!important;font-weight:600}
+.reading-actions button .dossier-icon{width:16px;height:16px}
+#share-article{background:linear-gradient(135deg,rgba(109,170,255,.25),rgba(255,255,255,.055)),rgba(12,34,68,.7)!important;border-color:rgba(125,186,255,.38)!important}
+#theme-toggle .dossier-icon{color:#ffd88a}
+.search-icon-button:hover,.back:hover,.reading-actions button:hover,.menu-toggle:hover,.linkbtn:hover,#logoutBtn:hover,#refreshAiBtn:hover{transform:translateY(-2px);border-color:rgba(145,200,255,.52)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.23),0 10px 24px rgba(30,110,220,.18)}
+.search-icon-button:active,.back:active,.reading-actions button:active,.menu-toggle:active{transform:scale(.96)}
+a:focus-visible,button:focus-visible{outline:2px solid #8dc4ff!important;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.search-icon-button,.back,.reading-actions button,.menu-toggle{transition:none!important}}
+</style>
+
+<script id="dossier-pro-icons-script">
+(()=> {
+const svg = {
+ search:"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"10.8\" cy=\"10.8\" r=\"6.8\"/><path d=\"m16 16 4.2 4.2\"/></svg>",
+ back:"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"m14.5 5-7 7 7 7\"/><path d=\"M8 12h12\"/></svg>",
+ share:"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 15V3\"/><path d=\"m7 8 5-5 5 5\"/><path d=\"M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7\"/></svg>",
+ menu:"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 7h16M4 12h16M4 17h16\"/></svg>",
+ sun:"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42\"/></svg>",
+ minus:"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M5 12h14\"/></svg>",
+ plus:"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M5 12h14M12 5v14\"/></svg>",
+ external:"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M14 4h6v6\"/><path d=\"M20 4 10 14\"/><path d=\"M18 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h5\"/></svg>"
+};
+const icon=(name)=>{const box=document.createElement('span');box.innerHTML=svg[name]||'';const el=box.firstElementChild;if(el)el.classList.add('dossier-icon');return el};
+document.querySelectorAll('.search-icon-button').forEach(el=>{el.replaceChildren(icon('search'));el.setAttribute('aria-label','Search stories');});
+document.querySelectorAll('.menu-toggle').forEach(el=>{el.replaceChildren(icon('menu'));el.setAttribute('aria-label','Open navigation menu');});
+document.querySelectorAll('a.back').forEach(el=>{
+ if(el.querySelector('.dossier-icon'))return;
+ const label=(el.textContent||'').replace(/^\s*←\s*/,'').trim()||'Back';
+ el.replaceChildren(icon('back'),Object.assign(document.createElement('span'),{textContent:label}));
+});
+const share=document.getElementById('share-article');
+if(share&&!share.querySelector('.dossier-icon')){
+ share.replaceChildren(icon('share'),Object.assign(document.createElement('span'),{textContent:'Share'}));
+}
+const theme=document.getElementById('theme-toggle');
+if(theme&&!theme.querySelector('.dossier-icon')){
+ const label=theme.textContent.trim().replace(/^☀️\s*/,'')||'Theme';
+ theme.replaceChildren(icon('sun'),Object.assign(document.createElement('span'),{textContent:label}));
+}
+const dec=document.getElementById('font-decrease');
+if(dec&&!dec.querySelector('.dossier-icon')){dec.replaceChildren(icon('minus'));dec.title='Decrease font size';}
+const inc=document.getElementById('font-increase');
+if(inc&&!inc.querySelector('.dossier-icon')){inc.replaceChildren(icon('plus'));inc.title='Increase font size';}
+document.querySelectorAll('a.linkbtn').forEach(el=>{if(!el.querySelector('.dossier-icon'))el.append(icon('external'));});
+})();
+</script>
 </body>
 </html>
