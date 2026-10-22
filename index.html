@@ -1390,6 +1390,42 @@
       .article::after { display:none !important; }
     }
   </style>
+
+<style id="dossier-news-card-responsive-fix">
+  /* Keep the live card aligned with the site content and prevent clipping on narrow screens */
+  .dossier-news-card{
+    box-sizing:border-box!important;
+    width:min(1240px,88%)!important;
+    max-width:1240px!important;
+    left:auto!important;
+    margin:12px auto 16px!important;
+    padding:14px 18px 10px!important;
+    min-width:0!important;
+  }
+  .dossier-news-card .world-news-heading,
+  .dossier-news-card .world-news-track{min-width:0!important;max-width:100%!important}
+  .dossier-news-card .world-news-track{padding:10px 0 8px!important}
+  @media(max-width:600px){
+    .dossier-news-card{
+      width:88%!important;
+      padding:11px 12px 8px!important;
+      margin:10px auto 14px!important;
+      border-radius:18px!important;
+    }
+    .dossier-news-card h1{font-size:clamp(15px,4vw,19px)!important;letter-spacing:.5px!important;overflow-wrap:anywhere}
+    .dossier-news-card .world-news-kicker{font-size:10px!important;letter-spacing:1.2px!important}
+    .dossier-news-card .world-news-divider{margin-top:8px!important}
+    .dossier-news-card .world-news-track{padding:8px 0 6px!important}
+    .dossier-news-card .world-news-items{animation-duration:95s!important}
+    .dossier-news-card .world-news-item{font-size:11px!important;gap:7px!important}
+  }
+  @media(max-width:360px){
+    .dossier-news-card{padding:10px!important;border-radius:15px!important}
+    .dossier-news-card h1{font-size:15px!important}
+    .dossier-news-card .world-news-kicker{font-size:9px!important;letter-spacing:1px!important}
+    .dossier-news-card .world-news-item{font-size:10px!important}
+  }
+</style>
 </head>
 <body>
  
