@@ -1504,6 +1504,28 @@
     }
   </style>
 
+
+<style id="dossier-premium-motion">
+  :root { --dossier-motion: cubic-bezier(.22,1,.36,1); }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: no-preference) {
+    body { animation: dossierPageIn .55s var(--dossier-motion) both; }
+    @keyframes dossierPageIn { from { opacity: .72; } to { opacity: 1; } }
+    .dossier-reveal { opacity: 0; transform: translateY(22px) scale(.99); transition: opacity .7s var(--dossier-motion), transform .7s var(--dossier-motion); }
+    .dossier-reveal.dossier-visible { opacity: 1; transform: translateY(0) scale(1); }
+    .article .read { display: inline-flex; align-items: center; gap: 9px; border: 1px solid rgba(135,195,255,.34); border-radius: 999px; padding: 10px 15px; background: linear-gradient(135deg,rgba(92,166,255,.18),rgba(128,105,255,.12)); box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 5px 18px rgba(20,95,210,.12); font-weight: 650; letter-spacing: -.015em; transition: transform .3s var(--dossier-motion), border-color .3s, box-shadow .3s, background .3s; }
+    .article .read::after { content: "↗"; display: inline-block; font-size: 1.05em; transition: transform .3s var(--dossier-motion); }
+    .article .read:hover { transform: translateY(-2px); border-color: rgba(145,205,255,.7); background: linear-gradient(135deg,rgba(92,166,255,.28),rgba(128,105,255,.2)); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 9px 26px rgba(20,95,210,.22); }
+    .article .read:hover::after { transform: translate(2px,-2px); }
+    body.dossier-leaving { opacity: 0; transform: translateY(5px) scale(.995); transition: opacity .18s ease, transform .18s ease; }
+    a, button { -webkit-tap-highlight-color: transparent; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .dossier-reveal { opacity: 1; transform: none; }
+  }
+</style>
+
 </head>
 <body>
  
@@ -2099,5 +2121,53 @@ if(inc&&!inc.querySelector('.dossier-icon')){inc.replaceChildren(icon('plus'));i
 document.querySelectorAll('a.linkbtn').forEach(el=>{if(!el.querySelector('.dossier-icon'))el.append(icon('external'));});
 })();
 </script>
+
+<script id="dossier-premium-motion-script">
+(() => {
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const revealTargets = document.querySelectorAll("main section, section, .section-head, .grid, .article, .hero, .feature, .category-card");
+  if (!reduce && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("dossier-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: "0px 0px -36px 0px" });
+    revealTargets.forEach((el, i) => {
+      if (el.closest(".article") && el.parentElement?.classList.contains("grid")) el.style.transitionDelay = Math.min((i % 4) * 55, 165) + "ms";
+      el.classList.add("dossier-reveal");
+      observer.observe(el);
+    });
+  }
+  if (sessionStorage.getItem("dossier-page-enter") === "1") {
+    sessionStorage.removeItem("dossier-page-enter");
+    if (!reduce) {
+      document.body.style.opacity = "0";
+      requestAnimationFrame(() => {
+        document.body.style.transition = "opacity .28s ease";
+        document.body.style.opacity = "1";
+      });
+    }
+  }
+  document.addEventListener("click", event => {
+    const link = event.target.closest("a[href]");
+    if (!link || reduce || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.target === "_blank" || link.hasAttribute("download")) return;
+    let url;
+    try { url = new URL(link.href, location.href); } catch { return; }
+    if (url.origin !== location.origin || url.href === location.href || url.hash && url.pathname === location.pathname) return;
+    sessionStorage.setItem("dossier-page-enter", "1");
+    event.preventDefault();
+    document.body.classList.add("dossier-leaving");
+    setTimeout(() => { location.href = url.href; }, 150);
+  }, true);
+  window.addEventListener("pageshow", () => {
+    document.body.classList.remove("dossier-leaving");
+    document.body.style.opacity = "";
+  });
+})();
+</script>
+
 </body>
 </html>
