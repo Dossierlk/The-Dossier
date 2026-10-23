@@ -372,8 +372,16 @@ if (allowed) {
       }
     }
 
+    // Prevent a slow initial session check from overwriting a newer sign-in event.
+    let authStateVersion = 0;
+
     async function checkSession() {
+      const versionAtStart = authStateVersion;
       const { data, error } = await db.auth.getSession();
+
+      // If auth changed while getSession() was pending, trust the newer auth event.
+      if (versionAtStart !== authStateVersion) return;
+
       if (error) showMessage(error.message, "err");
       setLoggedIn(data?.session?.user || null);
     }
@@ -927,6 +935,7 @@ if (!data?.success) {
   }
 });
     db.auth.onAuthStateChange((_event, session) => {
+      authStateVersion += 1;
       setLoggedIn(session?.user || null);
     });
 
