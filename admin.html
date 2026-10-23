@@ -884,56 +884,7 @@ refreshAiBtn.addEventListener("click", async () => {
   }
 });
 
-  refreshAiBtn.disabled = true;
-  refreshAiBtn.textContent = "Generating new article...";
 
-  try {
- 
-const { data: sessionData, error: sessionError } =
-  await db.auth.getSession();
-
-const accessToken = sessionData.session?.access_token;
-
-if (sessionError || !accessToken) {
-  throw new Error("Admin session missing. Please sign in again.");
-}
-
-const { data, error } = await db.functions.invoke(
-  "generate-quick-flashes",
-  {
-    body: {},
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  }
-);
-
-if (error) throw error;
-
-if (!data?.success) {
-  throw new Error(data?.error || "Article generation failed.");
-}
-
-    if (error) throw error;
-    if (!data?.success) {
-      throw new Error(data?.error || "Article generation failed.");
-    }
-
-    setAiMessage(
-      "New article saved as pending: " + (data.draft?.title || "Quick Flash")
-    );
-
-    await loadAiDrafts();
-  } catch (error) {
-    setAiMessage(
-      "Generation failed: " + (error.message || "Unknown error"),
-      true
-    );
-  } finally {
-    refreshAiBtn.disabled = false;
-    refreshAiBtn.textContent = "✦ Generate article";
-  }
-});
     db.auth.onAuthStateChange((_event, session) => {
       authStateVersion += 1;
       setLoggedIn(session?.user || null);
